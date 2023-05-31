@@ -1,0 +1,113 @@
+      <%- include('../layout/header.ejs') %>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .order-container {
+            max-width: 800px;
+            margin: 50px auto;
+            margin-top: 100px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .order-status {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .order-history {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .order-history-item {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container order-container">
+        <h1>Order Details</h1>
+
+        <div class="row">
+           <% for(let i=0;i<orders.length;i++){%>
+               <div class="col-md-4">
+                <img src="/public/adminimage/<%=orders[i].image%>" alt="Product Image" class="product-image">
+            </div>
+            <div class="col-md-8">
+         
+                
+                <p>Price: <%=orders[i].price%></p>
+                <p>Quantity: <%=orders[i].quantity%></p>
+                <p>Total: <%=orders[i].total%></p>
+                <p>Status: <span class="order-status"><%=orders[i].status%></span></p>
+             
+                <%if(orders[i].status==='cancelled'){%>
+
+                    <%}else{%>
+    <button class="btn btn-danger"> <a href="/cancelorder?size=<%=orders[i].size%>&color=<%=orders[i].color%>&name=<%=orders[i].name%>" style="text-decoration: none;color: white;"> Cancel Order</a> </button>
+                          
+                   <%}%>
+                
+                </div>
+            <hr>
+         <%}%>
+         
+       
+
+        <!-- <div class="order-history">
+            <h2>Order History</h2>
+
+            <div class="order-history-item">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="product.jpg" alt="Product Image" class="product-image">
+                    </div>
+                    <div class="col-md-8">
+                        <h4>Product Name</h4>
+                        <p>Price: $19.99</p>
+                        <p>Quantity: 1</p>
+                        <p>Total: $19.99</p>
+                        <p>Status: Delivered</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-history-item">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="product.jpg" alt="Product Image" class="product-image">
+                    </div>
+                    <div class="col-md-8">
+                        <h4>Product Name</h4>
+                        <p>Price: $19.99</p>
+                        <p>Quantity: 1</p>
+                        <p>Total: $19.99</p>
+                        <p>Status: Delivered</p>
+                    </div>
+                </div>
+            </div>
+
+             Add more order history items as needed -->
+        </div> 
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>

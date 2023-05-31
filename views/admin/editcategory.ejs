@@ -1,0 +1,31 @@
+<%- include('../layout/header.ejs',{admin:true}) %>
+
+
+<div class="container">
+    <h2>Edit Category</h2>
+    <form action="/admin/updatecategory" method="post">
+      <div class="mb-3">
+        <label for="categoryName" class="form-label">Category Name</label>
+        <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%= category.category_name %>" required>
+      </div>
+      <input type="text" name="categoryId" value="<%= category._id %>" hidden>
+      <button type="submit" class="btn btn-primary update-button">Update</button>
+    </form>
+  </div>
+  <script>
+    // Add event listener to form submission
+    document.querySelector('.update-button').addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+  
+      // Perform the form submission
+      // ...
+  
+      // Redirect to the rendered page with success message as query parameter
+      var successMessage = 'Category edited successfully';
+      window.location.href = '/admin/category?message=' + encodeURIComponent(successMessage);
+    });
+  </script>
+
+
+  
+  <%- include('../layout/footer.ejs',{admin:true}) %>

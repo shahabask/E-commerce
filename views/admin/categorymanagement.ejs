@@ -1,0 +1,154 @@
+<%- include('../layout/header.ejs',{admin:true}) %>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+
+
+<style>
+  .navbar {
+    background-color: #575757;
+  }
+
+  .navbar .navbar-brand {
+    color: #FCC114;
+    font-weight: bold;
+  }
+
+  .navbar .navbar-brand:hover,
+  .navbar .navbar-brand:focus {
+    color: white;
+  }
+
+  .navbar .search-icon {
+    color: white;
+    font-size: 20px;
+  }
+
+  .navbar .search-input {
+    background-color: white;
+    color: black;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container justify-content-end">
+    <a class="navbar-brand me-auto btn text-decoration-none" href="/admin/addcategory">Add Category</a>        
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <table id="categoryTable" class="table mb-0 bg-white">  
+    <thead class="badge-warning">
+      <tr>
+        <th>#</th>
+        <th>Category Name</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var i = 0; i < category.length; i++) { %>
+        <tr>
+          <td>
+            <div>
+              <p><%= i + 1 %></p>
+            </div>
+          </td>
+          <td>
+            <div>
+              <p><%= category[i].category_name %></p>
+            </div>
+          </td>
+          <td>
+            <div class="btn bg-secondary">
+              <a class="text-light edit-link text-decoration-none" href="/admin/editcategory?id=<%= category[i]._id %>">Edit</a>
+            </div>
+          </td>
+          <td>
+            <div class="btn bg-danger">
+              <a class="text-light delete-link text-decoration-none" href="/admin/deletecategory?id=<%= category[i]._id %>">Delete</a>
+            </div>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+
+<script>
+  $(function () {
+    $('#categoryTable').DataTable();
+  });
+</script>
+
+<script>
+  // Add event listener to delete links
+  document.querySelectorAll('.delete-link').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent the default link behavior
+      var deleteUrl = link.getAttribute('href');
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to the delete URL after the user confirms the deletion
+          window.location.href = deleteUrl;
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  // Add event listener to edit links
+  document.querySelectorAll('.edit-link').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent the default link behavior
+      var editUrl = link.getAttribute('href');
+
+      Swal.fire({
+        title: 'Edit Category',
+        text: 'Do you want to edit this category?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to the edit URL if the user confirms
+          window.location.href = editUrl;
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  // Retrieve the success message from the URL query parameter
+  var urlParams = new URLSearchParams(window.location.search);
+  var successMessage = urlParams.get('message');
+
+  // Display the success message if it exists
+  if (successMessage) {
+    Swal.fire('Success', successMessage, 'success');
+  }
+</script>
+
+<%- include('../layout/footer.ejs',{admin:true}) %>

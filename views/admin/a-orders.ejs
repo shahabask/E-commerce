@@ -1,0 +1,150 @@
+<%- include('../layout/header.ejs',{admin:true}) %>
+<style>
+    .navbar {
+      background-color: #575757;
+    }
+
+    .navbar .navbar-brand {
+      color: #FCC114;
+      font-weight: bold;
+    }
+
+    .navbar .navbar-brand:hover,
+    .navbar .navbar-brand:focus {
+      color: white;
+    }
+
+    .navbar .search-icon {
+      color: white;
+      font-size: 20px;
+    }
+
+    .navbar .search-input {
+      background-color: white;
+      color: black;
+    }
+  </style>
+
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container justify-content-end">
+      <a class="navbar-brand me-auto" href="#">Orders</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+    </div>
+  </nav>
+
+  
+
+        <div class="container-fluid" >
+            <table class="table mb-0 bg-white">
+                <thead class="badge-warning">
+                  <tr>  
+                    <th>Order ID</th>
+                    <th>Product details</th>
+                    <th>Userdetails</th>
+                    <!-- <th>Delivery Address</th>
+                    <th>Order Date</th> -->
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <!-- <th>Payment Method</th> -->
+                    <th>Order Status</th>
+                    <th>Action</th>
+                  
+                  </tr>
+                </thead>
+                <tbody>
+                 <% for(let i=0;i<orders.length;i++){%>
+
+                
+                  <tr>
+                    <td>
+                        <div>
+                            <p><%=orders[i]._id%></p>
+                        </div>
+                    </td>
+                  
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img
+                                src="/public/adminimage/<%=orders[i].image%>" 
+                                alt=""
+                                style="width: 45px; height: 45px"
+                                class="rounded-circle"
+                                />
+                            <div class="ms-3">
+                              <p class="fw-bold mb-1"><%=orders[i].name%></p>
+                              <p class="text-muted mb-0"><%=orders[i].size%></p>
+                            </div>
+                          </div>
+
+                    </td>
+                    <td>
+
+                        <div>
+                            <p><%=orders[i].email%></p>
+                            <p><%=orders[i].phone%></p>
+                        </div>
+                    </td>
+                  
+                    <!-- <td>
+
+                        <div>
+                            <p>Kochi</p>
+                        </div>
+                    </td>
+                   
+                    <td>
+
+                      <div>
+                          <p>1-02-2013</p>
+                      </div>
+                  </td> -->
+                    <td>
+                      <div><p><%=orders[i].quantity%></p></div>
+                    </td>
+                    <td>
+                        <div><p><%=orders[i].price%></p></div>
+                      </td>
+                   
+                    <!-- <td>
+                        <div>
+                            <p class="fw-normal mb-1">gpay</p>
+                        </div>
+                      
+                      
+                    </td> -->
+                    <%if(orders[i].status==='cancelled'){%>
+                       <td>
+                      <span class="badge badge-danger rounded-pill d-inline"><%=orders[i].status%></span>
+                    </td>
+                    <td>
+                      <div><button class="btn bg-secondary text-light">
+                        <a class="text-light text-decoration-none" href="/admin/deleteorder?size=<%=orders[i].size%>&color=<%=orders[i].color%>&userid=<%=orders[i].userid%>&name=<%=orders[i].name%>">Delete</a></button></div>
+                    </td>
+                   <% }else{%>
+                    <td>
+                      <span class="badge badge-success rounded-pill d-inline"><%=orders[i].status%></span>
+                    </td>
+                    <td>
+                      <div><button class="btn bg-danger text-light"><a class="text-light text-decoration-none" href="/admin/cancelorder?size=<%=orders[i].size%>&color=<%=orders[i].color%>&userid=<%=orders[i].userid%>&name=<%=orders[i].name%>">Cancel</a></button></div>
+                    </td>
+                 <%  }%>
+              
+
+                    
+                    
+                  </tr>
+               <% }%>
+                </tbody>
+              </table>
+            </div>
+            <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script>
+              $(function () {
+                $('#product').DataTable();
+              });
+            </script>
+<%- include('../layout/footer.ejs',{admin:true}) %>

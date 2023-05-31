@@ -1,0 +1,181 @@
+<%- include('../layout/header.ejs',{admin:true}) %>
+<head>
+ 
+<style>
+    .navbar {
+      background-color: #575757;
+    }
+
+    .navbar .navbar-brand {
+      color: #FCC114;
+      font-weight: bold;
+    }
+    .unblock-link {
+  font-family: Arial, sans-serif; /* Change the font family */
+  font-size: 16px; /* Change the font size */
+  display: block; /* Change the display model, e.g., from "inline" to "block" */
+  /* Add any other desired styles */
+}
+
+
+    .navbar .navbar-brand:hover,
+    .navbar .navbar-brand:focus {
+      color: white;
+    }
+
+    .navbar .search-icon {
+      color: white;
+      font-size: 20px;
+    }
+
+    .navbar .search-input {
+      background-color: white;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container justify-content-end">
+      <a class="navbar-brand me-auto" href="#">Users</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <form class="d-flex" style="margin-left: 400px;">
+              <input class="form-control me-2 search-input" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-light search-icon mx-3" type="submit"><i class="bi bi-search"></i></button>
+            </form>
+          </li>
+        </ul>
+      </div> -->
+    </div>
+  </nav>
+
+
+<div class="container-fluid" >
+    <table class="table mb-0 bg-white" id="userTable">
+        <thead class="badge-warning">
+          <tr>
+            <th>#</th>
+            <th>User Name</th>
+            <th>User Image</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Number Of Orders</th>
+            <th>Action</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <% for (var i = 0; i < user.length; i++) { %>
+          <tr>
+            <td>
+                <div>
+                    <p><%= i + 1 %></p>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <p><%= user[i].firstName %></p>
+                </div>
+            </td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <img
+                        src="https://mdbootstrap.com/img/new/avatars/8.jpg"
+                        alt=""
+                        style="width: 45px; height: 45px"
+                        class="rounded-circle"
+                        />
+                    <!-- <div class="ms-3">
+                      <p class="fw-bold mb-1">football</p>
+                      <p class="text-muted mb-0">football</p>
+                    </div> -->
+                  </div>
+
+            </td>
+            <td>
+                <div>
+                    <p><%= user[i].address[0].head %></p>
+                </div>
+            </td>
+            
+            <td>
+
+                <div>
+                    <p><%= user[i].email %></p>
+                   
+                </div>
+            </td>
+          
+            <td>
+
+                <div>
+                    <p><%= user[i].phone%></p>
+                </div>
+            </td>
+          
+            <td>
+              <div><p></p></div>
+            </td>
+            <% if(user[i].is_block==true){ %> 
+            <td>
+             
+                <div class="btn bg-secondary"><a class="text-light text-decoration-none unblock-link" href="/admin/unblock?id=<%= user[i]._id %>">Unblock</a></div>
+            </td>
+           <% }else{ %>
+              <td>
+                   
+                <div class="btn bg-secondary"><a class="text-light text-decoration-none block-link" href="/admin/block?id=<%= user[i]._id %>">Block</a></div>
+            </td>
+           <% }%>
+          </tr>
+          <% }%>
+        </tbody>
+      </table>
+    </div>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      $(function () {
+        $('#userTable').DataTable();
+      });
+    </script>
+    <script>
+
+      
+      document.querySelectorAll('.block-link').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent the default link behavior
+      var deleteUrl = link.getAttribute('href');
+
+      Swal.fire('User is blocked').then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to the delete URL after the user confirms the deletion
+          window.location.href = deleteUrl;
+        }
+      });
+    });
+  });
+  document.querySelectorAll('.unblock-link').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent the default link behavior
+      var deleteUrl = link.getAttribute('href');
+
+      Swal.fire('User is unblocked').then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to the delete URL after the user confirms the deletion
+          window.location.href = deleteUrl;
+        }
+      });
+    });
+  });
+</script>
+  
+ 
+
+<%- include('../layout/footer.ejs',{admin:true}) %>

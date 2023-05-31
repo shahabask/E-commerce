@@ -1,0 +1,108 @@
+<%- include('../layout/header.ejs',{admin:true}) %>
+<head>
+  
+  <style>
+    .navbar {
+      background-color: #575757;
+    }
+
+    .navbar .navbar-brand {
+      color: #FCC114;
+      font-weight: bold;
+    }
+
+    .navbar .navbar-brand:hover,
+    .navbar .navbar-brand:focus {
+      color: white;
+    }
+
+    .navbar .search-icon {
+      color: white;
+      font-size: 20px;
+    }
+
+    .navbar .search-input {
+      background-color: white;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container justify-content-end">
+      <a class="navbar-brand me-auto btn text-decoration-none"  href="/admin/addproduct">Add Products</a>  
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <table class="table mb-0 bg-white" id="product">
+      <thead class="badge-warning">
+        <tr>
+          <th>#</th>
+          <th>Product details</th>
+          <th>Category</th>
+          <th>Stock</th>
+          <th>Price</th>
+          <th>Action</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i = 0; i < product.length; i++) { %>
+        <tr>
+          <td>
+            <div>
+              <p><%= i+1%></p>
+            </div>
+          </td>
+          <td>
+            <div class="d-flex align-items-center">   
+              <img src="/public/adminimage/<%=product[i].image[0]%>" alt="" style="width: 45px; height: 45px" class="rounded-circle">
+              <div class="ms-3">
+                <p class="fw-bold mb-1"><%=product[i].brand%></p>
+                <p class="text-muted mb-0"><%=product[i].modelName%></p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div>
+              <p><%=product[i].category%></p>
+            </div>
+          </td>
+          <td>
+            <div>
+              <p><%=product[i].quantity%></p>
+            </div>
+          </td>
+          <td>
+            <div>
+              <p><%=product[i].price%></p>
+            </div>
+          </td>
+          <td>
+            <div><button class="btn bg-secondary "><a class="text-light text-decoration-none" href="/admin/editproduct?id=<%=product[i]._id%>">Edit</a></button></div>
+          </td>
+          <td>
+            <div><button class="btn bg-danger text-light"><a class="text-light text-decoration-none" href="/admin/deleteproduct?id=<%=product[i]._id%>">Delete</a></button></div>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    $(function () {
+      $('#product').DataTable();
+    });
+  </script>
+   
+<%- include('../layout/footer.ejs',{admin:true}) %>
+
+
+

@@ -1,0 +1,199 @@
+      <%- include('../layout/header.ejs',{admin:false}) %>
+
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+      <style>
+        body {
+          background-color: #f8f9fa;
+          color: #000;
+        }
+
+        .cart-container {
+
+          max-width: 800px;
+          margin-top: 100px;
+          /* margin: 50px auto; */
+          padding: 20px;
+          background-color: #1a237e;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item {
+
+          background-color: #fff;
+          padding: 20px;
+          border-radius: 5px;
+          margin-bottom: 20px;
+          border-bottom: 1px solid;
+        }
+
+        .cart-item img {
+          max-width: 100px;
+          height: auto;
+          border-radius: 5px;
+        }
+
+        .cart-item-title {
+          color: #000;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+
+        .cart-item-price {
+          color: #fcb20a;
+          font-weight: bold;
+        }
+
+        .quantity {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-top: 10px;
+        }
+
+        .quantity-btn {
+          background-color: #1a237e;
+          color: #fff;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        .remove-btn {
+          background-color: #fcb20a;
+          color: #000;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+      </style>
+      </head>
+
+      <body>
+        <div class="container cart-container">
+          <div class="cart-item">
+            <div class="row">
+
+
+              <%   if(typeof message !='undefined'){%>
+              <div class="col-md-12" style="text-align: center;">
+
+                <%=message%></div>
+
+              <% }else{%>
+
+              <% for(let i=0;i<products.length;i++){%>
+              <div class="col-md-3">
+                <img src="/public/adminimage/<%=products[i].image%>" alt="Product Image">
+              </div>
+              <div class="col-md-4">
+                <h4 class="cart-item-title"><%=products[i].modelName%></h4>
+                <p><%=products[i].description%></p>
+                <h5>Qty: <%=products[i].quantity%></h5>
+                <h5>Size: <%=products[i].size%></h5>
+                <h5>Color: <%=products[i].color%></h5>
+                <h5>Price: <product-unit-price><%=products[i].price%></product-unit-price> </h5>
+                <h5>total: <%=products[i].total%></h5>
+              </div>
+
+              <div class="col-md-3">
+                <!-- <h4 class="cart-item-price">$99.99</h4> -->
+                <button class="quantity-btn" onclick="decreaseQuantity(<%=i%>)">-</button>
+                <span class="product-quantity" id="quantity-<%=i%>"><%= products[i].quantity %></span>
+                <button class="quantity-btn" onclick="increaseQuantity(<%=i%>)">+</button>
+                
+                
+              
+
+
+
+                <button class="remove-btn" onclick="removeFromCart()"><a href="/removeitem?index=<%=i%>" style="text-decoration: none;">Remove</a> </button>
+              </div>
+              <hr>
+              <%}%> 
+
+          <%  }%>
+            </div>
+          </div>
+
+
+          <!-- Add more cart items here -->
+          <%   if(typeof message !='undefined'){%>
+          <div class="text-center mt-4">
+            <a href="/" class="btn btn-warning btn-lg" style="color: black;font-weight: 600;font-family: 'Courier New', Courier, monospace;">Go For Shopping</a>
+          </div>
+
+          <%  }else{%>
+          <form action="/selectaddress" method="post">
+            <div class="" style="text-align: center;height: 40px;max-width:800px;background-color: #fff;border-radius: 5px;">
+              <h3>Total Price: <%=total%></h3>
+              <input type="text" value="<%=total%>" name="total" hidden>
+              <input type="text" value="<%=shipping%>" name="shipping" hidden>
+
+
+            </div>
+            <div class="text-center mt-4">
+              <input type="submit" value="Proceed to Buy" class="btn btn-success btn-lg">
+
+            </div>
+          </form>
+
+          <%}%>
+
+   
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function decreaseQuantity(i) {
+    var quantityElement = $('#quantity-' + i);
+    var quantity = parseInt(quantityElement.text());
+
+    // Decrease the quantity by 1
+    if (quantity > 0) {
+      quantity -= 1;
+      quantityElement.text(quantity);
+
+      // Send AJAX request to update the quantity on the server
+      updateQuantity(quantity, i);
+    }
+  }
+
+  function increaseQuantity(i) {
+    var quantityElement = $('#quantity-' + i);
+    var quantity = parseInt(quantityElement.text());
+
+    // Increase the quantity by 1
+    quantity += 1;
+    quantityElement.text(quantity);
+
+    // Send AJAX request to update the quantity on the server
+    updateQuantity(quantity, i);
+  }
+
+  function updateQuantity(quantity, i) {
+    console.log('hai: ', quantity, i)
+    $.ajax({
+      url: '/updateitem', // Replace with your actual URL
+      method: 'POST', // or 'GET' depending on your server configuration
+      data: { quantity: quantity, productId: i },
+      success: function(response) {
+        // Handle success response
+        console.log('Quantity updated successfully');
+      },
+      error: function(xhr, status, error) {
+        // Handle error response
+        console.error('Failed to update quantity');
+      }
+    });
+  }
+</script>
+
+
+
+
+</body>
+</html>

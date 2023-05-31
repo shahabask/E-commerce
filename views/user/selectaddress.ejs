@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delivery Address</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .delivery-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .address-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .address-card h4 {
+            color: #333;
+        }
+
+        .address-card p {
+            margin-bottom: 10px;
+        }
+
+        .edit-address-btn,
+        .change-address-btn {
+            background-color: #fcb20a;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .payment-method-btn{
+            background-color: green;
+            border:none;
+            color:#fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container delivery-container">
+    <form action="/paymentmethod" method="post">
+    
+        <h4>Deliver Address</h4>
+        <div class="address-card">
+       <% for(let i=0;i<address.length;i++){ %>
+        
+           <% if(i==0){%>
+            <input type="radio" name="index" checked value="<%= i %>">
+            <input type="text" name="index1" value="<%= i %>" hidden>
+            <input type="submit" value="Select Payment Method" class="btn btn-success float-right" >
+          <% }else{%>
+            <input type="radio" name="index" value="<%= i %>">
+            <input type="text" name="index1" value="<%= i %>" hidden>
+          <% }%>
+          <input type="text" value="<%=total%>" name="total" hidden> 
+         <p>Name: <%=user.firstName%> <%=user.lastName%></p>
+        <p>Address: <%=address[i].head%>,<%=address[i].street%>,<%=address[i].city%>,<%=address[i].state%>,<%=address[i].country%> <p>pincode: <%=address[i].pincode%></p> <P>LandMark: <%=address[i].landmark%></P></p>
+        <p>Phone: <%=user.phone%></p>
+        <p>Email: <%=user.email%></p>
+        <button class="edit-address-btn"><a href="/editaddress?index=<%=i%>" style="text-decoration: none;color: white;">Edit Address</a></button>
+        <!-- <button class="change-address-btn">Change Address</button> -->
+     <hr>
+        
+     <%  }%>
+           
+      
+        </div>
+   </form>
+    <!-- Add more address cards here -->
+
+    <div class="address-card">
+        <h4>Product Details</h4>
+        <div class="row">
+            <div class="col-md-3">
+                <img src="product1.jpg" alt="Product Image" class="img-fluid">
+            </div>
+            <div class="col-md-9">
+                <h5>Product Name</h5>
+                <p>Product Description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet at beatae commodi
+                    cumque dignissimos eaque earum esse excepturi exercitationem expedita facilis fugiat hic id impedit
+                </p>
+            </div>
+        </div>
+     
+    </div>
+
+</div>
+
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+

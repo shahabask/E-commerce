@@ -1,0 +1,133 @@
+<%- include('../layout/header.ejs',{admin:false}) %>
+
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f2f2f2;
+    margin-top: 3.9rem;
+  }
+
+  /* Full Width Image */
+  .full-width-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+  }
+
+  /* Category List */
+  .category-list {
+    list-style: none;
+    padding-left: 50px;
+  }
+
+  .category-list li {
+    margin-bottom: 10px;
+   margin-left: 30px;
+  }
+
+  /* Product Cards */
+  .card {
+    margin-bottom: 20px;
+    text-align: center; /* Center the card content */
+    padding: 20px; /* Add space around the card */
+    background-color: #fff; /* Set a white background */
+    border-radius: 5px; /* Add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  }
+
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .card-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .card-text {
+    color: #888888;
+    margin-bottom: 10px;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+
+  .btn-primary {
+    background-color: #fcc114;
+    border-color: #fcc114;
+  }
+
+  /* Discounts and Coupons */
+  .discount-alerts {
+    margin-top: 20px;
+  }
+
+  .discount-alerts .alert {
+    margin-bottom: 10px;
+  }
+</style>
+
+<div><img src="/public/userImage/extreme-hillside-mountain-biking-r1krl4pwqdgya6wz.jpg" alt="Full Width Image" class="full-width-image"></div>
+<div class="container-fluid" >
+  <!-- Full Width Image -->
+  
+
+  <div class="row mt-4 justify-content-center"> <!-- Center the product cards -->
+    <!-- Category List -->
+    <!-- <div class="col-lg-3 col-md-4 col-sm-12"> -->
+    <div style="width:1100px">
+      <ul class="category-list">
+        <% for(let j = 0; j < category.length; j++) { %>
+          <li class="btn btn-warning mt-1">
+            <a href="/categoryproduct?category=<%= category[j].category_name %>" style="text-decoration:none;color: rgb(11, 10, 10);">
+              <%= category[j].category_name %>
+            </a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+    <!-- </div> -->
+  
+    <!-- Product Cards -->
+    <div class="col-lg-9 col-md-8 col-sm-12">
+      <div class="row">
+        <% for (let i = 0; i < products.length; i++) { %>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card">
+              <a href="/productdetails?id=<%=products[i]._id%>&category=<%=products[i].category%>"><div style="border-color: #060606;border-bottom: 5px;">
+              <img src="/public/adminimage/<%= products[i].image[0] %>" class="card-img-top"  alt="Product Image">
+            </div></a>
+              <div class="card-body">
+                <h5 class="card-title"><%= products[i].name %></h5>
+                <p class="card-text">Price: <%= products[i].price %></p>
+                <a href="#" class="btn btn-primary">Add to Cart</a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Discounts and Coupons -->
+<div class="container discount-alerts">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="alert alert-success" role="alert">
+        <strong>50% off!</strong> Use coupon code <strong>SPORT50</strong> for a 50% discount.
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="alert alert-info" role="alert">
+        Free shipping on all orders above $50. Limited time offer!
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<%- include('../layout/footer.ejs',{admin:false}) %>

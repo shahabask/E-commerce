@@ -1,0 +1,35 @@
+.footer {
+    background-color: #000;
+    color: #fff;
+    padding: 40px 0;
+  }
+  
+  .footer h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .footer p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .social-icons {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .social-icons li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .social-icons li:last-child {
+    margin-right: 0;
+  }
+  
+
+  
+  
+  
