@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Reset Password</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -35,6 +36,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container mt-5 text-light">
     <h2>Reset Password</h2>
@@ -51,14 +53,15 @@
       <% 
       if (typeof message != 'undefined') {
         %>
-        <p class="error-message"><%= message %></p>
-        <%
+      <p class="error-message"><%= message %></p>
+      <%
       }
       %>
       <button type="submit" class="btn btn-primary">Reset Password</button>
     </form>
   </div>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
- 
+
 </body>
+
 </html>

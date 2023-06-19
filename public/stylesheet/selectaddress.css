@@ -1,0 +1,238 @@
+body {
+    background-color: #f5f5f5; /* Example attractive background color for the body */
+    color: #333;
+    margin-top: 80px;
+}
+
+.delivery-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+    .address-card {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .address-card h4 {
+        color: #333;
+    }
+
+    .address-card p {
+        margin-bottom: 10px;
+    }
+
+    .edit-address-btn,
+    .change-address-btn {
+        background-color: #fcb20a;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .payment-method-btn{
+        background-color: green;
+        border:none;
+        color:#fff;
+        text-decoration: none;
+    }
+    .step-circle {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+background-color: #1a237e;
+color: #fff;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 20px;
+position: relative;
+z-index: 1;
+margin-bottom: 10px;
+margin-left: 15px;
+}
+
+/* Line styles */
+.step-line {
+width: 2px;
+background-color: #1a237e;
+position: absolute;
+top: 20px;
+left: 19px;
+z-index: 0;
+}
+
+.step-line:first-child {
+top: 0;
+}
+
+.step-line:last-child {
+height: 20px;
+}
+.step-item.active {
+color: #fcb20a;
+font-weight: bold;
+}
+
+/* Special effect for motion effect */
+.motion-effect {
+animation-name: motion;
+animation-duration: 0.5s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+}
+
+@keyframes motion {
+0% {
+  transform: translateY(0);
+}
+100% {
+  transform: translateY(-10px);
+}
+}
+.address-table {
+width: 100%;
+border-collapse: collapse;
+margin-bottom: 20px;
+background-color: #f8f9fa;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+font-family: 'Arial', sans-serif;
+}
+
+.address-table th,
+.address-table td {
+padding: 10px;
+text-align: left;
+}
+
+.address-table th {
+background-color: #1a237e;
+color: #fff;
+}
+
+.address-table td {
+background-color: #e3e8ee;
+color: #000;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.address-table tr:hover {
+background-color: #d1d6e0;
+}
+
+.address-table .edit-address-btn {
+background-color: transparent;
+border: none;
+color: #1a237e;
+cursor: pointer;
+}
+
+.address-table .edit-address-btn:hover {
+text-decoration: underline;
+}
+form {
+    background-color: #e9f3f8; /* Example attractive background color */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+.modal-container {
+display: none;
+position: fixed;
+z-index: 1;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+background-color: #fefefe;
+margin: 15% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 50%;
+}
+
+.close-modal-btn {
+margin-top: 10px;
+}
+
+.modal-container.show {
+display: block;
+}
+.modal-container {
+display: none;
+position: fixed;
+z-index: 9999;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+overflow: auto;
+background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+background-color: #fefefe;
+margin: 15% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 400px;
+max-width: 90%;
+border-radius: 5px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h4 {
+margin-top: 0;
+}
+
+.modal-content .form-group {
+margin-bottom: 15px;
+}
+
+.modal-content label {
+display: block;
+margin-bottom: 5px;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"] {
+width: 100%;
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+
+.modal-content button {
+background-color: #4CAF50;
+color: #fff;
+padding: 8px 16px;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+
+.modal-content button.close-modal-btn {
+background-color: #ccc;
+}
+
+.modal-content button.save-button {
+background-color: #2196F3;
+}
+
+.modal-content button:hover {
+opacity: 0.8;
+}
+
+.modal-container.show {
+display: block;
+}

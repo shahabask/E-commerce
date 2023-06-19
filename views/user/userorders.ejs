@@ -1,113 +1,182 @@
-      <%- include('../layout/header.ejs') %>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
+<%- include('../layout/header.ejs') %>
+<script src="https://cdn.jsdelivr.net/npm/easyinvoice/dist/easyinvoice.min.js"></script>
+<style>
+  body {
+    margin-top: 100px;
+  }
 
-        .order-container {
-            max-width: 800px;
-            margin: 50px auto;
-            margin-top: 100px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-image {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-
-        .order-status {
-            font-weight: bold;
-            color: #28a745;
-        }
-
-        .order-history {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-        }
-
-        .order-history-item {
-            margin-bottom: 20px;
-        }
-    </style>
+  #viewButtonDiv {
+    margin-left: 350px;
+  }
+</style>
 </head>
+
 <body>
-    <div class="container order-container">
-        <h1>Order Details</h1>
-
-        <div class="row">
-           <% for(let i=0;i<orders.length;i++){%>
-               <div class="col-md-4">
-                <img src="/public/adminimage/<%=orders[i].image%>" alt="Product Image" class="product-image">
-            </div>
-            <div class="col-md-8">
-         
-                
-                <p>Price: <%=orders[i].price%></p>
-                <p>Quantity: <%=orders[i].quantity%></p>
-                <p>Total: <%=orders[i].total%></p>
-                <p>Status: <span class="order-status"><%=orders[i].status%></span></p>
-             
-                <%if(orders[i].status==='cancelled'){%>
-
-                    <%}else{%>
-    <button class="btn btn-danger"> <a href="/cancelorder?size=<%=orders[i].size%>&color=<%=orders[i].color%>&name=<%=orders[i].name%>" style="text-decoration: none;color: white;"> Cancel Order</a> </button>
-                          
-                   <%}%>
-                
-                </div>
-            <hr>
-         <%}%>
-         
-       
-
-        <!-- <div class="order-history">
-            <h2>Order History</h2>
-
-            <div class="order-history-item">
-                <div class="row">
-                    <div class="col-md-4">
-                        <img src="product.jpg" alt="Product Image" class="product-image">
-                    </div>
-                    <div class="col-md-8">
-                        <h4>Product Name</h4>
-                        <p>Price: $19.99</p>
-                        <p>Quantity: 1</p>
-                        <p>Total: $19.99</p>
-                        <p>Status: Delivered</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="order-history-item">
-                <div class="row">
-                    <div class="col-md-4">
-                        <img src="product.jpg" alt="Product Image" class="product-image">
-                    </div>
-                    <div class="col-md-8">
-                        <h4>Product Name</h4>
-                        <p>Price: $19.99</p>
-                        <p>Quantity: 1</p>
-                        <p>Total: $19.99</p>
-                        <p>Status: Delivered</p>
-                    </div>
-                </div>
-            </div>
-
-             Add more order history items as needed -->
-        </div> 
+  <!-- Start Banner Area -->
+  <section class="banner-area organic-breadcrumb mt-5">
+    <div class="container">
+      <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        <div class="col-first">
+          <h1>ORDERS</h1>
+        </div>
+      </div>
     </div>
+  </section>
+  <!-- End Banner Area -->
+  <section class="h-100 gradient-custom">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-10 col-xl-8">
+          <%for(let i=0;i<orders.length;i++){%>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+          <div class="container card my-3 border border-1" style="border-radius: 10px;">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="text-muted mb-0">Order Date : <%=orders[i].products[0].orderDate.toLocaleDateString()%></h6>
+                <p class="small text-muted mb-0">Order ID : <%=orders[i].products[0]._id%></p>
+              </div>
+              <%for(let j=0;j<orders[i].products.length;j++){%>
+
+
+              <div class="card shadow-0 border mb-4">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <img src="/public/adminimage/<%=orders[i].products[j].image%>" class="img-fluid" alt="Phone">
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0"><%=orders[i].products[j].name%></p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">Color: <%=orders[i].products[j].color%></p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">Size: <%=orders[i].products[j].size%></p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">Qty: <%=orders[i].products[j].quantity%></p>
+                    </div>
+                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                      <p class="text-muted mb-0 small">Price: &#8377;<%=orders[i].products[j].price%></p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <%}%>
+            <div class="d-flex justify-content-between pt-2 align-items-center">
+                <div>
+                    <p class="fw-bold mb-0">Order Details</p>
+                    <p class="text-muted mb-0 pt-2">Order Status : <%=orders[i].status[0]%></p>
+              <p class="text-muted mb-0 pt-2">Payment Method : <%=orders[i].paymentMethod[0]%></p>
+            </div>
+            <h4 class="text-muted mb-0"><span class="fw-bold">Total: </span>&#8377;<%=orders[i].products[0].grandTotal%></h4>
+          </div>
+
+        </div>
+        <div class="row card-footer border-0 py-4" style="background-color: #221e1e; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+          <!-- <div class="col-md-6">
+             <%if(orders[i].status[0]=='cancelled'){%>
+
+             
+                  <div class="d-flex">
+                      <h6 class="text-danger mt-2"><b>This order has been Cancelled</b></h6>
+                  </div>
+              {{else if (eq this.status "Delivered")}} <%}else if(orders[i].status[0]=='delivered'){%>
+                  {{#if this.return}}
+                      <div class="d-flex align-items-start">
+                          <h6 class="text-warning mt-2"><b>This order has been Returned</b></h6>
+                      </div>
+                  {{else}}
+                      <div class="d-flex align-items-start">
+                          <a class="btn btn-warning return-button" data-bs-orderid="{{this.id}}"  data-bs-toggle="modal" data-bs-target="#returnProduct">Return Order</a>
+                      </div>
+                      {{#if returnErr}}
+                      <div class="mt-2">
+                          <p class="text-danger">{{returnErr}}</p>
+                      </div>
+                      {{else}}
+                      <div class="mt-2">
+                          <p class="text-light">You can only return before 7 days from the date of Delivery.</p>
+                      </div>
+                      {{/if}}
+                  {{/if}}
+              {{else}}  <%}else{%>
+                  <div class="d-flex align-items-start">
+                      <a class="btn btn-danger text-white" onclick="cancelOrder('{{this.id}}')">Cancel Order</a>
+                  </div>
+              {{/if}} <%}%>
+            </div> -->
+          <!-- <div class="col-md-6 text-right">
+              <button class="btn btn-secondary btn-sm" onclick="invoiceGenerate('{{this.id}}')" style="font-size: 12px;">Download Invoice</button>
+            </div> -->
+          
+            <% if(orders[i].status[0]!='delivered'&& orders[i].status[0]!='cancelled'&&orders[i].status[0]!='returned'){%>
+
+            <div class="d-flex align-items-start">
+              <a class="btn btn-danger text-white" onclick="cancelOrder('<%=orders[i].products[0]._id%>')">Cancel Order</a>
+          </div>
+          <%}%>
+          <div class="col-md-6 text-right align-items-end" id="viewButtonDiv">
+            <a href="/order-details?id=<%=orders[i].products[0]._id%>" style="text-decoration: none;"> <button class="btn btn-secondary btn-sm" style="font-size: 12px;">View Details</button></a>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <%}%>
+      </div>
+    </div>
+  </div>
+</section>
+       <%if(orders.length==0){%>
+      <div style="height: 370px;">
+        <h2 style="text-align: center;">No Order Placed.</h2>
+      </div>
+      <%}%>
+
+<!-- {{!-- RETURN MODAL --}} -->
+
+<!-- Modal -->
+
+<!-- {{!-- RETURN MODAL --}} -->
+
+<script>
+  function cancelOrder(orderId) {
+      Swal.fire({
+          title: 'Are you sure to cancel this order?',
+          text: "We apologize if something happened wrong",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Cancel Order!',
+          cancelButtonText: 'No, keep my order'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              Swal.fire(
+                  'Cancelled!',
+                  'Order has been cancelled.',
+                  'success'
+              ).then(() => {
+                  window.location.href = '/cancel-order?orderId=' + orderId;
+              });
+          }
+      });
+  }
+</script>
+
+<script>
+    var buttonFields = document.querySelectorAll('.return-button')
+    buttonFields.forEach((button)=>{
+        button.addEventListener('click',()=>{
+            var orderid = button.getAttribute('data-bs-orderid')
+            var modalField = document.getElementById('idField')
+            modalField.value = orderid
+        })
+    })
+</script>
+<%- include('../layout/footer.ejs')%>
 </body>
+
 </html>

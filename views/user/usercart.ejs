@@ -1,62 +1,65 @@
       <%- include('../layout/header.ejs',{admin:false}) %>
-
+      <meta charset="UTF-8">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+
       <style>
         body {
           background-color: #f8f9fa;
           color: #000;
+          margin-top: 150px;
         }
 
         .cart-container {
-
-          max-width: 800px;
-          margin-top: 100px;
-          /* margin: 50px auto; */
+          max-width: 900px;
+          margin: 50px auto;
           padding: 20px;
-          background-color: #1a237e;
+          background-color: #fff;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+
         }
 
         .cart-item {
-
-          background-color: #fff;
+          display: flex;
           padding: 20px;
-          border-radius: 5px;
-          margin-bottom: 20px;
-          border-bottom: 1px solid;
+          border-bottom: 1px solid #ddd;
         }
 
         .cart-item img {
           max-width: 100px;
           height: auto;
-          border-radius: 5px;
+          margin-right: 20px;
+        }
+
+        .cart-item-details {
+          flex-grow: 1;
         }
 
         .cart-item-title {
-          color: #000;
+          font-size: 18px;
           font-weight: bold;
           margin-bottom: 10px;
         }
 
         .cart-item-price {
-          color: #fcb20a;
-          font-weight: bold;
+          font-size: 16px;
+          color: #B12704;
+          margin-bottom: 10px;
         }
 
         .quantity {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          margin-top: 10px;
+          margin-bottom: 10px;
         }
 
         .quantity-btn {
-          background-color: #1a237e;
-          color: #fff;
+          background-color: #f0c14b;
+          color: #111;
           border: none;
           padding: 5px 10px;
-          border-radius: 5px;
+          border-radius: 2px;
           cursor: pointer;
         }
 
@@ -67,133 +70,474 @@
           padding: 5px 10px;
           border-radius: 5px;
           cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+
+        .remove-btn:hover {
+          background-color: #e69500;
+        }
+
+        /* Special effect for table rows */
+        .table tbody tr:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+          transition: background-color 0.3s ease;
+        }
+
+        .step-item.active {
+          color: #fcb20a;
+          font-weight: bold;
+        }
+
+        /* Special effect for completed steps */
+        .step-item.completed {
+          color: #4caf50;
+        }
+
+        /* Circle styles */
+        .step-circle {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #1a237e;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          position: relative;
+          z-index: 1;
+          margin-bottom: 10px;
+          margin-left: 15px;
+        }
+
+        /* Line styles */
+        .step-line {
+          width: 2px;
+          background-color: #1a237e;
+          position: absolute;
+          top: 20px;
+          left: 19px;
+          z-index: 0;
+        }
+
+        .step-line:first-child {
+          top: 0;
+        }
+
+        .step-line:last-child {
+          height: 20px;
+        }
+
+        /* Special effect for motion effect */
+        .motion-effect {
+          animation-name: motion;
+          animation-duration: 1s;
+          animation-iteration-count: infinite;
+          animation-direction: alternate;
+        }
+
+        @keyframes motion {
+          0% {
+            transform: translateY(0);
+          }
+
+          100% {
+            transform: translateY(-10px);
+          }
+        }
+
+        .total-container {
+          max-width: 900px;
+          /* Increase the max-width value */
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f8f9fa;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          margin-top: 100px;
+          /* margin-left: 60px;  */
+        }
+
+        .invoice-heading {
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 20px;
+        }
+
+        .invoice-details {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+        }
+
+        .invoice-details span {
+          font-weight: bold;
+        }
+
+        /* Coupon form styles */
+        .coupon-form {
+          margin-top: 20px;
+          padding: 20px;
+          background-color: #f8f9fa;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .coupon-field {
+          display: flex;
+          align-items: center;
+        }
+
+        .coupon-input {
+          flex: 1;
+          padding: 5px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin-right: 10px;
+        }
+
+        .apply-btn {
+          background-color: #1a237e;
+          color: #fff;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        .message {
+          color: red;
+          margin-top: 5px;
+        }
+
+        #grandTotal {
+          font-family: Arial, sans-serif;
+          /* Use a font that supports the rupee symbol */
         }
       </style>
-      </head>
+
 
       <body>
-        <div class="container cart-container">
-          <div class="cart-item">
-            <div class="row">
-
-
-              <%   if(typeof message !='undefined'){%>
-              <div class="col-md-12" style="text-align: center;">
-
-                <%=message%></div>
-
-              <% }else{%>
-
-              <% for(let i=0;i<products.length;i++){%>
-              <div class="col-md-3">
-                <img src="/public/adminimage/<%=products[i].image%>" alt="Product Image">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9">
+              <div class="step-container d-flex justify-content-between align-items-center mb-4">
+                <div class="step-item active" style="color: #fcb20a;">
+                  <div class="step-circle motion-effect">
+                    <i class="fas fa-shopping-cart"></i>
+                  </div>
+                  <span class="step-heading">Shopping Cart</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-item">
+                  <div class="step-circle">
+                    <i class="fas fa-check-circle"></i>
+                  </div>
+                  <span class="step-heading">Checkout</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-item">
+                  <div class="step-circle">
+                    <i class="fas fa-truck"></i>
+                  </div>
+                  <span class="step-heading">Order Complete</span>
+                </div>
               </div>
-              <div class="col-md-4">
-                <h4 class="cart-item-title"><%=products[i].modelName%></h4>
-                <p><%=products[i].description%></p>
-                <h5>Qty: <%=products[i].quantity%></h5>
-                <h5>Size: <%=products[i].size%></h5>
-                <h5>Color: <%=products[i].color%></h5>
-                <h5>Price: <product-unit-price><%=products[i].price%></product-unit-price> </h5>
-                <h5>total: <%=products[i].total%></h5>
-              </div>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Product Details</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Size</th>
+                      <th scope="col">Color</th>
+                      <th scope="col">Product Total</th>
+                      <th scope="col">Action</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
-              <div class="col-md-3">
-                <!-- <h4 class="cart-item-price">$99.99</h4> -->
-                <button class="quantity-btn" onclick="decreaseQuantity(<%=i%>)">-</button>
-                <span class="product-quantity" id="quantity-<%=i%>"><%= products[i].quantity %></span>
-                <button class="quantity-btn" onclick="increaseQuantity(<%=i%>)">+</button>
+
+                    <% for (let i = 0; i <products.length; i++) { %>
+                    <tr>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <img src="/public/adminimage/<%= products[i].image %>" alt="Product Image" class="mr-3" style="max-width: 100px; height: auto; border-radius: 5px;">
+                          <div>
+                            <h4 class="cart-item-title"><%= products[i].modelName %></h4>
+                            <p><%= products[i].description %></p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="product-price">&#8377;<%= products[i].price %></span>
+                      </td>
+                      <td>
+                        <span class="product-price" id="displayQuantity"> <%= products[i].quantity %></span>
+                      </td>
+
+                      <td><%= products[i].size %></td>
+                      <td><%= products[i].color %></td>
+                      <td>
+                        <span class="product-total">&#8377;<%= products[i].total %></span>
+                      </td>
+                      <td>
+                        <div class="quantity">
+                          <button class="quantity-btn" onclick="decreaseQuantity(<%= i %>,'<%=products[i].size%>','<%=products[i].color%>','<%=products[i].stock%>')">-</button>
+                          <span class="product-quantity" id="quantity-<%= i %>"><%= products[i].quantity %></span>
+                          <button class="quantity-btn" onclick="increaseQuantity(<%= i %>,'<%=products[i].size%>','<%=products[i].color%>','<%=products[i].stock%>')">+</button>
+                        </div>
+                        <div class="message" id="message-<%= i %>"></div>
+                      </td>
+                      <td>
+                        <button class="remove-btn">
+                          <a href="/removeitem?index=<%= i %>" style="text-decoration: none; color: inherit;">Remove</a>
+                        </button>
+                      </td>
+                    </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+                <% if(products.length==0){%>
+
+                <div style="margin-left: 360px; margin-top: 100px;">
+                  <img src="/public/userImage/lidl-romania-lidl.gif" alt="">
+                </div>
+
+                <%}%>
+              </div>
+            </div>
+            <% if (products.length!=0){%>
+                <div class="col-md-3">
+                  <div class="total-container">
+                    <h2 class="invoice-heading">Invoice Details</h2>
+                    <div class="invoice-details">
+                      <span>Subtotal:</span>
+                      <span>&#8377; <%= total %></span>
+                    </div>
+                    <div class="invoice-details">
+                      <span>Coupon Discount:</span>
+                      <p style="font-weight: 600;">&#8377;</p><span id="couponDiscountSpan"></span>
+                    </div>
+                    <div class="invoice-details">
+                      <span>Other Discount:</span>
+                      <span>&#8377; <%= 0 %></span>
+                    </div>
+                    <div class="invoice-details">
+                      <span>Shipping:</span>
+                      <span>&#8377; <%= shipping %></span>
+
+                    </div>
+                    <%if((total)<2000){%>
+                    <p style="font-size: x-small; color: rgb(68, 124, 209);">purchase for more than <span style="color: rgb(243, 35, 35);"> &#8377;1999 </span> for free delivery</p>
+                    <% }%>
+                    <hr>
+                    <div class="invoice-details">
+                      <span>Total: </span>
+                      <span id="grandTotal">&#8377; <%=total+shipping %></span>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="text-right">
+                      <form action="/buyfromcart" method="post">
+                        <input type="hidden" name="total" id="totalInput">
+                        <!-- <input type="hidden" name="shipping" value="<%= shipping %>"> -->
+  
+                        <input type="text" name="couponDiscount" id="couponDiscount" hidden>
+                        <input type="text" name="otherDiscount" id="otherDiscount" hidden>
+                        <input type="submit" value="Proceed to Checkout" class="btn btn-primary">
+                      </form>
+                    </div>
+                  </div>
+                </div>
                 
-                
-              
-
-
-
-                <button class="remove-btn" onclick="removeFromCart()"><a href="/removeitem?index=<%=i%>" style="text-decoration: none;">Remove</a> </button>
               </div>
-              <hr>
-              <%}%> 
+                
 
-          <%  }%>
+
+              <div class="row mt-4">
+                <!-- <div class="col-md-8">
+                  <div class="coupon-form">
+                    <h4>Apply Coupon</h4>
+                    <form>
+                      <div class="coupon-field">
+                        <input type="text" id="couponinput" name="coupon" class="coupon-input" placeholder="Enter coupon code">
+
+                        <button type="button" class="apply-btn" onclick="checkCouponValidate()">Apply Coupon</button>
+                      </div>
+                    </form>
+
+                  </div>
+                </div> -->
+
+                <!-- <div class="col-md-4">
+                  <div class="text-right">
+                    <form action="/buyfromcart" method="post">
+                      <input type="hidden" name="total" id="totalInput"> -->
+                      <!-- <input type="hidden" name="shipping" value="<%= shipping %>"> -->
+
+                      <!-- <input type="text" name="couponDiscount" id="couponDiscount" hidden>
+                      <input type="text" name="otherDiscount" id="otherDiscount" hidden>
+                      <input type="submit" value="Proceed to Checkout" class="btn btn-primary">
+                    </form>
+                  </div>
+                </div> -->
+              </div> <%  }%>
             </div>
-          </div>
-
-
-          <!-- Add more cart items here -->
-          <%   if(typeof message !='undefined'){%>
-          <div class="text-center mt-4">
-            <a href="/" class="btn btn-warning btn-lg" style="color: black;font-weight: 600;font-family: 'Courier New', Courier, monospace;">Go For Shopping</a>
-          </div>
-
-          <%  }else{%>
-          <form action="/selectaddress" method="post">
-            <div class="" style="text-align: center;height: 40px;max-width:800px;background-color: #fff;border-radius: 5px;">
-              <h3>Total Price: <%=total%></h3>
-              <input type="text" value="<%=total%>" name="total" hidden>
-              <input type="text" value="<%=shipping%>" name="shipping" hidden>
-
-
-            </div>
-            <div class="text-center mt-4">
-              <input type="submit" value="Proceed to Buy" class="btn btn-success btn-lg">
-
-            </div>
-          </form>
-
-          <%}%>
-
-   
-</div>
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  function decreaseQuantity(i) {
-    var quantityElement = $('#quantity-' + i);
-    var quantity = parseInt(quantityElement.text());
-
-    // Decrease the quantity by 1
-    if (quantity > 0) {
-      quantity -= 1;
-      quantityElement.text(quantity);
-
-      // Send AJAX request to update the quantity on the server
-      updateQuantity(quantity, i);
-    }
-  }
-
-  function increaseQuantity(i) {
-    var quantityElement = $('#quantity-' + i);
-    var quantity = parseInt(quantityElement.text());
-
-    // Increase the quantity by 1
-    quantity += 1;
-    quantityElement.text(quantity);
-
-    // Send AJAX request to update the quantity on the server
-    updateQuantity(quantity, i);
-  }
-
-  function updateQuantity(quantity, i) {
-    console.log('hai: ', quantity, i)
-    $.ajax({
-      url: '/updateitem', // Replace with your actual URL
-      method: 'POST', // or 'GET' depending on your server configuration
-      data: { quantity: quantity, productId: i },
-      success: function(response) {
-        // Handle success response
-        console.log('Quantity updated successfully');
-      },
-      error: function(xhr, status, error) {
-        // Handle error response
-        console.error('Failed to update quantity');
-      }
-    });
-  }
-</script>
 
 
 
 
-</body>
-</html>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+              function decreaseQuantity(i, size, color, stock) {
+                
+                var quantityElement = $('#quantity-' + i);
+                var quantity = parseInt(quantityElement.text());
+            
+                // Decrease the quantity by 1
+                if (quantity > 1) {
+                  quantity -= 1;
+                  quantityElement.text(quantity);
+                  if(quantity<=stock){
+
+                    $('#message-' + i).text('');
+                  }
+                  // Send AJAX request to update the quantity on the server
+                  updateQuantity(quantity, i, size, color);
+                }
+              }
+
+              function increaseQuantity(i, size, color, stock) {
+                var quantityElement = $('#quantity-' + i);
+                var quantity = parseInt(quantityElement.text());
+              // if(quantity<=stock){
+                quantity += 1;
+                quantityElement.text(quantity);
+                if(quantity<stock){
+
+                  updateQuantity(quantity, i, size, color);
+                }
+              // }
+                // Increase the quantity by 1
+                
+                if (quantity > stock) {
+                  // Show message below the buttons
+                  $('#message-' + i).text('Exceeded the stock limit');
+                  return; // Exit the function
+                }
+                // Send AJAX request to update the quantity on the server
+              }
+
+
+
+              function updateQuantity(quantity, i, size, color) {
+                // console.log('hai: ', quantity, i)
+                var size = size
+                var color = color
+
+                $.ajax({
+                  url: '/updateitem', // Replace with your actual URL
+                  method: 'POST', // or 'GET' depending on your server configuration
+
+                  data: {
+                    quantity: quantity,
+                    productId: i,
+                    size: size,
+                    color: color
+                  },
+                  success: function(response) {
+                    // window.location.reload()
+                    const quantity=$('#displayQuantity')
+                    quantity.text(response.displayQuantity)
+                  
+                    // Handle success response
+                    console.log('Quantity updated successfully');
+
+                  },
+                  error: function(xhr, status, error) {
+                    // Handle error response
+                    console.error('Failed to update quantity');
+                  }
+
+                });
+              }
+
+
+              var isCouponApplied = false;
+
+              // function checkCouponValidate() {
+              //   var couponInput = document.getElementById('couponinput');
+              //   var grandTotal = parseFloat(document.getElementById("grandTotal").textContent.trim().replace(/[^0-9.]/g, ""))
+
+              //   var couponValue = couponInput.value
+              //   console.log(couponValue)
+              //   if (isCouponApplied) {
+              //     // Coupon already applied, no need to repeat
+              //     couponInput.value = 'coupon is already applied'
+              //     couponInput.style.color = String('green')
+
+              //     return;
+              //   }
+              //   // Create the request payload
+              //   var data = {
+              //     coupon: couponValue,
+              //     total: grandTotal
+              //   };
+
+              //   // Send the AJAX request
+              //   fetch('/applycoupon', {
+              //       method: 'POST',
+              //       headers: {
+              //         'Content-Type': 'application/json'
+              //       },
+              //       body: JSON.stringify(data)
+              //     })
+              //     .then(response => response.json())
+              //     .then(result => {
+              //       const couponDiscount = result.couponDiscount;
+              //       const Total = result.total
+              //       console.log(couponDiscount)
+              //       if (couponDiscount) {
+
+              //         let x = document.getElementById('couponDiscountSpan')
+              //         couponDiscountSpan.textContent = couponDiscount
+              //         document.getElementById('couponDiscount').value = couponDiscount
+              //         const grandTotalElement = document.getElementById("grandTotal");
+              //         grandTotalElement.textContent = "\u20B9 " + Total;
+              //         isCouponApplied = true
+              //         // const totalInput = document.getElementById("totalInput");
+              //         // totalInput.value =Total;
+
+              //       } else {
+              //         couponInput.value = result
+              //         // couponInput.placeholder = result
+              //         couponInput.style.color = String('red')
+
+              //         // document.getElementById('responseMessage').textContent = result 
+              //       }
+              //       // Handle the response from the server
+              //       console.log(result);
+              //     })
+              //     .catch(error => {
+              //       // Handle any errors that occur during the request
+              //       console.error(error);
+              //     });
+
+              // }
+              // couponInput.addEventListener('input', function() {
+              //   if (couponInput.value === '' || couponInput.value === 'not a valid coupon' || couponInput.value === 'coupon is already applied') {
+              //     couponInput.style.color = ''; // Set it back to an empty string for normal text color
+              //   }
+              // })
+            </script>
+
+
+
+
+      </body>
+
+      </html>

@@ -1,107 +1,127 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Delivery Address</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
-    <style>
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-        }
+<!-- 
+   <!DOCTYPE html>
+   <html>
+   <head> -->
+<%-include('../layout/header.ejs',{admin:false})%>
+<title>Delivery Page</title>
 
-        .delivery-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-        }
 
-        .address-card {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
 
-        .address-card h4 {
-            color: #333;
-        }
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="/public/stylesheet/selectaddress.css">
 
-        .address-card p {
-            margin-bottom: 10px;
-        }
-
-        .edit-address-btn,
-        .change-address-btn {
-            background-color: #fcb20a;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .payment-method-btn{
-            background-color: green;
-            border:none;
-            color:#fff;
-            text-decoration: none;
-        }
-    </style>
 </head>
-<body>
-<div class="container delivery-container">
-    <form action="/paymentmethod" method="post">
-    
-        <h4>Deliver Address</h4>
-        <div class="address-card">
-       <% for(let i=0;i<address.length;i++){ %>
-        
-           <% if(i==0){%>
-            <input type="radio" name="index" checked value="<%= i %>">
-            <input type="text" name="index1" value="<%= i %>" hidden>
-            <input type="submit" value="Select Payment Method" class="btn btn-success float-right" >
-          <% }else{%>
-            <input type="radio" name="index" value="<%= i %>">
-            <input type="text" name="index1" value="<%= i %>" hidden>
-          <% }%>
-          <input type="text" value="<%=total%>" name="total" hidden> 
-         <p>Name: <%=user.firstName%> <%=user.lastName%></p>
-        <p>Address: <%=address[i].head%>,<%=address[i].street%>,<%=address[i].city%>,<%=address[i].state%>,<%=address[i].country%> <p>pincode: <%=address[i].pincode%></p> <P>LandMark: <%=address[i].landmark%></P></p>
-        <p>Phone: <%=user.phone%></p>
-        <p>Email: <%=user.email%></p>
-        <button class="edit-address-btn"><a href="/editaddress?index=<%=i%>" style="text-decoration: none;color: white;">Edit Address</a></button>
-        <!-- <button class="change-address-btn">Change Address</button> -->
-     <hr>
-        
-     <%  }%>
-           
-      
-        </div>
-   </form>
-    <!-- Add more address cards here -->
 
-    <div class="address-card">
-        <h4>Product Details</h4>
-        <div class="row">
-            <div class="col-md-3">
-                <img src="product1.jpg" alt="Product Image" class="img-fluid">
-            </div>
-            <div class="col-md-9">
-                <h5>Product Name</h5>
-                <p>Product Description Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet at beatae commodi
-                    cumque dignissimos eaque earum esse excepturi exercitationem expedita facilis fugiat hic id impedit
-                </p>
-            </div>
+<body>
+  <div class="container delivery-container">
+    <div class="step-container d-flex justify-content-between align-items-center mb-4">
+      <div class="step-item ">
+        <div class="step-circle">
+          <i class="fas fa-shopping-cart"></i>
         </div>
-     
+        <span class="step-heading">Shopping Cart</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item active">
+        <div class="step-circle motion-effect">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <span class="step-heading">Checkout</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-circle">
+          <i class="fas fa-truck"></i>
+        </div>
+        <span class="step-heading">Order Complete</span>
+      </div>
+    </div>
+    <div>
+      <form action="/selectaddress" method="post" id="addressForm">
+        <h4>Delivery Address</h4>
+        <table class="address-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let i = 0; i < address.length; i++) { %>
+            <tr>
+              <td>
+                <input type="checkbox" name="index" value="<%= i %>" onclick="handleCheckbox(this)" <% if(i == 0) { %> checked <% } %>>
+              </td>
+              <td><%= user.firstName %> <%= user.lastName %></td>
+              <td>
+                <%= address[i].head %>, <%= address[i].street %>, <%= address[i].city %>, <%= address[i].state %>, <%= address[i].country %>
+                <br>pincode: <%= address[i].pincode %>
+                <br>LandMark: <%= address[i].landmark %>
+              </td>
+              <td><%= user.phone %></td>
+              <td><%= user.email %></td>
+              <td>
+
+                <a href="/editaddresscheckout?index=<%= i %>" style="text-decoration: none;" id="edit"> <i class="fas fa-edit"></i></a>
+
+              </td>
+            </tr>
+            <% } %>
+
+          </tbody>
+
+
+
+
+        </table>
+        <a href="/userprofile" class="btn btn-info text-decoration-none">Add Address</a>
+        <input type="text" name="addressIndex" id="selectedAddressIndex" value="0" hidden>
+        <div class="text-right">
+
+          <input type="submit" value="Proceed to Payment" class="btn btn-success">
+        </div>
+      </form>
     </div>
 
-</div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
 
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <script>
+      function handleCheckbox(checkbox) {
+        $('input[name="index"]').not(checkbox).prop('checked', false);
+        if (checkbox.checked) {
+          $('#selectedAddressIndex').val(checkbox.value);
+          console.log(checkbox.value);
+        } else {
+          // If none of the checkboxes are checked, set the value to the default (0)
+          const checkedCheckbox = $('input[name="index"]:checked');
+          if (checkedCheckbox.length === 0) {
+            $('#selectedAddressIndex').val(0);
+            console.log(0);
+          }
+        }
+      }
+
+
+
+      // $('#edit').on('submit',function(event){
+      //       event.preventDefault();
+      //     })
+
+      // $('#addressForm').on('submit',function(event){
+      //   event.preventDefault();
+      // })
+    </script>
+
 </body>
-</html>
 
+</html>

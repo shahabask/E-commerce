@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%-include('../layout/header.ejs',{admin:false})%>
+  <title>Classic Wallet</title>
+  <style>
+    body {
+
+      font-family: Arial, sans-serif;
+      background-color: #654321bc;
+      margin-top: 120px;
+      padding: 20px;
+    }
+
+    .wallet {
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: #1283ca;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .balance-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .balance {
+      font-size: 24px;
+      font-weight: bold;
+      padding: 10px;
+      background-color: #c2e7ff;
+      border-radius: 5px;
+      color: #654321;
+      display: inline-block;
+    }
+
+    .gif {
+      width: 50px;
+      height: 50px;
+      margin-left: 10px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .transaction-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .transaction-table th,
+    .transaction-table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .transaction-table th {
+      background-color: #f1f1f1;
+
+    }
+
+    .transaction-table td.amount {
+      font-weight: bold;
+      color: gold;
+    }
+
+    .transaction-table td.description {
+      max-width: 300px;
+      color: black
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wallet">
+    <div class="balance-container">
+      <div class="balance">Wallet Balance: &#8377;<%=wallet.balance%></div>
+      <img style="justify-content: center;border-radius: 5px;width: 120px;height: 100px;" class="gif" src="/public/wallet/wallet_blue_800x600_dribbble.gif" alt="Money GIF">
+    </div>
+    <div class="table-container">
+      <table class="transaction-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%for(let i=0;i<wallet.history.length;i++){%>
+          <tr>
+            <td style="font-weight: bold;"><%=wallet.history[i].transactionDate.toLocaleDateString()%></td>
+            <td class="description"><%=wallet.history[i].description%></td>
+            <td class="amount">&#8377;<%=wallet.history[i].amount%></td>
+          </tr>
+          <%}%>
+          <tr>
+            <td style="font-weight: bold;">2023-05-28</td>
+            <td class="description">Refund</td>
+            <td class="amount">+$100.00</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold;">2023-05-25</td>
+            <td class="description">Restaurant Bill</td>
+            <td class="amount">-$20.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>

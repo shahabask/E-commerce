@@ -1,197 +1,638 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
-    <style>
-        body {
-            background-color: #f5f5f5;
+  <%-include('../layout/header.ejs',{admin:false})%>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      margin-top: 80px;
+    }
+
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      background-color: #e9f3f8;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      /* justify-content: ; */
+    }
+
+    .product-details,
+    .payment-details {
+      flex: 1;
+    }
+
+    .product-details h2,
+    .payment-details h2 {
+      color: #1a237e;
+      margin-bottom: 20px;
+    }
+
+    .product-details p,
+    .payment-details p {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .product-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 10%;
+      object-fit: cover;
+    }
+
+    .total-amount {
+      text-align: right;
+      flex: 0 0 200px;
+    }
+
+    .total-amount h2 {
+      color: #1a237e;
+      margin-bottom: 20px;
+    }
+
+    .total-amount h4 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .payment-options {
+      background-color: #1a237e;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .payment-options h2 {
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .payment-options label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .place-order-button {
+      margin-top: 20px;
+      background-color: #1a237e;
+      color: #fff;
+      border: none;
+    }
+
+    .place-order-button:hover {
+      background-color: #fff;
+      color: #1a237e;
+    }
+
+    .order-animation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-top: 50px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideIn 0.5s ease-in-out forwards;
+    }
+
+    @keyframes slideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .product-table {
+      width: 95%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      background-color: #f5deb3;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-table th,
+    .product-table td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    .product-table th {
+      background-color: #1a237e;
+      color: #fff;
+    }
+
+    .product-table td {
+      background-color: #f5f5f5;
+      color: #333;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .product-table td:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    .product-table td:last-child {
+      border-radius: 0 10px 10px 0;
+    }
+
+    .product-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* .step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #1a237e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 10px;
+    margin-left: 15px;
+  } */
+
+    /* Line styles */
+    .step-container {
+      max-width: 800px;
+      margin: 50px auto;
+      justify-content: center;
+      display: flex;
+      padding: 20px;
+    }
+
+    .step-item {
+      flex: 1;
+      text-align: center;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background-color: #ccc;
+      margin: 0 5px;
+    }
+    .step-item.active {
+          color: #fcb20a;
+          font-weight: bold;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #f5deb3;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            justify-content: space-between;
+    .step-circle {
+      background-color: #1a237e;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 55px;
+    }
+
+    .step-circle i {
+      color: #fff;
+    }
+
+    .step-heading {
+      color: #333;
+    }
+
+    .active .step-circle {
+      background-color: #1a237e;
+    }
+
+    .active .step-circle i {
+      color: #fff;
+    }
+
+    .motion-effect {
+      animation: motion 1s infinite;
+    }
+
+    @keyframes motion {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+    .coupon-form {
+          margin-top: 20px;
+          padding: 20px;
+          background-color: #f8f9fa;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        .product-details,
-        .payment-details {
-            flex: 1;
+        .coupon-field {
+          display: flex;
+          align-items: center;
         }
 
-        .product-details h2,
-        .payment-details h2 {
-            color: #8b4513;
-            margin-bottom: 20px;
+        .coupon-input {
+          flex: 1;
+          padding: 5px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin-right: 10px;
         }
 
-        .product-details p,
-        .payment-details p {
-            color: #333;
-            margin-bottom: 10px;
+        .apply-btn {
+          background-color: #1a237e;
+          color: #fff;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
         }
-
-        .product-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 10%;
-            object-fit: cover;
-        }
-
-        .total-amount {
-            text-align: right;
-            flex: 0 0 200px;
-        }
-
-        .total-amount h2 {
-            color: #8b4513;
-            margin-bottom: 20px;
-        }
-
-        .total-amount h4 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .payment-options {
-            background-color: #8b4513;
-            color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
-        }
-
-        .payment-options h2 {
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .payment-options label {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .place-order-button {
-            margin-top: 20px;
-            background-color: #8b4513;
-            color: #fff;
-            border: none;
-        }
-
-        .place-order-button:hover {
-            background-color: #654321;
-        }
-
-        .order-animation {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            margin-top: 50px;
-            text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideIn 0.5s ease-in-out forwards;
-        }
-
-        @keyframes slideIn {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="product-details">
-            <h2>Product Details</h2>
-            <% for(let i=0;i<products.length;i++){%>
-                <img class="product-image" src="/public/adminimage/<%=products[i].image%>" alt="Product Image">
-           <p><%=products[i].modelName%></p>
-            <p>Qty: <%=products[i].quantity%></p>
-            <p>Price: <%=products[i].price%></p>
-     
 
-          <%  }%>
-            
-            
-        </div>
+  <div class="step-container d-flex justify-content-between align-items-center mb-4">
+    <div class="step-item ">
+      <div class="step-circle">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <span class="step-heading">Shopping Cart</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item active">
+      <div class="step-circle motion-effect">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <span class="step-heading">Checkout</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-item">
+      <div class="step-circle">
+        <i class="fas fa-truck"></i>
+      </div>
+      <span class="step-heading">Order Complete</span>
+    </div>
+  </div>
+  </div>
+  <div class="row">
+      
 
-        <div class="payment-details">
-            <div class="payment-card">
-                <div class="card-header">
-                    <h2>Payment Details</h2>
-                </div>
-                <div class="card-body">
-                    <!-- <p>Discount: $10</p> -->
-                    <h6>Total: <%=total%></h6>
-                    <!-- <p>Coupon Applied: ABC123</p> -->
-                    <p>Delivery Charges: <%=shipping%></p>
-                </div>
-            </div>
+   
+        <div class="col-md-8 col-lg-8">
+  <div class="container" >
 
-            <div class="total-amount">
-                <h2>Total Amount</h2>
-                <h4>Total Price: <%=grandTotal%></h4>
-            </div>
-           <form action="/orderplaced" method="post">
-            <div class="payment-options">
-                <h2>Select Payment Option</h2>
-                <input type="text" value="<%=total%>" name="total" hidden> 
-                <input type="text" value="<%=shipping%>" name="shipping" hidden> 
-                <input type="text" value="<%=grandTotal%>" name="grandTotal" hidden> 
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="paymentOption" id="cashOnDelivery" value="cashOnDelivery" checked>
-                    <label class="form-check-label" for="cashOnDelivery">Cash on Delivery</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="paymentOption" id="creditCard" value="creditCard">
-                    <label class="form-check-label" for="creditCard">Credit Card</label>
-                </div>
-            </div>
-             <input type="submit" class="btn btn-block place-order-button" onclick="placeOrder()" value="Place Your Order">
-            <!-- <button  ><a href="/userorder" style="text-decoration: none;color: #fff;"></a> </button> -->
-        </form>
-        </div>
+    <div class="product-details">
+      <h2>Product Details</h2>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Model Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i=0; i<products.length; i++){%>
+          <tr>
+            <td>
+              <img class="product-image" src="/public/adminimage/<%=products[i].image%>" alt="Product Image">
+            </td>
+            <td><%=products[i].modelName%></td>
+            <td><%=products[i].quantity%></td>
+            <td><%=products[i].price%></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
     </div>
 
-    
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function placeOrder() {
+    <div class="payment-details">
+      <div class="payment-card">
+        <div class="card-header">
+          <h2>Payment Details</h2>
+        </div>
+        <div class="card-body">
+          <!-- <p>Discount: $10</p> -->
+          <h6>Total: <span> <%= total %></span></h6>
+         
+            
+          <span id="couponDiscountSpan">Coupon Discount:&#8377;</span>
+          
+          <p>Delivery Charges: &#8377;<%=shipping%></p>
+        </div>
+      </div>
+
+      <div class="total-amount">
+        <h2>Total Amount</h2>
+        <h4 id="grandTotal">Total Price: &#8377; <%=grandTotal%></h4>
+      </div>
+      <form action="">
+        <div class="payment-options">
+          <h2>Select Payment Option</h2>
         
+          <input type="text" value="<%=shipping%>" name="shipping" hidden>
+         
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentOption" id="cashOnDelivery" value="cashOnDelivery" checked>
+            <label class="form-check-label" for="cashOnDelivery">Cash on Delivery</label>
+          </div>
+          <input type="number" name="total" id="totalInput" hidden>
+          <input type="number" name="couponDiscount" id="couponDiscount" hidden>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentOption" id="creditCard" value="online-payment">
+            <label class="form-check-label" for="creditCard">Online Payment</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentOption" id="wallet" value="wallet-payment">
+            <label class="form-check-label" for="wallet">Wallet Payment</label>
+          </div>
+        </div>
+        <input type="text" name="addressIndex" value="<%=addressIndex%>" hidden>
+        <input type="button" class="btn btn-block place-order-button" onclick="placeOrder()" value="Place Your Order">
+        <!-- <button  ><a href="/userorder" style="text-decoration: none;color: #fff;"></a> </button> -->
+      </form>
+    </div>
+  </div>
+</div>
+<div class="col-md-3" style="margin-top: 80px; margin-right: 50px;">
+  <div class="coupon-form">
+    <h4>Apply Coupon</h4>
+    <form>
+      <div class="coupon-field">
+        <input type="text" id="couponInput" name="coupon" class="coupon-input" placeholder="Enter coupon code">
+
+        <button type="button" class="apply-btn" onclick="checkCouponValidate()">Apply Coupon</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+</div>
+ 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    function placeOrder() {
+
+
+
+      const selectedRadioButton = document.querySelector('input[name="paymentOption"]:checked');
+      const addressIndex = document.querySelector('input[name="addressIndex"]').value
+      const total=document.getElementById("totalInput").value
+         console.log(total)
+      const selectedValue = selectedRadioButton.value;
+
+      $.ajax({
+        url: '/orderplaced',
+        method: 'POST',
+        data: {
+          paymentOption: selectedValue,
+          addressIndex: addressIndex,
+          total:total
+        },
+        success: function(response) {
+          const order = response.order
+          // console.log(order.amount)
+          if (selectedValue == 'wallet-payment') {
+            // console.log('walletpayment')
+            // console.log(order.amount)
+             if(response.codSuccess==false){
+              alert('Insufficient Balance')
+             }else{
+              const container = document.querySelector('.container');
+            container.style.display = 'none';
+            document.querySelector('.coupon-form').style.display='none';
+             Swal.fire({
+              icon: 'success',
+              title: 'Order Placed Successfully!',
+              showConfirmButton: false,
+              timer: 2000,
+            });
+
+            setTimeout(function() {
+              location.href = "/userorder";
+            })
+
+             }
+          
+          } else if (selectedValue == 'online-payment') {
+            console.log(selectedValue)
+
+            var options = {
+              "key": "rzp_test_PyP2RD55w0NgDZ", // Enter the Key ID generated from the Dashboard
+              "amount": order.amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+              "currency": "INR",
+              "name": "shahabas",
+              "description": "Test Transaction",
+              "image": "https://example.com/your_logo",
+              "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+              "handler": function(response) {
+                // alert(response.razorpay_payment_id);
+                // alert(response.razorpay_order_id);
+                // alert(response.razorpay_signature)
+                verifypayment(response, order)
+              },
+              "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+              },
+              "notes": {
+                "address": "Razorpay Corporate Office"
+              },
+              "theme": {
+                "color": "#3399cc"
+              }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+
+
+            rzp1.on('payment.failed', function(response) {
+              alert(response.error.code);
+              alert(response.error.description);
+              alert(response.error.source);
+              alert(response.error.step);
+              alert(response.error.reason);
+              alert(response.error.metadata.order_id);
+              alert(response.error.metadata.payment_id);
+
+
+
+
+            });
+
            
 
-            // Hide container
+          } else {
+
+
             const container = document.querySelector('.container');
             container.style.display = 'none';
+            document.querySelector('.coupon-form').style.display='none';
+            Swal.fire({
+              icon: 'success',
+              title: 'Order Placed Successfully!',
+              showConfirmButton: false,
+              timer: 2000,
+            });
 
-            // Simulate delay before showing success message
-            setTimeout(function () {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Order Placed Successfully!',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-            }, 2000);
+            setTimeout(function() {
+              location.href = "/userorder";
+            }, 3000)
+
+          }
+        },
+        error: function(error) {
+          // Handle the error response
+          res.send("payment is not successful")
         }
-    </script>
+      });
+
+
+
+
+      // Hide container
+
+    }
+
+    function verifypayment(response, order) {
+      console.log('ljhgoehveoihp')
+      $.ajax({
+        url: '/verify-payment',
+        method: 'POST',
+        data: {
+          response,
+          order
+        },
+        success: (response) => {
+          if (response.status) {
+            const container = document.querySelector('.container');
+            container.style.display = 'none';
+            document.querySelector('.coupon-form').style.display='none';
+            Swal.fire({
+              icon: 'success',
+              title: 'Order Placed Successfully!',
+              showConfirmButton: false,
+              timer: 2000,
+            });
+
+            setTimeout(function() {
+              location.href = "/userorder";
+            }, 3000)
+
+          } else {
+            alert('payment failed')
+          }
+        }
+
+      })
+    }
+
+    var isCouponApplied = false;
+
+function checkCouponValidate() {
+  // console.log('heoj')
+  var couponInput = document.getElementById('couponInput');
+  // console.log(couponInput)
+  var grandTotal = parseFloat(document.getElementById("grandTotal").textContent.trim().replace(/[^0-9.]/g, ""))
+
+  var couponValue = couponInput.value
+  // console.log(couponValue)
+  if (isCouponApplied) {
+    // Coupon already applied, no need to repeat
+    couponInput.value = 'coupon is already applied'
+    couponInput.style.color = String('green')
+
+    return;
+  }
+  // Create the request payload
+  var data = {
+    coupon: couponValue,
+    total: grandTotal
+  };
+  // console.log(couponValue)
+  // Send the AJAX request
+  fetch('/applycoupon', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+      const couponDiscount = result.couponDiscount;
+      const Total = result.total
+      // console.log(couponDiscount)
+      if (couponDiscount) {
+        
+        console.log(Total)
+        let x = document.getElementById('couponDiscountSpan')
+        couponDiscountSpan.textContent ="Coupon Discount: \u20B9 " + couponDiscount
+        document.getElementById('couponDiscount').value = couponDiscount
+        const grandTotalElement = document.getElementById("grandTotal");
+        grandTotalElement.textContent = "Total Price: \u20B9 " + Total;
+        const totalInput = document.getElementById("totalInput");
+        totalInput.value =Total;
+       isCouponApplied = true
+        console.log("total :",totalInput.value)
+
+      } else {
+        couponInput.value = result
+        // couponInput.placeholder = result
+        couponInput.style.color = String('red')
+
+        // document.getElementById('responseMessage').textContent = result 
+      }
+
+    })
+    .catch(error => {
+      // Handle any errors that occur during the request
+      console.error(error);
+    });
+
+}
+couponInput.addEventListener('input', function() {
+  if (couponInput.value === '' || couponInput.value === 'not a valid coupon' || couponInput.value === 'coupon is already applied') {
+    couponInput.style.color = ''; // Set it back to an empty string for normal text color
+  }
+})
+  </script>
 </body>
+
 </html>
+
+

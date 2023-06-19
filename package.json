@@ -21,6 +21,7 @@
     "nodemailer": "^6.9.2",
     "nodemon": "^2.0.22",
     "randomstring": "^1.2.3",
+    "razorpay": "^2.8.6",
     "sweetalert": "^2.1.2"
   }
 }

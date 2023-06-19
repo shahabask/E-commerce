@@ -2,8 +2,9 @@
 
 <style>
   body {
+    background-image: url('/public/userImage/');
     font-family: 'Roboto', sans-serif;
-    background-color: #f2f2f2;
+    background-color: #f2f2f266;
     margin-top: 3.9rem;
   }
 
@@ -22,17 +23,22 @@
 
   .category-list li {
     margin-bottom: 10px;
-   margin-left: 30px;
+    margin-left: 30px;
   }
 
   /* Product Cards */
   .card {
     margin-bottom: 20px;
-    text-align: center; /* Center the card content */
-    padding: 20px; /* Add space around the card */
-    background-color: #fff; /* Set a white background */
-    border-radius: 5px; /* Add rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    text-align: center;
+    /* Center the card content */
+    padding: 20px;
+    /* Add space around the card */
+    background-color: #fff;
+    /* Set a white background */
+    border-radius: 15px;
+    /* Add rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Add a subtle shadow */
   }
 
   .card-img-top {
@@ -68,66 +74,384 @@
   .discount-alerts .alert {
     margin-bottom: 10px;
   }
+
+  .sidebar {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* border: 0.5px solid rgba(11, 11, 11, 0.95); Replace #f00 with your desired border color */
+    /* border-right-width: 0px;
+  border-right-style: solid;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0; */
+  }
+
+
+  .sidebar-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .sidebar-option {
+    margin-bottom: 15px;
+  }
+
+  .sidebar-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .sidebar-select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+
+
+  .sidebar-price-range {
+    display: flex;
+    align-items: center;
+  }
+
+  .sidebar-price-range input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .sidebar-button {
+    background-color: #fcc114;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .sidebar-button:hover {
+    background-color: #fca200;
+  }
+
+
+  /* Product Cards */
+  .product-card {
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-basis: calc(33.33% - 20px);
+    /* Adjust the card size here */
+    margin-right: 20px;
+    /* border: 2px solid ; Replace #4c6ef5 with your desired border color */
+    transition: transform 0.3s ease;
+    /* Add smooth transition effect */
+
+    /* Optional: Add hover effect */
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .sidebar-colors {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-color {
+    margin-right: 5px;
+    position: relative;
+  }
+
+  .sidebar-color input[type="checkbox"] {
+    display: none;
+  }
+
+  .sidebar-color label {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+
+  .sidebar-color label:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-color input[type="checkbox"]:checked+label {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .click-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar-color label::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .sidebar-color input[type="checkbox"]:checked+label::after {
+    opacity: 1;
+  }
+
+  .sidebar-color label::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .sidebar-color input[type="checkbox"]:checked+label+.click-effect {
+    opacity: 1;
+  }
+
+
+  .product-card:last-child {
+    margin-right: 0;
+  }
+
+  .product-card-img {
+    height: 150px;
+    width: 170px;
+    margin-left: 60px;
+    /* object-fit: cover; */
+    border-radius: 5%;
+  }
+  @media (max-width: 900px) {
+  /* For medium-sized screens */
+  .product-card-img {
+    width: 140px;
+    margin-right: 50px;
+  }
+}
+
+@media (max-width: 576px) {
+  /* For small-sized screens */
+  .product-card-img {
+    width: 120px;
+    margin-left: 30px;
+  }
+}
+  .product-card-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .product-card-price {
+    color: #888888;
+    margin-bottom: 10px;
+  }
+
+  .product-card-body {
+    padding: 15px;
+  }
+
+  .btn-primary {
+    background-color: #fcc114;
+    border-color: #fcc114;
+  }
+
+  .sidebar-color.selected {
+    border: 2px solid #fcc114;
+  }
 </style>
 
-<div><img src="/public/userImage/extreme-hillside-mountain-biking-r1krl4pwqdgya6wz.jpg" alt="Full Width Image" class="full-width-image"></div>
-<div class="container-fluid" >
-  <!-- Full Width Image -->
-  
+<body>
 
-  <div class="row mt-4 justify-content-center"> <!-- Center the product cards -->
-    <!-- Category List -->
-    <!-- <div class="col-lg-3 col-md-4 col-sm-12"> -->
-    <div style="width:1100px">
-      <ul class="category-list">
-        <% for(let j = 0; j < category.length; j++) { %>
-          <li class="btn btn-warning mt-1">
-            <a href="/categoryproduct?category=<%= category[j].category_name %>" style="text-decoration:none;color: rgb(11, 10, 10);">
-              <%= category[j].category_name %>
-            </a>
-          </li>
-        <% } %>
-      </ul>
-    </div>
-    <!-- </div> -->
-  
-    <!-- Product Cards -->
-    <div class="col-lg-9 col-md-8 col-sm-12">
-      <div class="row">
-        <% for (let i = 0; i < products.length; i++) { %>
+  <div><img src="/public/userImage/extreme-hillside-mountain-biking-r1krl4pwqdgya6wz.jpg" alt="Full Width Image" class="full-width-image"></div>
+  <div class="container-fluid">
+    <div class="row mt-4">
+      <div class="col-lg-2 col-md-4 col-sm-12">
+        <div class="sidebar">
+          <form action="/filter" method="post">
+            <h5 class="sidebar-title">Filter</h5>
+            <div class="sidebar-option">
+              <label class="sidebar-label" for="category-filter">Category:</label>
+              <select class="sidebar-select" id="category-filter" name="selectedCategory">
+                <option value="">All</option>
+                <% for(let j = 0; j < category.length; j++) { %>
+                <option value="<%= category[j].category_name %>"><%= category[j].category_name %></option>
+                <% } %>
+              </select>
+            </div>
+            <div class="sidebar-option">
+              <label class="sidebar-label">Color:</label>
+              <div class="sidebar-colors">
+                <div class="sidebar-color">
+                  <input type="checkbox" id="color-red" name="color[]" value="red">
+                  <label for="color-red" style="background-color: red;"></label>
+                </div>
+                <div class="sidebar-color">
+                  <input type="checkbox" id="color-blue" name="color[]" value="blue">
+                  <label for="color-blue" style="background-color: blue;"></label>
+                </div>
+                <div class="sidebar-color">
+                  <input type="checkbox" id="color-green" name="color[]" value="green">
+                  <label for="color-green" style="background-color: green;"></label>
+                </div>
+                <!-- Add more color options here -->
+              </div>
+            </div>
+
+            <div class="sidebar-option">
+              <label class="sidebar-label">Price:</label>
+              <div class="sidebar-price-range">
+                <input type="number" id="price-min" name="minPrice" placeholder="Min">
+                <span>-</span>
+                <input type="number" id="price-max" name="maxPrice" placeholder="Max">
+              </div>
+            </div>
+            <div class="sidebar-option">
+              <button class="sidebar-button" type="submit" id="apply-filter-btn">Apply Filters</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-9 col-md-8 col-sm-12">
+        <div id="product-cards" class="row">
+          <% for (let i = 0; i < products.length; i++) { %>
           <div class="col-lg-4 col-md-6 col-sm-12">
-            <div class="card">
-              <a href="/productdetails?id=<%=products[i]._id%>&category=<%=products[i].category%>"><div style="border-color: #060606;border-bottom: 5px;">
-              <img src="/public/adminimage/<%= products[i].image[0] %>" class="card-img-top"  alt="Product Image">
-            </div></a>
-              <div class="card-body">
-                <h5 class="card-title"><%= products[i].name %></h5>
-                <p class="card-text">Price: <%= products[i].price %></p>
+            <div class="product-card">
+              <a href="/productdetails?id=<%=products[i]._id%>&category=<%=products[i].category%>">
+                <div style="border-color: #060606;border-bottom: 5px;" class="col-md-8">
+                  <img src="/public/adminimage/<%= products[i].image[0] %>" class="product-card-img" alt="Product Image">
+                </div>
+              </a>
+              <div class="product-card-body">
+                <h5 class="product-card-title"><%= products[i].name %></h5>
+                <p class="product-card-price">₹<%= products[i].price %></p>
                 <a href="#" class="btn btn-primary">Add to Cart</a>
               </div>
             </div>
           </div>
-        <% } %>
+          <% } %>
+        </div>
+
+        <nav aria-label="Product Pagination">
+          <ul class="pagination justify-content-center mt-4">
+            <% if (currentPage > 1) { %>
+            <li class="page-item">
+              <a class="page-link" href="/?page=<%= currentPage - 1 %>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <% } %>
+
+            <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+              <a class="page-link" href="/?page=<%= i %>"><%= i %></a>
+            </li>
+            <% } %>
+
+            <% if (currentPage < totalPages) { %>
+            <li class="page-item">
+              <a class="page-link" href="/?page=<%= currentPage + 1 %>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </nav>
       </div>
+
     </div>
   </div>
-</div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // Assuming you have a button with the id "apply-filter-btn" to trigger the AJAX request
+    // document.getElementById("apply-filter-btn").addEventListener("click", function() {
+    //   // Get the selected category
+    //   var selectedCategory = document.getElementById("category-filter").value;
 
-<!-- Discounts and Coupons -->
-<div class="container discount-alerts">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="alert alert-success" role="alert">
-        <strong>50% off!</strong> Use coupon code <strong>SPORT50</strong> for a 50% discount.
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="alert alert-info" role="alert">
-        Free shipping on all orders above $50. Limited time offer!
-      </div>
-    </div>
-  </div>
-</div>
+    //   // Get the selected colors
+    //   var selectedColors = Array.from(document.querySelectorAll("input[name='color']:checked"))
+    //     .map(function(checkbox) {
+    //       return checkbox.value;
+    //     });
 
-<!-- Footer -->
-<%- include('../layout/footer.ejs',{admin:false}) %>
+    //   // Get the selected price range
+    //   var selectedPriceMin = document.getElementById("price-min").value;
+    //   var selectedPriceMax = document.getElementById("price-max").value;
+
+    //   // Send the fetch request
+    //   fetch("/filter", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json"
+    //     },
+    //     body: JSON.stringify({
+    //       category: selectedCategory,
+    //       colors: selectedColors,
+    //       priceMin: selectedPriceMin,
+    //       priceMax: selectedPriceMax
+    //     })
+    //   })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       // Handle the response from the server
+    //       console.log('successfull');
+    //       console.log(data);
+    //       var productCardsContainer = document.getElementById("product-cards");
+    //       productCardsContainer.innerHTML = data;
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     });
+    // });
+
+    // Add event listener to color elements
+    const colorElements = document.querySelectorAll('.sidebar-color');
+
+    colorElements.forEach(colorElement => {
+      colorElement.addEventListener('click', () => {
+        // Toggle 'selected' class on the clicked color element
+        colorElement.classList.toggle('selected');
+
+        // Check if the color element is selected
+        const isSelected = colorElement.classList.contains('selected');
+
+        // Update the checkbox state based on the selection
+        const checkbox = colorElement.querySelector('input[type="checkbox"]');
+        checkbox.checked = isSelected;
+      });
+    });
+  </script>
+
+
+  <%- include('../layout/footer.ejs',{admin:false}) %>

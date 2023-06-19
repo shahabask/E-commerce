@@ -1,0 +1,283 @@
+<%- include('../layout/header.ejs',{admin:true}) %>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .sidebar {
+      background-color: #FCC114;
+      height: 100vh;
+      padding-top: 20px;
+
+      color: black
+    }
+
+    .sidebar-header {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .sidebar-brand {
+      color: #FFFFFF;
+      font-weight: bold;
+      font-size: 20px;
+      text-decoration: none;
+    }
+
+    .nav-item {
+      margin-bottom: 10px;
+    }
+
+    .nav-link {
+      color: #7E7E7E;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .nav-link.active {
+      color: #575757;
+    }
+
+    .nav-link:hover {
+      color: #FFFFFF;
+    }
+
+    .sidebar .nav-link.active {
+      background-color: #000;
+      border-radius: 10px;
+    }
+
+    .coupon-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .coupon {
+      width: calc(33.33% - 20px);
+      margin-bottom: 20px;
+      text-align: center;
+      padding: 20px;
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .coupon {
+        width: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .coupon {
+        width: 100%;
+      }
+    }
+
+    .coupon {
+      width: 300px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .coupon-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .coupon-image img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background-color: #f56c6c;
+      margin-right: 10px;
+      transform: rotate(-20deg);
+    }
+
+    .coupon-details {
+      flex-grow: 1;
+    }
+
+    .coupon-code {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .coupon-description {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .coupon-expiry {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 5px;
+    }
+
+    .coupon-status {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .coupon {
+      width: calc(33.33% - 20px);
+      margin-bottom: 20px;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .coupon:before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background: linear-gradient(to right, #4c6ef5, #f56c6c);
+      border-radius: 10px 10px 0 0;
+    }
+
+    .coupon-image img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      background-color: #f56c6c;
+      margin: 0 auto 10px;
+      display: block;
+    }
+
+    .coupon-details {
+      position: relative;
+    }
+
+    .delete-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #f56c6c;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .delete-link:hover {
+      color: #c22e2e;
+    }
+
+    /* .coupon-code-icon {
+  font-size: 60px;
+} */
+  </style>
+</head>
+
+<body>
+
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col-lg-2 col-sm-2 sidebar">
+
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'dashboard') { %>active<% } %>" href="/admin/home">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
+              <i class="bi bi-basket"></i> Products
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'users') { %>active<% } %>" href="/admin/users">
+              <i class="bi bi-people"></i> Users
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'orders') { %>active<% } %>" href="/admin/orders">
+              <i class="bi bi-file-earmark-text"></i> Orders
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
+              <i class="bi bi-grid-3x3-gap"></i> Category Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
+              <i class="bi bi-tags-fill"></i> Coupon Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" id="addCouponLink" href="/admin/addcoupon">
+              <i class="bi bi-plus"></i>Add Coupon
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-lg-9 col-sm-9">
+        <div class="coupon-container mt-5">
+          <% coupons.forEach((coupon) => { %>
+          <div class="coupon">
+            <div class="coupon-content">
+              <div class="coupon-image">
+
+                <img src="/public/adminimage/<%= coupon.image%>" alt="Coupon Image">
+              </div>
+              <div class="coupon-details">
+                <h2 class="coupon-code"><i class="fas fa-ticket-alt coupon-code-icon mx-1" style="color: rgb(109, 107, 107);"> <%= coupon.couponCode %></i></h2>
+                <p class="coupon-description"><%= coupon.description %></p>
+                <p class="coupon-expiry">Expires on: <%= (coupon.expiryDate).toLocaleDateString() %>
+                  <% if(coupon.status=='Active'){%>
+                <p class="coupon-status">Status: <span style="color: green; font-weight: 600;"><%= coupon.status %></span></p>
+                <%}else{%>
+                <p class="coupon-status">Status: <span style="color: red; font-weight: 600;"><%= coupon.status %></span></p>
+                <%}%>
+                      
+                      <a href="/admin/deletecoupon/?id=<%= coupon._id %>" class="delete-link">
+                <i class="bi bi-trash-fill"></i>
+                </a>
+                <a href="edit-coupon?id=<%= coupon._id %>" class="edit-icon" style="text-decoration: none;color: black;">
+                  <i class="fas fa-edit"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+  
+  <%- include('../layout/footer.ejs',{admin:true}) %>
+</body>
+
+</html>

@@ -1,6 +1,8 @@
 <%- include('../layout/header.ejs',{admin:true}) %>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.css">
+
 <head>
-  
+
   <style>
     .navbar {
       background-color: #575757;
@@ -25,84 +27,254 @@
       background-color: white;
       color: black;
     }
+
+    .container {
+  display: flex;
+    
+}
+
+.sidebar {
+  background-color: #FCC114;
+  flex: 0 0 auto; /* Sidebar won't grow or shrink */
+  width: 250px; /* Set the desired width of the sidebar */
+  padding-top: 20px;
+  color: black;
+  min-height: 100vh;
+}
+
+.table-wrapper {
+  flex: 1 1 auto; /* Table wrapper will grow and shrink */
+  overflow: auto; /* Add a scrollbar when table content exceeds wrapper height */
+}
+
+table {
+  width: 100%;
+  /* Additional table styles here */
+}
+
+
+    .sidebar-header {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .sidebar-brand {
+      color: #FFFFFF;
+      font-weight: bold;
+      font-size: 20px;
+      text-decoration: none;
+    }
+
+    .nav-item {
+      margin-bottom: 10px;
+    }
+
+    .nav-link {
+      color: #7E7E7E;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .nav-link.active {
+      color: #575757;
+    }
+
+    .nav-link:hover {
+      color: #FFFFFF;
+    }
+
+    .sidebar .nav-link.active {
+      background-color: #000;
+      border-radius: 10px;
+    }
   </style>
+  <style>
+    /* Header styles */
+    #myDataTable tbody tr:hover {
+    background-color: #f5f5f5;
+  }
+  #myDataTable tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  #myDataTable {
+    border: none;
+  }
+  #myDataTable td {
+    white-space: normal;
+    word-wrap: break-word;
+  }
+  #myDataTable thead th {
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+  #myDataTable_paginate .pagination {
+    background-color: #f5f5f5;
+    border: none;
+  }
+  
+  #myDataTable_paginate .paginate_button {
+    background-color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 2px;
+  }
+  
+  #myDataTable_paginate .paginate_button.current {
+    background-color: #e0e0e0;
+    color: #333;
+  }
+  
+  </style>
+  
 </head>
+
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container justify-content-end">
-      <a class="navbar-brand me-auto btn text-decoration-none"  href="/admin/addproduct">Add Products</a>  
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-  </nav>
+
+
+
 
   <div class="container-fluid">
-    <table class="table mb-0 bg-white" id="product">
-      <thead class="badge-warning">
-        <tr>
-          <th>#</th>
-          <th>Product details</th>
-          <th>Category</th>
-          <th>Stock</th>
-          <th>Price</th>
-          <th>Action</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (var i = 0; i < product.length; i++) { %>
-        <tr>
-          <td>
-            <div>
-              <p><%= i+1%></p>
-            </div>
-          </td>
-          <td>
-            <div class="d-flex align-items-center">   
-              <img src="/public/adminimage/<%=product[i].image[0]%>" alt="" style="width: 45px; height: 45px" class="rounded-circle">
-              <div class="ms-3">
-                <p class="fw-bold mb-1"><%=product[i].brand%></p>
-                <p class="text-muted mb-0"><%=product[i].modelName%></p>
-              </div>
-            </div>
-          </td>
-          <td>
-            <div>
-              <p><%=product[i].category%></p>
-            </div>
-          </td>
-          <td>
-            <div>
-              <p><%=product[i].quantity%></p>
-            </div>
-          </td>
-          <td>
-            <div>
-              <p><%=product[i].price%></p>
-            </div>
-          </td>
-          <td>
-            <div><button class="btn bg-secondary "><a class="text-light text-decoration-none" href="/admin/editproduct?id=<%=product[i]._id%>">Edit</a></button></div>
-          </td>
-          <td>
-            <div><button class="btn bg-danger text-light"><a class="text-light text-decoration-none" href="/admin/deleteproduct?id=<%=product[i]._id%>">Delete</a></button></div>
-          </td>
+    <div class="row">
+      <div class="col-lg-2 col-sm-2 sidebar">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'dashboard') { %>active<% } %>" href="/admin/home">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
+              <i class="bi bi-basket"></i> Products
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'users') { %>active<% } %>" href="/admin/users">
+              <i class="bi bi-people"></i> Users
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'orders') { %>active<% } %>" href="/admin/orders">
+              <i class="bi bi-file-earmark-text"></i> Orders
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
+              <i class="bi bi-grid-3x3-gap"></i> Category Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
+              <i class="bi bi-tags-fill"></i> Coupon Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="/admin/addproduct">
+              <i class="bi bi-plus"></i> Add Products
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-10 col-sm-10">
+        <div class="container-fluid">
+          <table class="table mb-0 bg-white" id="myDataTable" >
+
+            <thead class="badge-warning">
+              <tr>
+                <th>#</th>
+                <th>Product details</th>
+                <th>Category</th>
+                <th>Stock</th>
+                <th>Price</th>
+                <th>Action</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (var i = 0; i < product.length; i++) { %>
+              <tr>
+                <td>
+                  <div>
+                    <p><%= i+1%></p>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="/public/adminimage/<%=product[i].image[0]%>" alt="" style="width: 45px; height: 45px" class="rounded-circle">
+                    <div class="ms-3">
+                      <p class="fw-bold mb-1"><%=product[i].brand%></p>
+                      <p class="text-muted mb-0"><%=product[i].modelName%></p>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <p><%=product[i].category%></p>
+                  </div>
+                </td>
+                <%  if(product[i].quantity==0||product[i].available==false){%>
+                <td>
+                  <div>
+                    <p>Out Of Stock</p>
+                  </div>
+                </td>
+
+                <% }else{%>
+                <td>
+                  <div>
+                    <p><%=product[i].quantity%></p>
+                  </div>
+                </td>
+
+                <%}%>
+               
+                <td>
+                  <div>
+                    <p><%=product[i].price%></p>
+        </div>
+        </td>
+        <%if(product[i].available){%>
+        <td>
+          <div><button class="btn bg-secondary "><a class="text-light text-decoration-none" href="/admin/editproduct?id=<%=product[i]._id%>">Edit</a></button></div>
+        </td>
+        <td>
+          <div><button class="btn bg-danger text-light"><a class="text-light text-decoration-none" href="/admin/deleteproduct?id=<%=product[i]._id%>">Delete</a></button></div>
+        </td>
+        <% }else{%>
+        <td>
+          <!-- <div><button class="btn bg-secondary "><a class="text-light text-decoration-none" href="/admin/editproduct?id=<%=product[i]._id%>">Edit</a></button></div> -->
+        </td>
+        <td>
+          <div><button class="btn bg-success text-light"><a class="text-light text-decoration-none" href="/admin/add-deleted-product?id=<%=product[i]._id%>">Add</a></button></div>
+        </td>
+        <% }%>
         </tr>
         <% } %>
-      </tbody>
-    </table>
+        </tbody>
+        </table>
+      </div>
+    </div>
   </div>
+  </div>
+  <!-- <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+  
 
-  <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
   <script>
-    $(function () {
-      $('#product').DataTable();
+    $(function() {
+      $('#myDataTable').DataTable();
+    });
+
+    $(document).ready(function() {  
+      $('#addProductLink').click(function(e) {
+        e.preventDefault();
+        $('.navbar-brand.me-auto.btn.text-decoration-none').slideToggle('slow');
+      });
     });
   </script>
-   
-<%- include('../layout/footer.ejs',{admin:true}) %>
 
-
-
+  <%- include('../layout/footer.ejs',{admin:true}) %>

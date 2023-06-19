@@ -1,13 +1,12 @@
-
 <%- include('../layout/header.ejs') %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/bootstrap-icons.min.css">
 <style>
- body {
+  body {
     background-color: rgba(243, 240, 250, 0.74);
     background-size: cover;
     background-position: center;
-    
+
   }
 
   .product-image-container {
@@ -37,31 +36,31 @@
     <div class="shadow p-5 mb-5 bg-white rounded row">
       <div class="col-md-6">
         <!-- <div class="col-md-10"> -->
-          <div class="card">
-            <div class="d-flex justify-content-center">
-              <div class="col-md-6">
-                <div class="images p-3">
-                  <div class="text-center mb-4">
-                   <img id="main-image" src="/public/adminimage/<%=product.image[0] %>" width="300" height="300" data-zoom-image="/public/adminimage/<%=product.image[0]%>" class="product-image" />
-                 </div>
-                  <div class="thumbnail text-center" id="thumbnail" >
+        <div class="card">
+          <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+              <div class="images p-3">
+                <div class="text-center mb-4">
+                  <img id="main-image" src="/public/adminimage/<%=product.image[0] %>" width="300" height="300" data-zoom-image="/public/adminimage/<%=product.image[0]%>" class="product-image" />
+                </div>
+                <div class="thumbnail text-center" id="thumbnail">
 
-                   
-              
-                      <% product.image.forEach(function(image) { %>
-                        <img onclick="change_image(this)" src="/public/adminimage/<%=image%>" width="70" height="80" class="zoomGallery" style="border: 0.5px solid rgba(128, 128, 128, 0.386);">
-                      <% }) %>
-              
-                  </div>
+
+
+                  <% product.image.forEach(function(image) { %>
+                  <img onclick="change_image(this)" src="/public/adminimage/<%=image%>" width="70" height="80" class="zoomGallery" style="border: 0.5px solid rgba(128, 128, 128, 0.386);">
+                  <% }) %>
+
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
       <div class="col-md-6">
         <h2 class="product-info">
           <%= product.modelName %>
-        </h2> 
+        </h2>
         <h4><%=product.brand%></h4>
         <p class="product-price">₹<%= product.price %></p>
         <div>
@@ -69,178 +68,182 @@
             <input type="hidden" id="selectedColor" name="selectedColor" value="">
             <h4>COLOR:</h4>
             <% for (let i = 0; i < color.length; i++) { %>
-              <a href="#" style="text-decoration: none;background-color:white;" class="btn btn-outline-dark color-btn"
-                data-color="<%= color[i] %>"><%= color[i] %></a>
+            <a href="#" style="text-decoration: none;background-color:white;" class="btn btn-outline-dark color-btn" data-color="<%= color[i] %>"><%= color[i] %></a>
             <% } %>
-            
+
             <div id="color-error-msg" style="display: none; color: red;">Please select a color.</div>
-            
+
             <div>
               <h4>SIZE:</h4>
               <input type="radio" name="size" value="<%=size[0]%>" checked>
               <label for=""><%=size[0]%></label>
               <% for(let j=1;j<size.length;j++){ %>
-                <input type="radio" name="size" value="<%=size[j]%>">
-                <label for=""><%=size[j]%></label>
+              <input type="radio" name="size" value="<%=size[j]%>">
+              <label for=""><%=size[j]%></label>
               <% } %>
             </div>
-            
+
             <a class="nav-link" href="#">
               <i class="bi bi-heart heart-icon" style="color:grey;font-size: 1.5em;"></i>
             </a>
-            
+            <%if(product.quantity!=0){%>
             <button class="btn btn-warning btn-add-to-cart mx-1" data-action="addtocart">Add to Cart</button>
             <button class="btn btn-primary" data-action="buy">Buy Now</button>
-            
+            <%}else{%>
+            <P style="color: red;">Out of stock</P>
+
+            <%}%>
             <div>
               <p><%= product.description %></p>
-            </div>
-          </form>
-          
-        
-          
+        </div>
+        </form>
+
+
+
+      </div>
     </div>
   </div>
- </div></div>
+  </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
-<script>
-  function change_image(image) {
-    var container = document.getElementById("main-image");
-    container.src = image.src;
-    
-    // Reinitialize elevateZoom on the main image
-    $('.product-image').elevateZoom({
-      zoomWindowPosition: 1,
-      zoomWindowWidth: 300,
-      zoomWindowHeight: 300,
-      gallery: 'thumbnail',
-      cursor: 'crosshair',
-      galleryActiveClass: 'active',
-      responsive: true,
-      zoomWindowFadeIn: 500,
-      zoomWindowFadeOut: 500,
-      lensFadeIn: 500,
-      lensFadeOut: 500,
-      zoomWindowContainerClass: 'zoom-display'
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+  <script>
+    function change_image(image) {
+      var container = document.getElementById("main-image");
+      container.src = image.src;
+
+      // Reinitialize elevateZoom on the main image
+      $('.product-image').elevateZoom({
+        zoomWindowPosition: 1,
+        zoomWindowWidth: 300,
+        zoomWindowHeight: 300,
+        gallery: 'thumbnail',
+        cursor: 'crosshair',
+        galleryActiveClass: 'active',
+        responsive: true,
+        zoomWindowFadeIn: 500,
+        zoomWindowFadeOut: 500,
+        lensFadeIn: 500,
+        lensFadeOut: 500,
+        zoomWindowContainerClass: 'zoom-display'
+      });
+    }
+
+    $(document).ready(function() {
+      $('.product-image').elevateZoom({
+        zoomWindowPosition: 1,
+        zoomWindowWidth: 300,
+        zoomWindowHeight: 300,
+        gallery: 'thumbnail',
+        cursor: 'crosshair',
+        galleryActiveClass: 'active',
+        responsive: true,
+        zoomWindowFadeIn: 500,
+        zoomWindowFadeOut: 500,
+        lensFadeIn: 500,
+        lensFadeOut: 500,
+        zoomWindowContainerClass: 'zoom-display'
+      });
     });
-  }
+  </script>
+  <script>
+    $(document).ready(function() {
+      // Handle button click event
+      $('.btn-add-to-cart').on('click', function(e) {
+        e.preventDefault();
 
-  $(document).ready(function() {
-    $('.product-image').elevateZoom({
-      zoomWindowPosition: 1,
-      zoomWindowWidth: 300,
-      zoomWindowHeight: 300,
-      gallery: 'thumbnail',
-      cursor: 'crosshair',
-      galleryActiveClass: 'active',
-      responsive: true,
-      zoomWindowFadeIn: 500,
-      zoomWindowFadeOut: 500,
-      lensFadeIn: 500,
-      lensFadeOut: 500,
-      zoomWindowContainerClass: 'zoom-display'
+        var action = $(this).data('action'); // Get the data-action attribute value
+        var selectedColor = $('#selectedColor').val(); // Get the selected color from the hidden input field
+        var selectedSize = $('input[name="size"]:checked').val(); // Get the value of the selected size radio button
+        if (!selectedColor) {
+          $('#color-error-msg').show(); // Display the error message if no color is selected
+          return; // Stop further execution if color is not selected
+        } else {
+          $('#color-error-msg').hide(); // Hide the error message if color is selected
+        }
+        // Send the data via AJAX
+        $.ajax({
+          url: '/addtocart',
+          method: 'POST',
+          data: {
+            id: '<%= product._id %>',
+            type: 'addtocart',
+            color: selectedColor,
+            size: selectedSize
+          },
+
+          success: function(response) {
+            // Handle the success response
+            console.log('Data sent successfully!');
+          },
+          error: function(error) {
+            // Handle the error response
+            console.log('Error:', error);
+          }
+        });
+      });
+
+      // Handle color button click event
+
+      $('.color-btn').on('click', function(e) {
+        e.preventDefault();
+        var color = $(this).data('color');
+        $('#selectedColor').val(color); // Set the selected color in the hidden input field
+        $(this).toggleClass('active');
+      });
     });
-  });
-</script>
-<script>
-$(document).ready(function() {
- // Handle button click event
- $('.btn-add-to-cart').on('click', function(e) {
-   e.preventDefault();
+  </script>
+  <script>
+    $(document).ready(function() {
+      // Handle button click event
+      $('.btn-primary').on('click', function(e) {
+        e.preventDefault();
 
-   var action = $(this).data('action'); // Get the data-action attribute value
-   var selectedColor = $('#selectedColor').val(); // Get the selected color from the hidden input field
-  var selectedSize = $('input[name="size"]:checked').val(); // Get the value of the selected size radio button
-  if (!selectedColor) {
- $('#color-error-msg').show(); // Display the error message if no color is selected
- return; // Stop further execution if color is not selected
-} else {
- $('#color-error-msg').hide(); // Hide the error message if color is selected
-}
-   // Send the data via AJAX
-   $.ajax({
-     url: '/addtocart',
-     method: 'POST',
-     data: {
-       id: '<%= product._id %>',
-       type: 'addtocart',
-       color: selectedColor,
-       size: selectedSize
-     },
-     
-     success: function(response) {
-       // Handle the success response
-       console.log('Data sent successfully!');
-     },
-     error: function(error) {
-       // Handle the error response
-       console.log('Error:', error);
-     }
-   });
- });
+        // var action = $(this).data('action'); // Get the data-action attribute value
+        var selectedColor = $('#selectedColor').val(); // Get the selected color from the hidden input field
+        var selectedSize = $('input[name="size"]:checked').val(); // Get the value of the selected size radio button
+        if (!selectedColor) {
+          $('#color-error-msg').show(); // Display the error message if no color is selected
+          return; // Stop further execution if color is not selected
+        } else {
+          $('#color-error-msg').hide(); // Hide the error message if color is selected
+        }
+        // Send the data via AJAX
+        $.ajax({
+          url: '/buyproduct',
+          method: 'POST',
+          data: {
+            id: '<%= product._id %>',
+            type: 'buy',
+            color: selectedColor,
+            size: selectedSize
+          },
 
- // Handle color button click event
- 
-$('.color-btn').on('click', function(e) {
-e.preventDefault();
-var color = $(this).data('color');
-$('#selectedColor').val(color); // Set the selected color in the hidden input field
-$(this).toggleClass('active');
-});
-});
-</script>
-<script>
- $(document).ready(function() {
-   // Handle button click event
-   $('.btn-primary').on('click', function(e) {
-     e.preventDefault();
- 
-     // var action = $(this).data('action'); // Get the data-action attribute value
-     var selectedColor = $('#selectedColor').val(); // Get the selected color from the hidden input field
-    var selectedSize = $('input[name="size"]:checked').val(); // Get the value of the selected size radio button
-    if (!selectedColor) {
-   $('#color-error-msg').show(); // Display the error message if no color is selected
-   return; // Stop further execution if color is not selected
- } else {
-   $('#color-error-msg').hide(); // Hide the error message if color is selected
- }
-     // Send the data via AJAX
-     $.ajax({
-       url: '/buyproduct',
-       method: 'POST',
-       data: {
-         id: '<%= product._id %>',
-         type: 'buy',
-         color: selectedColor,
-         size: selectedSize
-       },
-       
-       success: function(response) {
-         // Handle the success response
-         console.log('Data sent successfully!');
-       },
-       error: function(error) {
-         // Handle the error response
-         console.log('Error:', error);
-       }
-     });
-   });
- 
-   // Handle color button click event
-   
-$('.color-btn').on('click', function(e) {
- e.preventDefault();
- var color = $(this).data('color');
- $('#selectedColor').val(color); // Set the selected color in the hidden input field
- $(this).toggleClass('active');
-});
-});
- </script>
-  
+          success: function(response) {
+            // Handle the success response
+            console.log('Data sent successfully!');
+          },
+          error: function(error) {
+            // Handle the error response
+            console.log('Error:', error);
+          }
+        });
+      });
+
+      // Handle color button click event
+
+      $('.color-btn').on('click', function(e) {
+        e.preventDefault();
+        var color = $(this).data('color');
+        $('#selectedColor').val(color); // Set the selected color in the hidden input field
+        $(this).toggleClass('active');
+      });
+    });
+  </script>
+
 
 </body>
+
 </html>

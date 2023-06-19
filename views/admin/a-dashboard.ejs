@@ -1,8 +1,102 @@
 <%- include('../layout/header.ejs',{admin:true}) %>
-<p>heloooooo
-    this is Dashboard
-</p>
-<div><img src="/public/adminimage/Dashboard Screen for Quoting Software.png" alt=""></div>
+<link rel="stylesheet" href="/public/css/style.css">
+
+<style>
+  .sidebar {
+    background-color: #FCC114;
+    height: 100vh;
+    padding-top: 20px;
+
+    color: black
+  }
+
+  .sidebar-header {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .sidebar-brand {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: none;
+  }
+
+  .nav-item {
+    margin-bottom: 10px;
+  }
+
+  .nav-link {
+    color: #7E7E7E;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+
+  .nav-link.active {
+    color: #575757;
+  }
+
+  .nav-link:hover {
+    color: #FFFFFF;
+  }
+
+  .sidebar .nav-link.active {
+    background-color: #000;
+    border-radius: 10px;
+  }
+</style>
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-lg-2 col-sm-2 sidebar">
+      <!-- <div class="sidebar-header">
+        <a class="sidebar-brand" href="/admin">
+          Golon Sports
+        </a>
+      </div> -->
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'dashboard') { %>active<% } %>" href="/admin/home">
+            <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
+            <i class="bi bi-basket"></i> Products
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'users') { %>active<% } %>" href="/admin/users">
+            <i class="bi bi-people"></i> Users
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'orders') { %>active<% } %>" href="/admin/orders">
+            <i class="bi bi-file-earmark-text"></i> Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
+            <i class="bi bi-grid-3x3-gap"></i> Category Management
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
+            <i class="bi bi-tags-fill"></i> Coupon Management
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-lg-10 col-sm-10">
+      <p>heloooooo, this is Dashboard</p>
+      <div><img src="/public/adminimage/Dashboard Screen for Quoting Software.png" alt=""></div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+
 
 
 <%- include('../layout/footer.ejs',{admin:true}) %>
