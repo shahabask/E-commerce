@@ -1,6 +1,7 @@
 <%- include('../layout/header.ejs',{admin:true}) %>
 
 <style>
+  input[type="number"],
   input[type="text"],
   input[type="password"],
   select {
@@ -14,7 +15,7 @@
     margin-bottom: 10px;
     /* box-shadow: 0px 0px 10px 0px #0d0d0d; */
   }
-
+  input[type="number"]:focus,
   input[type="text"]:focus,
   input[type="password"]:focus,
   select:focus {
@@ -117,7 +118,11 @@
 			</div>
 			<div class="namediv" style="margin-bottom: 10px;">
 				<label>Price</label><br>
-				<input type="text" name="price" placeholder="Enter price" required>
+				<input type="number" name="price" placeholder="Enter price" required>
+			</div>
+      <div class="namediv" style="margin-bottom: 10px;">
+				<label>Discount Percentage</label><br>
+				<input type="number" name="discount" placeholder="Enter Product Discount" required>
 			</div>
 			<div class="namediv">
 				<label id="sizeLabel">Size</label><br>

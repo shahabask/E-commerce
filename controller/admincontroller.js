@@ -214,7 +214,7 @@ const loadOrdersList = async (req, res) => {
     ];
 
     const orders = await Order.aggregate(pipeline);
-    orders.sort((a,b)=>b.products[0].orderDate-a.products[0].orderDate)
+    orders.sort((a, b) => b.products[0].orderDate - a.products[0].orderDate);
     res.render("a-orders", { orders: orders, currentPage: "orders" });
   } catch (error) {
     console.log(error.message);
@@ -228,7 +228,7 @@ const loadAddProduct = async (req, res) => {
     res.render("addProduct", { category: category1 });
   } catch (error) {
     console.log(error.message);
-    res.send(error)
+    res.send(error);
   }
 };
 
@@ -244,6 +244,7 @@ const addProduct = async (req, res) => {
       const product = new Product({
         modelName: req.body.name,
         brand: req.body.brand,
+        discount:req.body.discount,
         category: req.body.category,
         quantity: req.body.quantity,
         price: req.body.price,
@@ -300,7 +301,7 @@ const deleteCategory = async (req, res) => {
 
 const loadAddCategory = (req, res) => {
   try {
-    console.log('sdsdsds');
+    console.log("sdsdsds");
     res.render("addcategory", { message: "" });
   } catch (error) {
     console.log(error.message);
@@ -309,14 +310,13 @@ const loadAddCategory = (req, res) => {
 const updateCategory = async (req, res) => {
   try {
     const id = req.body.categoryId;
-    console.log("id:", id);
     const name = req.body.categoryName;
-    console.log(name);
+    const discount = req.body.categoryDiscount;
     const update = await Category.updateOne(
       { _id: id },
-      { $set: { category_name: name } }
+      { $set: { category_name: name, discount: discount } }
     );
-    console.log(update);
+
     res.redirect("/admin/category");
   } catch (error) {
     console.log(error);
@@ -325,9 +325,10 @@ const updateCategory = async (req, res) => {
 const addCategory = async (req, res) => {
   try {
     const categoryNames = req.body.categoryName;
-
+    const categoryDiscounts = req.body.categoryDiscount;
     for (let i = 0; i < categoryNames.length; i++) {
       const categoryName = categoryNames[i];
+      const discount = categoryDiscounts[i];
       console.log(categoryName);
       const checkCategory = await Category.findOne({
         category_name: { $regex: categoryName, $options: "i" },
@@ -338,6 +339,7 @@ const addCategory = async (req, res) => {
       } else {
         const category = new Category({
           category_name: categoryName,
+          discount: discount,
         });
         await category.save();
       }
@@ -367,15 +369,15 @@ const unBlockUser = async (req, res) => {
     const user = await User.findOne({ _id: id });
     // console.log(user.isBlock)
     res.redirect("/admin/users");
-  } catch (error) {}
+  } catch (error) { }
 };
 const loadEditProduct = async (req, res) => {
   try {
     const id = req.query.id;
-    console.log(id);
+
 
     const product = await Product.findOne({ _id: id });
-    console.log(product);
+
     const category = await Category.find({});
     res.render("editproduct", { product: product, category: category });
   } catch (error) {
@@ -390,6 +392,7 @@ const editProduct = async (req, res) => {
     let updateField = {
       modelName: req.body.name,
       brand: req.body.brand,
+      discount:req.body.discount,
       category: req.body.category,
       quantity: req.body.quantity,
       price: req.body.price,
@@ -398,6 +401,7 @@ const editProduct = async (req, res) => {
       image: currentProduct.image,
       color: req.body.color,
     };
+    console.log(updateField)
     if (req.files && req.files.length > 0) {
       updateField.image = req.files.map((file) => file.filename);
     }
@@ -485,32 +489,6 @@ const editStatus = async (req, res) => {
 
 const loadCoupon = async (req, res) => {
   try {
-    const coupon = [
-      {
-        code: "fegert",
-        description: "heflg",
-        expiryDate: "1/02/20223",
-        status: "Active",
-      },
-      {
-        code: "feterh",
-        description: "heflg",
-        expiryDate: "1/02/20223",
-        status: "Expired",
-      },
-      {
-        code: "feggrt",
-        description: "heflg",
-        expiryDate: "1/02/20223",
-        status: "Active",
-      },
-      {
-        code: "feggrt",
-        description: "heflg",
-        expiryDate: "1/02/20223",
-        status: "Active",
-      },
-    ];
     const coupons = await Coupon.find({});
     const currentDate = new Date();
     for (const coupon of coupons) {
@@ -533,9 +511,6 @@ const loadCoupon = async (req, res) => {
 };
 const loadAddCoupon = (req, res) => {
   try {
-    // const currentDate = new Date();
-    // const expiryDate =req.body.
-
     res.render("addCoupon", { currentPage: "" });
   } catch (error) {
     console.log(error.message);
@@ -548,7 +523,7 @@ const addCoupon = async (req, res) => {
 
     const coupon = new Coupon({
       couponCode: req.body.code,
-      amount: req.body.amount,
+      percentage: req.body.percentage,
       description: req.body.description,
       expiryDate: req.body.expiryDate,
       image: req.file.filename,
@@ -559,25 +534,40 @@ const addCoupon = async (req, res) => {
     console.log(error.message);
   }
 };
-const loadEditCoupon=async(req,res)=>{
-  try{
-    const id=req.query.id
-    const coupon=await Coupon.findOne({_id:id})
-    console.log(coupon)
-    res.render('editCoupon',{coupon:coupon,currentPage:''})
-
-  }catch(error){
-       console.log(error.message)
+const loadEditCoupon = async (req, res) => {
+  try {
+    const id = req.query.id;
+    const coupon = await Coupon.findOne({ _id: id });
+    res.render("editCoupon", { coupon: coupon, currentPage: "" });
+  } catch (error) {
+    console.log(error.message);
   }
-}
-const editCoupon=async(req,res)=>{
-  try{
+};
+const editCoupon = async (req, res) => {
+  try {
+    const id = req.body.couponId;
 
-  }catch(error){
-    console.log(error.message)
-
+    const coupon = await Coupon.findOne({ _id: id });
+    console.log(req.body.percentage);
+    const updatedCoupon = {
+      couponCode: req.body.code,
+      percentage: req.body.percentage,
+      description: req.body.description,
+      expiryDate: req.body.expiryDate,
+      image: coupon.image,
+    };
+    if (req.file) {
+      updatedCoupon.image = req.file.filename;
+    }
+    const couponUpdate = await Coupon.updateOne(
+      { _id: id },
+      { $set: updatedCoupon }
+    );
+    res.redirect("/admin/coupon");
+  } catch (error) {
+    console.log(error.message);
   }
-}
+};
 const deleteCoupon = async (req, res) => {
   try {
     const id = req.query.id;

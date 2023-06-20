@@ -8,6 +8,10 @@
       <label for="categoryName" class="form-label">Category Name</label>
       <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%= category.category_name %>" required>
     </div>
+    <div class="mb-3">
+      <label for="categoryName" class="form-label">Category Name</label>
+      <input type="number" class="form-control" id="categoryDiscount" name="categoryDiscount" value="<%= category.discount %>" required>
+    </div>
     <input type="text" name="categoryId" value="<%= category._id %>" hidden>
     <button type="submit" class="btn btn-primary update-button">Update</button>
   </form>
@@ -25,16 +29,16 @@
 
 <script>
   // Add event listener to form submission
-  document.querySelector('.update-button').addEventListener('click', function(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
+  // document.querySelector('.update-button').addEventListener('click', function(event) {
+  //   event.preventDefault(); // Prevent the default form submission behavior
 
     // Perform the form submission
     // ...
 
     // Redirect to the rendered page with success message as query parameter
     var successMessage = 'Category edited successfully';
-    window.location.href = '/admin/category?message=' + encodeURIComponent(successMessage);
-  });
+    // window.location.href = '/admin/category?message=' + encodeURIComponent(successMessage);
+  // });
 </script>
 
 

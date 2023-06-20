@@ -9,6 +9,10 @@ const category = new mongoose.Schema({
     type: String,
     required: true,
   },
+  discount:{
+    type:Number,
+    required:false
+  }
 });
 
 module.exports = mongoose.model("Category", category);

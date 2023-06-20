@@ -1,6 +1,7 @@
 <%- include('../layout/header.ejs',{admin:true}) %>
 
 <style>
+  input[type="number"],
   input[type="text"],
   input[type="password"],
   select {
@@ -18,7 +19,7 @@
 
   /*  */
 
-
+  input[type="number"]:focus,
   input[type="text"]:focus,
   input[type="password"]:focus,
   select:focus {
@@ -81,7 +82,7 @@
 
       <div class="namediv">
         <label>Brand Name</label><br>
-        <input type="text" name="brand" placeholder="Enter brand name" value="<%=product.brand  %>" required>
+        <input type="text" name="brand" placeholder="Enter brand name" value="<%=product.brand %>" required>
       </div>
       <div class="namediv">
         <label>Category</label><br>
@@ -118,8 +119,12 @@
       </div>
       <div class="namediv" style="margin-bottom: 10px;">
         <label>Price</label><br>
-        <input type="text" name="price" placeholder="Enter price" required value="<%=product.price  %>">
+        <input type="number" name="price" placeholder="Enter price" required value="<%=product.price  %>">
       </div>
+      <div class="namediv" style="margin-bottom: 10px;">
+				<label>Discount Percentage</label><br>
+				<input type="number" name="discount" placeholder="Enter Product Discount" value="<%=product.discount%>" required>
+			</div>
       <div class="namediv">
         <label>Color</label><br>
         <select class="form-select" aria-label="Default select example" name="size">

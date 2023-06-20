@@ -9,6 +9,7 @@ const cartController = require("../controller/cartController");
 const userController = require("../controller/usercontroller");
 const orderController = require("../controller/orderController");
 const productController = require("../controller/productController");
+const couponController= require("../controller/couponcontroller")
 
 const multer = require("multer");
 const path = require("path");
@@ -123,6 +124,8 @@ userRoute.get(
   auth.isUserLoggedIn,
   orderController.loadUserOrders
 );
+userRoute.get('/usercoupon',auth.isUserLoggedIn,couponController.loadMyCoupons)
+userRoute.get('/delete-coupon-user',auth.isUserLoggedIn,couponController.deleteCoupon)
 userRoute.post('/return-order',orderController.returnOrder)
 userRoute.get(
   "/order-history",
@@ -141,7 +144,7 @@ userRoute.get(
   auth.isUserLoggedIn,
   userController.loadUserWallet
 );
-userRoute.post("/applycoupon", cartController.applyCoupon);
+userRoute.post("/applycoupon", couponController.applyCoupon);
 userRoute.get("/logout", auth.isUserLoggedIn, userController.logOut);
 
 module.exports = userRoute;

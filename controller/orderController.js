@@ -5,6 +5,7 @@ const Cart = require("../Model/cartModel");
 const Order = require("../Model/orderModel");
 const Coupon = require("../Model/couponModel");
 const Wallet =require('../Model/walletModel');
+const Usercoupon=require('../Model/userCouponModel')
 const Razorpay = require("razorpay");
 const mongoose = require("mongoose");
 
@@ -28,7 +29,7 @@ const orderPlaced = async (req, res) => {
     let total = req.body.total;
     console.log(typeof total)
     total = Number(total);
-console.log(total)
+
      
     if (total != 0) {
       const userId = req.session.userId;
@@ -198,7 +199,7 @@ const loadPaymentMethod = async (req, res) => {
       if (total < 2000) {
         shipping = 100;
       }
-      console.log();
+    
       const grandTotal = total + shipping
 
       res.render("price-payment", {
@@ -228,9 +229,7 @@ const loadEditAddressCheckout = async (req, res) => {
 const verifyPayment = async (req, res) => {
   try {
     const userId = req.session.userId;
-    console.log(userId);
-
-    const payment = req.body.response;
+   const payment = req.body.response;
 
     const crypto = require("crypto");
     const hash = crypto
@@ -323,7 +322,7 @@ const cancelOrder = async(req, res) => {
            await newWallet.save()
            wallet=newWallet
          }
-        console.log(wallet)
+        
          wallet.balance+=order.grandTotal
          wallet.history.push({transactionDate:new Date,amount:order.grandTotal,description:'Cancelled Order'})
          await wallet.save()
@@ -351,20 +350,7 @@ const returnOrder = async (req, res) => {
    
     const order=await Order.findOneAndUpdate({_id:orderId},{status:'return-requested'})
    
-  //   if(order.paymentMethod!='cashOnDelivery'){
-        
-  //     let wallet=await Wallet.findOne({userId:req.session.userId})
-  //     if(!wallet){
-  //       const newWallet= new Wallet({userId:req.session.userId})
-  //       await newWallet.save()
-  //       wallet=newWallet
-  //     }
-  //   //  console.log(wallet)
-  //     wallet.balance+=order.grandTotal
-  //     wallet.history.push({transactionDate:new Date,amount:order.grandTotal,description:'Returned Order'})
-  //     await wallet.save()
 
-  //  }
    res.redirect('/order-details?id=' + orderId)
   } catch (error) {
     console.log(error.message);

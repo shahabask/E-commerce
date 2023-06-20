@@ -88,7 +88,7 @@ adminRoute.post(
   adminController.addCoupon
 );
 adminRoute.get('/edit-coupon',auth.isAdminLoggedIn,adminController.loadEditCoupon)
-adminRoute.post('/edit-coupon',adminController.editCoupon)
+adminRoute.post('/edit-coupon',upload.single("image"),adminController.editCoupon)
 adminRoute.get(
   "/deletecoupon",
   auth.isAdminLoggedIn,

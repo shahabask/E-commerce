@@ -1,4 +1,5 @@
-const { default: mongoose } = require("mongoose");
+
+const mongoose=require('mongoose')
 const Product = require("../Model/productModel");
 const User = require("../Model/userModel");
 const Category = require("../Model/categoryModel");
@@ -59,12 +60,12 @@ const removeFromCart = async (req, res) => {
     res.redirect("/usercart");
   } catch (error) {}
 };
-const getCart = async (req, res) => {
+const  getCart = async (req, res) => {
   const cart = await Cart.findOne({ userId: req.session.userId });
   // console.log('req.session.userId: ', typeof req.session.userId);
   // console.log(cart)
   try {
-    const pipeline = [
+    const pipeline = [    
       {
         $match: { userId: new mongoose.Types.ObjectId(req.session.userId) },
       },
@@ -223,31 +224,7 @@ const buyProductsFromCart = async (req, res) => {
   }
 };
 
-const applyCoupon = async (req, res) => {
-  try {
-    let couponCode = req.body.coupon;
-    let total = req.body.total;
 
-    if (couponCode.length > 0) {
-      const regexValue = new RegExp(`^${couponCode}$`, "i");
-
-      var coupon = await Coupon.findOne({ couponCode: { $regex: regexValue } });
-    }
-
-    //  console.log('this is couponcode',coupon)
-
-    if (coupon) {
-      let couponDiscount = coupon.amount;
-      total = total - couponDiscount;
-
-      return res.json({ couponDiscount, total });
-    } else {
-      return res.json("not a valid coupon");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
 module.exports = {
   buyProductDirectly,
   buyProductsFromCart,
@@ -255,5 +232,5 @@ module.exports = {
   addToCart,
   updateItem,
   removeFromCart,
-  applyCoupon,
+  
 };

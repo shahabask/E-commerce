@@ -13,6 +13,10 @@
         <label for="categoryName_0" class="form-label">Category Name</label>
         <input type="text" class="form-control" id="categoryName_0" name="categoryName[]" required>
       </div>
+      <div class="mb-3">
+        <label for="categoryName_0" class="form-label1">Category Discount</label>
+        <input type="number" class="form-control" id="categoryDiscount_0" name="categoryDiscount[]" required>
+      </div>
     </div>
     <button type="button" class="btn btn-primary" onclick="addCategoryField()">Add More</button>
     <button type="submit" class="btn btn-success" onclick="addcategory()">Submit</button>
@@ -36,11 +40,16 @@
 
     var categoryField = document.createElement('div');
     categoryField.classList.add('mb-3');
-
+    
     var label = document.createElement('label');
     label.setAttribute('for', 'categoryName_' + categoryCounter);
     label.classList.add('form-label');
     label.textContent = 'Category Name';
+    
+    var label1=document.createElement('label1');
+    label1.setAttribute('for', 'categoryDiscount_' + categoryCounter);
+    label1.classList.add('form-label1');
+    label1.textContent = 'Category Discount';
 
     var input = document.createElement('input');
     input.setAttribute('type', 'text');
@@ -48,9 +57,19 @@
     input.setAttribute('id', 'categoryName_' + categoryCounter);
     input.setAttribute('name', 'categoryName[]');
     input.required = true;
+    var input1 = document.createElement('input1');
+    input1.setAttribute('type', 'number');
+    input1.classList.add('form-control');
+    input1.setAttribute('id', 'categoryDiscount_' + categoryCounter);
+    input1.setAttribute('name', 'categoryDiscount[]');
+    input1.required = true;
 
     categoryField.appendChild(label);
     categoryField.appendChild(input);
+    categoryContainer.appendChild(categoryField);
+
+    categoryField.appendChild(label1);
+    categoryField.appendChild(input1);
     categoryContainer.appendChild(categoryField);
 
     categoryCounter++;
