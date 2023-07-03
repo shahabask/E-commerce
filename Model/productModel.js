@@ -29,18 +29,24 @@ const product = new mongoose.Schema({
     type: String,
     required: false,
   },
-  quantity: {
-    type: Number,
-    required: true,
-  },
+ color:{
+type:Array,
+required:true
+ },
+ size:{
+  type:Array,
+  required:true
+   },
+   quantity:{
+    type:Number,
+    required:true
+   },
+
   modelName: {
     type: String,
     required: true,
   },
-  size: {
-    type: String,
-    required: true,
-  },
+
   available: {
     type: Boolean,
     default: true,

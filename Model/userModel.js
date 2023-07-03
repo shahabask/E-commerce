@@ -67,6 +67,22 @@ const user = new mongoose.Schema({
     type: String,
     required: false,
   },
+  referralCode:{
+    type:String,
+    required:false
+  },
+  referralCodeUsed:{
+    type:String,
+    default:0,
+  },
+  otpExpiration:{
+    type:Date,
+    default:0
+  },
+ totalOrders:{
+  type:Number,
+  default:0
+ }
 });
 
 module.exports = mongoose.model("User", user);

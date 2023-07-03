@@ -1,239 +1,561 @@
 <%- include('../layout/header.ejs',{admin:true}) %>
 
-<style>
-  input[type="number"],
-  input[type="text"],
-  input[type="password"],
-  select {
-    border-radius: 5px;
-    border: none;
-    padding: 8px 12px;
-    background-color: white;
-    color: black;
-    box-sizing: border-box;
-    width: 100%;
-    margin-bottom: 10px;
-    /* box-shadow: 0px 0px 10px 0px #0d0d0d; */
-  }
-  input[type="number"]:focus,
-  input[type="text"]:focus,
-  input[type="password"]:focus,
-  select:focus {
-    outline: none;
-    box-shadow: 0px 0px 10px 0px #FCC114;
-  }
+<head>
+  <title>ADD PRODUCT</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body,
+    div,
+    form,
+    input,
+    select,
+    p {
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+    }
+
+    h1 {
+      position: absolute;
+      margin: 0;
+      font-size: 36px;
+      color: #fff;
+      z-index: 2;
+    }
+
+    span.required {
+      color: red;
+    }
+
+    .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 20px;
+    }
+
+    form {
+      width: 100%;
+      padding: 20px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 30px 0 #095484;
+    }
+
+    .banner {
+      position: relative;
+      height: 180px;
+      background-image: url("/public/adminimage/1684772852195-adidas\ blue\ shoe.webp");
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .banner::after {
+      content: "";
+      background-color: rgba(0, 0, 0, 0.4);
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    p.top-info {
+      margin: 10px 0;
+    }
+
+    input,
+    select {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    input {
+      width: calc(100% - 10px);
+      padding: 5px;
+    }
+
+    select {
+      width: 100%;
+      padding: 7px 0;
+      background: transparent;
+    }
+
+    .item:hover p,
+    .question:hover p,
+    .question label:hover,
+    input:hover::placeholder {
+      color: #095484;
+    }
+
+    .item input:hover,
+    .item select:hover {
+      border: 1px solid transparent;
+      box-shadow: 0 0 5px 0 #095484;
+      color: #095484;
+    }
+
+    .item {
+      position: relative;
+      margin: 10px 0;
+    }
+
+    .question input {
+      width: auto;
+      margin: 0;
+      border-radius: 50%;
+    }
+
+    .question input,
+    .question span {
+      vertical-align: middle;
+    }
+
+    .question label {
+      display: inline-block;
+      margin: 5px 20px 15px 0;
+    }
+
+    .btn-block {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    button {
+      width: 150px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #095484;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0666a3;
+    }
+
+    @media (min-width: 568px) {
+
+      .name-item,
+      .city-item {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .name-item input,
+      .city-item input {
+        width: calc(50% - 20px);
+      }
+
+      .city-item select {
+        width: calc(50% - 8px);
+      }
+    }
+
+    #select-colors {
+      display:flex;
+      width: calc(100% - 300px);
+      align-items: center;
+      margin-right: 30px;
+
+    }
+
+    .question-answer input[type="checkbox"] {
+      margin-right: 5px; 
+      padding-right: 10px;
+
+    }
+    .sidebar {
+  background-color: #FCC114;
+  flex: 0 0 auto; /* Sidebar won't grow or shrink */
+  width: 250px; /* Set the desired width of the sidebar */
+  padding-top: 20px;
+  color: black;
+  min-height: 100vh;
+}
+
+.table-wrapper {
+  flex: 1 1 auto; /* Table wrapper will grow and shrink */
+  overflow: auto; /* Add a scrollbar when table content exceeds wrapper height */
+}
+
+table {
+  width: 100%;
+  /* Additional table styles here */
+}
 
 
+    .sidebar-header {
+      padding: 10px;
+      text-align: center;
+    }
 
-  .namediv {
-    padding-left: 20px;
-    width: 100%;
-  }
+    .sidebar-brand {
+      color: #FFFFFF;
+      font-weight: bold;
+      font-size: 20px;
+      text-decoration: none;
+    }
 
+    .nav-item {
+      margin-bottom: 10px;
+    }
 
-  .productdiv {
-    color: #131313;
-    padding-top: 40px;
-    border: solid 1px;
-    border-color: #ffffff00;
-    box-shadow: 0px 0px 10px 0px #0d0d0d;
-    border-radius: 10px;
-    background-color: #FCC114;
-  }
+    .nav-link {
+      color: #7E7E7E;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
 
-  .btn-secondary {
-    background-color: #575757;
-    color: white;
-  }
+    .nav-link.active {
+      color: #575757;
+    }
 
-  .btn-secondary:hover,
-  .btn-secondary:focus {
-    color: white;
-  }
+    .nav-link:hover {
+      color: #FFFFFF;
+    }
 
-  .btn-secondary {
+    .sidebar .nav-link.active {
+      background-color: #000;
+      border-radius: 10px;
+    }
 
-    color: white;
-    width: 100px;
-  }
+    /* #select-colors {
+    margin-right: 10px;
+  } */
+  </style>
+</head>
 
-  .custom-file-input {
-    opacity: 100;
-  }
-</style>
-
-
-<div class="container mt-3" style="position: relative;">
-  <div class="" style="position: absolute; right: 20px;">
-    <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
-  </div>
-</div>
-<div class="d-flex justify-content-center container mt-5" style="margin-bottom: 30px;">
-  <div class="container-fluid productdiv" style="font-weight: 500;">
-    <h4 style="font-weight: 500;">ADD PRODUCT</h4><br>
-
+<body>
+  <div class="row">
+    <div class="col-lg-2 col-sm-2 sidebar">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'dashboard') { %>active<% } %>" href="/admin/home">
+            <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'salesReport') { %>active<% } %>" href="/admin/sales-report">
+            <i class="fas fa-chart-line"></i> Sales Report
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
+            <i class="bi bi-basket"></i> Products
+          </a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link text-light" href="/admin/addproduct">
+            <i class="bi bi-plus" style="color: #000; " ></i> Add Products
+          </a>
+        </li> -->
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'users') { %>active<% } %>" href="/admin/users">
+            <i class="bi bi-people"></i> Users
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'orders') { %>active<% } %>" href="/admin/orders">
+            <i class="bi bi-file-earmark-text"></i> Orders
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
+            <i class="bi bi-grid-3x3-gap"></i> Category
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
+            <i class="bi bi-tags-fill"></i> Coupon 
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+            <i class="fas fa-flag"></i> Banner
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+    <div class="col-lg-10 col-sm-10">
+  <div class="testbox">
     <form action="/admin/addproduct" method="post" enctype="multipart/form-data">
+      <div class="banner">
+        <h1>ADD PRODUCT</h1>
+      </div>
+      <div class="question">
+        <% if( typeof message !='undefined'&&err==3){ %>
+          <p  id="message" style="color: rgb(230, 16, 16);"><%=message%></p>
+          <%}%>
 
-      <div class="namediv">
-        <label>Product Name</label><br>
-        <input type="text" name="name" placeholder="Enter product name" required>
+    </div>
+      <div class="item">
+        <p>Product Name<span class="required">*</span></p>
+        <div class="name-item">
+          <input type="text" name="name" placeholder="Enter product name" required />
+
+        </div>
+      </div>
+      <div class="item">
+        <p>Brand Name<span class="required">*</span></p>
+        <div class="name-item">
+          <input type="text" name="brand" placeholder="Enter brand name" required />
+
+        </div>
       </div>
 
-      <div class="namediv">
-        <label>Brand Name</label><br>
-        <input type="text" name="brand" placeholder="Enter brand name" value="" required>
-      </div>
-      <div class="namediv">
-        <label>Category</label><br>
+      <div class="item">
+        <p>Category<span class="required">*</span></p>
         <select class="form-select" aria-label="Default select example" name="category">
           <option></option>
           <% for(let i=0;i<category.length;i++){%>
           <option value="<%= category[i].category_name %>"><%= category[i].category_name %></option>
           <%}%>
-				</select>
-			</div>
-			<div class="namediv">
-				<label>Color</label><br>
-				<select class="form-select" aria-label="Default select example" name="color">
-					
-					    <option></option>
-						<option>Red</option>
-						<option>Green</option>
-						<option>Yellow</option>
-						<option>Blue</option>
-						<option>White</option>
-						<option>Black</option>
-						<option>Silver</option>
-						<option>Gold</option>
-						<option>Light yellow</option>
-						<option>Violet</option>
-						<option>Pink</option>
-						<option>Light Green</option>
-					
-				</select>
-			</div>
-			<div class="namediv">
-				<label>Quantity</label><br>
-				<input type="text" name="quantity" placeholder="Enter Quantity" required>
-			</div>
-			<div class="namediv" style="margin-bottom: 10px;">
-				<label>Price</label><br>
-				<input type="number" name="price" placeholder="Enter price" required>
-			</div>
-      <div class="namediv" style="margin-bottom: 10px;">
-				<label>Discount Percentage</label><br>
-				<input type="number" name="discount" placeholder="Enter Product Discount" required>
-			</div>
-			<div class="namediv">
-				<label id="sizeLabel">Size</label><br>
-				<select class="form-select" aria-label="Default select example" name="size">
-					<option></option>
-					
-						<option>S</option>
-						<option>M</option>
-						<option>L</option>
-						<option>XL</option>
-						<option>6.5</option>
-						<option>7.5</option>
-						<option>8</option>
-						<option>8.5</option>
-						<option>9</option>
-						<option>9.5</option>
-						<option>10</option>
-						<option>11</option>
-						
-					
-				</select>
-			</div>
-			<div class="namediv">
-				<label>Description</label><br>
-				<textarea name="description" style="border: #fff;border-radius: 2px;" placeholder="Enter description" id="" cols="40" rows="6"></textarea >
-			
-			</div>
-			<div class="m-4">
-				<label style="color: #fff; font-weight: 300;">Upload Images</label><br>
-				<input type="file" class="form-control-file custom-file-input" id="preview-image" name="image"
-					onchange="previewImage(event)" style="opacity:100" multiple>
-			</div>
-			<div style="text-align: center; padding-top: 20px; padding-bottom: 15px;">
-				<input type="submit" class="btn btn-secondary" value="Submit">
-			</div>
-			<div>
-				<% if( typeof message !='undefined'){ %>
-          <p style="color: rgb(230, 16, 16);"><%=message%></p>
-          <%}%>
-			</div>
-		</form>
-	</div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+                  </select>
+        </div>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+        <div class="item">
+            <p>Quantity<span class="required">*</span></p>
+         <input type="number" name="quantity" required/>
+        
+     
+    </div>
+        <div class="item">
+            <p>Price<span class="required">*</span></p>
+            <div class="city-item">
+            <input type="number" name="price" placeholder="Product Price" required/>
+            <% if( typeof message !='undefined'&&err==2||typeof message !='undefined'&&err==1){ %>
+              <p  id="message" style="color: rgb(230, 16, 16);"><%=message%></p>
+              <%}%>
+          <input type="number" name="discount" placeholder="Discount Percentage" required/>
+         
+        </div></div>
+        <div class="item" id="select-colors">
 
-<script>
-	$(document).ready(function() {
-  // Get the select element for category
-  const categorySelect = $('select[name="category"]');
-  // Get the label and select element for size
-  const sizeLabel = $('#sizeLabel');
-  const sizeSelect = $('select[name="size"]');
+            <p>Select Colors<span class="required">*</span></p><br>
+          
+            <input type="checkbox" id="red1" name="color" value="Red">
+  <label for="red1">Red</label><br>
   
-  // Event handler for category selection change
-  categorySelect.on('change', function() {
-	console.log('JHGEO')
-    const selectedCategory = categorySelect.val();
-    if (selectedCategory === 'Suppliment') {
-      // If 'supplement' category is selected, replace label with 'kg'
-	  console.log('HGOEIF')
-      sizeLabel.text('kg');
-      // Change the select options for 'supplement'
-      sizeSelect.empty();
-      sizeSelect.append('<option></option>');
-	  sizeSelect.append('<option>500g</option>');
-      sizeSelect.append('<option>1Kg</option>');
-      sizeSelect.append('<option>2Kg</option>');
-      sizeSelect.append('<option>5Kg</option>');
-    } else {
-      // If any other category is selected, revert to default label and options
-      sizeLabel.text('Size');
-      sizeSelect.empty();
-      sizeSelect.append('<option></option>');
-      sizeSelect.append('<option>S</option>');
-      sizeSelect.append('<option>M</option>');
-      sizeSelect.append('<option>L</option>');
-      sizeSelect.append('<option>XL</option>');
-      sizeSelect.append('<option>6.5</option>');
-      sizeSelect.append('<option>7.5</option>');
-      sizeSelect.append('<option>8</option>');
-      sizeSelect.append('<option>8.5</option>');
-      sizeSelect.append('<option>9</option>');
-      sizeSelect.append('<option>9.5</option>');
-      sizeSelect.append('<option>10</option>');
-      sizeSelect.append('<option>11</option>');
-    }
-  });
-});
+  <input type="checkbox" id="green1" name="color" value="Green">
+  <label for="green1">Green</label>
+  
+  <input type="checkbox" id="yellow1" name="color" value="Yellow">
+  <label for="yellow1">Yellow</label>
+  <input type="checkbox" id="blue1" name="color" value="Blue">
+  <label for="blue1">Blue</label><br>
+  
+  <input type="checkbox" id="white1" name="color" value="White">
+  <label for="white1">White</label>
+  
+  <input type="checkbox" id="black1" name="color" value="Black">
+  <label for="black1">Black</label>
+  <input type="checkbox" id="silver1" name="color" value="Silver">
+  <label for="silver1">Silver</label><br>
+  
+  <input type="checkbox" id="gold1" name="color" value="Gold">
+  <label for="gold1">Gold</label>
+  
+  <input type="checkbox" id="lightyellow1" name="color" value="Light Yellow">
+  <label for="lightyellow1">Light Yellow</label>
+  <input type="checkbox" id="violet1" name="color" value="Violet">
+  <label for="violet1">Violet</label><br>
+  
+  <input type="checkbox" id="pink1" name="color" value="Pink">
+  <label for="pink1">Pink</label>
+  
+  <input type="checkbox" id="lightgreen1" name="color" value="Light Green">
+  <label for="lightgreen1">Light Green</label>
+  
+</div> z
 
-	function previewImage(event){
-		const previewImages=document.getElementById('preview-image')
-		for(let i=0;i<event.target.files.length;i++){
-			const file=event.target.files[i]
-			const reader =new FileReader()
-			reader.onload=function(e){
-				previewImages[i].src=e.target.result
-			}
-			reader.readAsDataURL(file)
-		}
-	}
-</script>
+<div class="item" id="select-colors">
+
+    <p>Select Size<span class="required">*</span></p><br>
+  
+    <input type="checkbox" id="sizeS" name="size" value="S">
+    <label for="sizeS">S</label><br>
+    
+    <input type="checkbox" id="sizeM" name="size" value="M">
+    <label for="sizeM">M</label>
+    
+    <input type="checkbox" id="sizeL" name="size" value="L">
+    <label for="sizeL">L</label>
+    
+    <input type="checkbox" id="sizeXL" name="size" value="XL">
+    <label for="sizeXL">XL</label><br>
+    
+    <input type="checkbox" id="size6.5" name="size" value="6.5">
+    <label for="size6.5">6.5</label>
+    
+    <input type="checkbox" id="size7.5" name="size" value="7.5">
+    <label for="size7.5">7.5</label>
+    
+    <input type="checkbox" id="size8" name="size" value="8">
+    <label for="size8">8</label>
+    
+    <input type="checkbox" id="size8.5" name="size" value="8.5">
+    <label for="size8.5">8.5</label><br>
+    
+    <input type="checkbox" id="size9" name="size" value="9">
+    <label for="size9">9</label>
+    
+    <input type="checkbox" id="size9.5" name="size" value="9.5">
+    <label for="size9.5">9.5</label>
+    
+    <input type="checkbox" id="size10" name="size" value="10">
+    <label for="size10">10</label>
+    
+    <input type="checkbox" id="size11" name="size" value="11">
+    <label for="size11">11</label>
+    
+
+</div> 
+</div> 
+
+        <!-- <div class="item">
+          <p>Home Address<span class="required">*</span></p>
+          <input type="text" name="name" placeholder="Street address" required/>
+          <div class="city-item">
+            <input type="text" name="name" placeholder="City" required/>
+            <input type="text" name="name" placeholder="Region" required/>
+            <input type="text" name="name" placeholder="Postal / Zip code" required/>
+            <select>
+              <option value="">Country</option>
+              <option value="1">Russia</option>
+              <option value="2">Germany</option>
+              <option value="3">France</option>
+              <option value="4">Armenia</option>
+              <option value="5">USA</option>
+            </select>
+          </div>
+        </div> -->
+        <div class="item">
+          <p>Description<span ></span></p>
+          <textarea name="description" style="border: #fff;border-radius: 2px;" placeholder="Enter description" id="" cols="40" rows="6"></textarea >
+          </div>
+        <div class="item">
+          <p>Upload Image</p>
+          <input type="file" class="form-control-file custom-file-input" id="preview-image" name="image"
+          onchange="previewImage(event)" style="opacity:100" multiple required>
+
+        </div>
+
+       
+     
+        <div class="btn-block">
+          <button type="submit" >ADD</button>
+        </div>
+      </form>
+    </div>
+  </div> 
 
 
-<%- include('../layout/footer.ejs',{admin:true}) %>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+    <script>
+      // Check if the message element exists
+      var messageElement = document.getElementById('message');
+      if (messageElement) {
+        // Set a timeout to remove the message after 2 seconds
+        setTimeout(function() {
+          messageElement.remove();
+        }, 2000);
+      }
+    </script>
+   
+   <script>
+        $(document).ready(function() {
+      // Get the select element for category
+      const categorySelect = $('select[name="category"]');
+      // Get the label and select element for size
+      const sizeLabel = $('#sizeLabel');
+      const sizeSelect = $('select[name="size"]');
+      
+      // Event handler for category selection change
+      categorySelect.on('change', function() {
+        console.log('JHGEO')
+        const selectedCategory = categorySelect.val();
+        if (selectedCategory === 'Suppliment') {
+          // If 'supplement' category is selected, replace label with 'kg'
+          console.log('HGOEIF')
+          sizeLabel.text('kg');
+          // Change the select options for 'supplement'
+          sizeSelect.empty();
+          sizeSelect.append('<option></option>');
+          sizeSelect.append('<option>500g</option>');
+          sizeSelect.append('<option>1Kg</option>');
+          sizeSelect.append('<option>2Kg</option>');
+          sizeSelect.append('<option>5Kg</option>');
+        } else {
+          // If any other category is selected, revert to default label and options
+          sizeLabel.text('Size');
+          sizeSelect.empty();
+          sizeSelect.append('<option></option>');
+          sizeSelect.append('<option>S</option>');
+          sizeSelect.append('<option>M</option>');
+          sizeSelect.append('<option>L</option>');
+          sizeSelect.append('<option>XL</option>');
+          sizeSelect.append('<option>6.5</option>');
+          sizeSelect.append('<option>7.5</option>');
+          sizeSelect.append('<option>8</option>');
+          sizeSelect.append('<option>8.5</option>');
+          sizeSelect.append('<option>9</option>');
+          sizeSelect.append('<option>9.5</option>');
+          sizeSelect.append('<option>10</option>');
+          sizeSelect.append('<option>11</option>');
+        }
+      });
+    });
+    
+        function previewImage(event){
+            const previewImages=document.getElementById('preview-image')
+            for(let i=0;i<event.target.files.length;i++){
+                const file=event.target.files[i]
+                const reader =new FileReader()
+                reader.onload=function(e){
+                    previewImages[i].src=e.target.result
+                }
+                reader.readAsDataURL(file)
+            }
+        }
+    </script>
+    
+    
+    <%- include('../layout/footer.ejs',{admin:true}) %>
+
+
+    <!-- <div class="container mt-3" style="position: relative;">
+        <div class="" style="position: absolute; right: 20px;">
+          <button class="btn btn-secondary" onclick="history.back()">Go Back</button>
+        </div>
+      </div> -->

@@ -66,7 +66,47 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-
+  <script>
+    $(document).ready(function() {
+      $("#login-form").validate({
+        rules: {
+          email: {
+            required: true,
+            email: true,
+          },
+          password: {
+            required: true,
+            minlength: 3,
+          },
+        },
+        messages: {
+          email: {
+            required: "Please enter your email address",
+            email: "Please enter a valid email address",
+          },
+          password: {
+            required: "Please enter a password",
+            minlength: "Your password must be at least 6 characters long",
+          },
+        },
+        highlight: function(element) {
+          $(element).closest(".form-outline").addClass("has-danger");
+        },
+        unhighlight: function(element) {
+          $(element).closest(".form-outline").removeClass("has-danger");
+        },
+        errorElement: "div",
+        errorClass: "form-text text-danger",
+        errorPlacement: function(error, element) {
+          if (element.parent(".form-group").length) {
+            error.insertAfter(element.parent());
+          } else {
+            error.insertAfter(element);
+          }
+        },
+      });
+    });
+  </script>
 </body>
 
 </html>

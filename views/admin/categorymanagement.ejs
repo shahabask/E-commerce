@@ -158,6 +158,11 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'salesReport') { %>active<% } %>" href="/admin/sales-report">
+            <i class="fas fa-chart-line"></i> Sales Report
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
             <i class="bi bi-basket"></i> Products
           </a>
@@ -174,19 +179,25 @@
         </li>
         <li class="nav-item">
           <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
-            <i class="bi bi-grid-3x3-gap"></i> Category Management
+            <i class="bi bi-grid-3x3-gap"></i> Category
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
-            <i class="bi bi-tags-fill"></i> Coupon Management
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-light"  href="/admin/addcategory"><i class="bi bi-plus"></i> Add Category </a>
+          <a class="nav-link text-light"  href="/admin/addcategory"><i class="bi bi-plus" style="color: #000;"></i> Add Category </a>
             
           </button>
         </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
+            <i class="bi bi-tags-fill"></i> Coupon
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+            <i class="fas fa-flag"></i> Banner
+          </a>
+        </li>
+       
       </ul>
     </div>
     <div class="col-lg-10 col-sm-10">

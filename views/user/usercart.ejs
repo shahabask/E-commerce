@@ -12,7 +12,7 @@
 
         .cart-container {
           max-width: 900px;
-          margin: 50px auto;
+          margin: 50px auto; 
           padding: 20px;
           background-color: #fff;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -214,9 +214,196 @@
           font-family: Arial, sans-serif;
           /* Use a font that supports the rupee symbol */
         }
+        @media (max-width: 576px) {
+  .table-container {
+    overflow-x: auto;
+  }
+
+}
+.cssbuttons-io-button {
+  background: green;
+  color: white;
+  font-family: inherit;
+  padding: 0.35em;
+  padding-left: 1.2em;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 0.3em;
+  border: none;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #edcbd7;
+  overflow: hidden;
+  position: relative;
+  height: 2.2em;
+  padding-right: 3.3em;
+}
+
+.cssbuttons-io-button .icon {
+  background: white;
+  margin-left: 1em;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.2em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #fff;
+  right: 0.3em;
+  transition: all 0.3s;
+}
+
+.cssbuttons-io-button:hover .icon {
+  width: calc(100% - 0.6em);
+}
+
+.cssbuttons-io-button .icon svg {
+  width: 1.1em;
+  transition: transform 0.3s;
+  color: #630ae9;
+}
+
+.cssbuttons-io-button:hover .icon svg {
+  transform: translateX(0.1em);
+}
+
+.cssbuttons-io-button:active .icon {
+  transform: scale(0.95);
+}
+/* .custom-button {
+  position: relative;
+  overflow: hidden;
+  background: #A370F0;
+  color: white;
+  font-family: inherit;
+  padding: 0.35em;
+  padding-left: 1.2em;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 0.9em;
+  border: none;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #714da6;
+  height: 2.8em;
+  padding-right: 3.3em;
+  cursor: pointer;
+}
+
+.custom-button::before {
+  content: "";
+  position: absolute;
+  right: 0.3em;
+  top: 0.3em;
+  height: calc(100% - 0.6em);
+  width: 2.2em;
+  background: white;
+  border-radius: 0.7em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #7b52b9;
+  transition: width 0.3s;
+}
+
+.custom-button:hover::before {
+  width: calc(100% - 0.6em);
+}
+
+.custom-button svg {
+  width: 1.1em;
+  transition: transform 0.3s;
+  color: #7b52b9;
+}
+
+.custom-button:hover svg {
+  transform: translateX(0.1em);
+}
+
+.custom-button:active {
+  transform: scale(0.95);
+} */
       </style>
 
+ <style>
+  .button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 15px 20px;
+  background-color: #f0c14b;
+  border: none;
+  font: inherit;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 7px;
+  cursor: not-allowed;
+  overflow: hidden;
+  height: 35px;
+  transition: all 0.3s ease cubic-bezier(0.23, 1, 0.320, 1);
+}
 
+.button span {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.button::before {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  translate: 0 105%;
+  background-color: #f0c14b;
+  color: black;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.button svg {
+  width: 25px;
+  height: 25px;
+  fill: #000;
+  padding-left: 5px;
+  margin-right: 5px;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.button:hover {
+  animation: shake 0.2s linear 1;
+}
+
+.button:hover::before {
+  translate: 0 0;
+}
+
+.button:hover svg {
+  fill: black;
+}
+
+@keyframes shake {
+  0% {
+    rotate: 0deg;
+  }
+
+  33% {
+    rotate: 10deg;
+  }
+
+  66% {
+    rotate: -10deg;
+  }
+
+  100% {
+    rotate: 10deg;
+  }
+}
+
+ </style>
       <body>
         <div class="container">
           <div class="row">
@@ -275,13 +462,13 @@
                         <span class="product-price">&#8377;<%= products[i].price %></span>
                       </td>
                       <td>
-                        <span class="product-price" id="displayQuantity"> <%= products[i].quantity %></span>
+                        <span class="product-price" id="displayQuantity-<%=i%>"> <%= products[i].quantity %></span>
                       </td>
 
                       <td><%= products[i].size %></td>
                       <td><%= products[i].color %></td>
                       <td>
-                        <span class="product-total">&#8377;<%= products[i].total %></span>
+                        <span class="product-total" id="product-total-<%=i%>">&#8377;<%= products[i].total %></span>
                       </td>
                       <td>
                         <div class="quantity">
@@ -292,8 +479,13 @@
                         <div class="message" id="message-<%= i %>"></div>
                       </td>
                       <td>
-                        <button class="remove-btn">
-                          <a href="/removeitem?index=<%= i %>" style="text-decoration: none; color: inherit;">Remove</a>
+                        <button class="remove-btn button">
+                          <a href="/removeitem?index=<%= i %>" style="text-decoration: none; color: inherit;" onclick="confirmDelete(event,'<%=i%>')">  <span>
+                          </span>
+                          <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-miterlimit="2" stroke-linejoin="round" fill-rule="evenodd" clip-rule="evenodd"><path fill-rule="nonzero" d="m12.002 2.005c5.518 0 9.998 4.48 9.998 9.997 0 5.518-4.48 9.998-9.998 9.998-5.517 0-9.997-4.48-9.997-9.998 0-5.517 4.48-9.997 9.997-9.997zm0 1.5c-4.69 0-8.497 3.807-8.497 8.497s3.807 8.498 8.497 8.498 8.498-3.808 8.498-8.498-3.808-8.497-8.498-8.497zm0 7.425 2.717-2.718c.146-.146.339-.219.531-.219.404 0 .75.325.75.75 0 .193-.073.384-.219.531l-2.717 2.717 2.727 2.728c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.384-.073-.53-.219l-2.729-2.728-2.728 2.728c-.146.146-.338.219-.53.219-.401 0-.751-.323-.751-.75 0-.192.073-.384.22-.531l2.728-2.728-2.722-2.722c-.146-.147-.219-.338-.219-.531 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"></path></svg>
+                          </span></a>
+
                         </button>
                       </td>
                     </tr>
@@ -315,28 +507,25 @@
                     <h2 class="invoice-heading">Invoice Details</h2>
                     <div class="invoice-details">
                       <span>Subtotal:</span>
-                      <span>&#8377; <%= total %></span>
+                      <span id="subTotal">&#8377; <%= total %></span>
+                    </div>
+                 
+                    <div class="invoice-details">
+                      <span >Discounts:</span>
+                      <span id="discount">&#8377; <%= discount %></span>
                     </div>
                     <div class="invoice-details">
-                      <span>Coupon Discount:</span>
-                      <p style="font-weight: 600;">&#8377;</p><span id="couponDiscountSpan"></span>
-                    </div>
-                    <div class="invoice-details">
-                      <span>Other Discount:</span>
-                      <span>&#8377; <%= 0 %></span>
-                    </div>
-                    <div class="invoice-details">
-                      <span>Shipping:</span>
-                      <span>&#8377; <%= shipping %></span>
+                      <span >Shipping:</span>
+                      <span id="shipping">&#8377; <%= shipping %></span>
 
                     </div>
                     <%if((total)<2000){%>
-                    <p style="font-size: x-small; color: rgb(68, 124, 209);">purchase for more than <span style="color: rgb(243, 35, 35);"> &#8377;1999 </span> for free delivery</p>
+                    <p id="message" style="font-size: x-small; color: rgb(68, 124, 209);">purchase for more than <span style="color: rgb(243, 35, 35);"> &#8377;1999 </span> for free delivery</p>
                     <% }%>
                     <hr>
                     <div class="invoice-details">
                       <span>Total: </span>
-                      <span id="grandTotal">&#8377; <%=total+shipping %></span>
+                      <span id="grandTotal">&#8377; <%=discountTotal+shipping %></span>
                     </div>
                   </div>
                   <div class="col-md-4">
@@ -347,7 +536,16 @@
   
                         <input type="text" name="couponDiscount" id="couponDiscount" hidden>
                         <input type="text" name="otherDiscount" id="otherDiscount" hidden>
-                        <input type="submit" value="Proceed to Checkout" class="btn btn-primary">
+                        <!-- <input type="submit" value="Proceed to Checkout" class="btn btn-primary custom-button"> -->
+                        <button type="submit" class="cssbuttons-io-button">
+                          Checkout
+                          <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                              <path fill="none" d="M0 0h24v24H0z"></path>
+                              <path fill="currentColor" d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"></path>
+                            </svg>
+                          </div>
+                        </button>
                       </form>
                     </div>
                   </div>
@@ -358,32 +556,8 @@
 
 
               <div class="row mt-4">
-                <!-- <div class="col-md-8">
-                  <div class="coupon-form">
-                    <h4>Apply Coupon</h4>
-                    <form>
-                      <div class="coupon-field">
-                        <input type="text" id="couponinput" name="coupon" class="coupon-input" placeholder="Enter coupon code">
-
-                        <button type="button" class="apply-btn" onclick="checkCouponValidate()">Apply Coupon</button>
-                      </div>
-                    </form>
-
-                  </div>
-                </div> -->
-
-                <!-- <div class="col-md-4">
-                  <div class="text-right">
-                    <form action="/buyfromcart" method="post">
-                      <input type="hidden" name="total" id="totalInput"> -->
-                      <!-- <input type="hidden" name="shipping" value="<%= shipping %>"> -->
-
-                      <!-- <input type="text" name="couponDiscount" id="couponDiscount" hidden>
-                      <input type="text" name="otherDiscount" id="otherDiscount" hidden>
-                      <input type="submit" value="Proceed to Checkout" class="btn btn-primary">
-                    </form>
-                  </div>
-                </div> -->
+    
+                 
               </div> <%  }%>
             </div>
 
@@ -456,10 +630,24 @@
                   },
                   success: function(response) {
                     // window.location.reload()
-                    const quantity=$('#displayQuantity')
+                    const quantity=$('#displayQuantity-'+i)
                     quantity.text(response.displayQuantity)
-                  
-                    // Handle success response
+                    const productTotal=$('#product-total-'+i)
+                    productTotal.text('₹' +response.total)
+                    const subTotal=$('#subTotal')
+                    subTotal.text('₹' +response.subTotal)
+                    const grandTotal=$('#grandTotal')
+                    grandTotal.text('₹' +response.grandTotal)
+                    const discount=$('#discount')
+                    discount.text('₹' +(response.discount))
+                    if(response.subTotal>=2000){
+                      document.getElementById("message").style.display = "none";
+                      const shipping=$('#shipping')
+                      shipping.text('₹' +0)
+                    }else{
+                      document.getElementById("message").style.display = "block"
+                    }
+                 
                     console.log('Quantity updated successfully');
 
                   },
@@ -474,70 +662,31 @@
 
               var isCouponApplied = false;
 
-              // function checkCouponValidate() {
-              //   var couponInput = document.getElementById('couponinput');
-              //   var grandTotal = parseFloat(document.getElementById("grandTotal").textContent.trim().replace(/[^0-9.]/g, ""))
+              
 
-              //   var couponValue = couponInput.value
-              //   console.log(couponValue)
-              //   if (isCouponApplied) {
-              //     // Coupon already applied, no need to repeat
-              //     couponInput.value = 'coupon is already applied'
-              //     couponInput.style.color = String('green')
 
-              //     return;
-              //   }
-              //   // Create the request payload
-              //   var data = {
-              //     coupon: couponValue,
-              //     total: grandTotal
-              //   };
 
-              //   // Send the AJAX request
-              //   fetch('/applycoupon', {
-              //       method: 'POST',
-              //       headers: {
-              //         'Content-Type': 'application/json'
-              //       },
-              //       body: JSON.stringify(data)
-              //     })
-              //     .then(response => response.json())
-              //     .then(result => {
-              //       const couponDiscount = result.couponDiscount;
-              //       const Total = result.total
-              //       console.log(couponDiscount)
-              //       if (couponDiscount) {
+              function confirmDelete(event,index) {
+    event.preventDefault(); // Prevents the default behavior of the link
 
-              //         let x = document.getElementById('couponDiscountSpan')
-              //         couponDiscountSpan.textContent = couponDiscount
-              //         document.getElementById('couponDiscount').value = couponDiscount
-              //         const grandTotalElement = document.getElementById("grandTotal");
-              //         grandTotalElement.textContent = "\u20B9 " + Total;
-              //         isCouponApplied = true
-              //         // const totalInput = document.getElementById("totalInput");
-              //         // totalInput.value =Total;
+    // Display the confirmation SweetAlert
+    Swal.fire({
+      title: "Confirmation",
+      text: "Are you sure you want to remove this item from the cart?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, remove it!",
+      cancelButtonText: "No, cancel",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // If confirmed, proceed with the deletion by redirecting to the link
+        window.location.href =`/removeitem/?index=${index}` ;
+      }
+    });
 
-              //       } else {
-              //         couponInput.value = result
-              //         // couponInput.placeholder = result
-              //         couponInput.style.color = String('red')
-
-              //         // document.getElementById('responseMessage').textContent = result 
-              //       }
-              //       // Handle the response from the server
-              //       console.log(result);
-              //     })
-              //     .catch(error => {
-              //       // Handle any errors that occur during the request
-              //       console.error(error);
-              //     });
-
-              // }
-              // couponInput.addEventListener('input', function() {
-              //   if (couponInput.value === '' || couponInput.value === 'not a valid coupon' || couponInput.value === 'coupon is already applied') {
-              //     couponInput.style.color = ''; // Set it back to an empty string for normal text color
-              //   }
-              // })
+    return false; // Prevents the link from navigating immediately
+  }
             </script>
 
 

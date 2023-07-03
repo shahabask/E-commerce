@@ -2,24 +2,38 @@ const mongoose = require("mongoose");
 const Order = require("../Model/orderModel");
 const Coupon = require("../Model/couponModel");
 const Usercoupon = require("../Model/userCouponModel");
-
+const Cart=require('../Model/cartModel')
+const User=require('../Model/userModel')
 const applyCoupon = async (req, res) => {
   try {
     let couponCode = req.body.coupon;
     let total = req.body.total;
+  
 
     if (couponCode.length > 0) {
       const regexValue = new RegExp(`^${couponCode}$`, "i");
 
       var coupon = await Coupon.findOne({ couponCode: { $regex: regexValue } });
     }
-
+    let cart = await Cart.findOne({userId:req.session.userId})
+    
+    var products =cart.product // Your array of products
+  
+    var maxPrice = products.reduce((max, product) => {
+      return product.price > max ? product.price : max;
+    }, 0)
+    
     //  console.log('this is couponcode',coupon)
-
     if (coupon) {
-      let couponDiscount = coupon.amount;
-      total = total - couponDiscount;
+      let couponDiscount =Math.floor((maxPrice*coupon.percentage)/100) ;
+      
+      const cart=await Cart.findOne({userId:req.session.userId})
+      cart.grandTotal-=couponDiscount
+     await cart.save()   
 
+      console.log(typeof couponDiscount)
+      total = total - couponDiscount;
+       console.log(total)
       return res.json({ couponDiscount, total });
     } else {
       return res.json("not a valid coupon");
@@ -161,17 +175,19 @@ const loadMyCoupons = async (req, res) => {
     ];
 
     let coupon = await Usercoupon.aggregate(pipeline);
+    const user=await User.findOne({_id:req.session.userId})
+    const referralCode=user.referralCode
     // console.log(typeof coupon)
-    console.log("coupon undenda", coupon)
+    // console.log("coupon undenda", coupon)
     if(coupon.length>0) {
 
       var{ _id, coupons } = coupon[0];
-    console.log('ith coupons',coupons)
-      res.render("userCoupon", { coupons: coupons, admin: false });
+    
+      res.render("userCoupon", { coupons: coupons, admin: false,referralCode:referralCode });
     }else{
     
      console.log("coupon ilaanaano nee parayunne")
-      res.render("userCoupon",{coupons:coupon,admin:false})
+      res.render("userCoupon",{coupons:coupon,admin:false,referralCode:referralCode})
     }
    
 

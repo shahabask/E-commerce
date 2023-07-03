@@ -144,8 +144,18 @@ table {
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'salesReport') { %>active<% } %>" href="/admin/sales-report">
+              <i class="fas fa-chart-line"></i> Sales Report
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
               <i class="bi bi-basket"></i> Products
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="/admin/addproduct">
+              <i class="bi bi-plus" style="color: #000; " ></i> Add Products
             </a>
           </li>
           <li class="nav-item">
@@ -160,19 +170,20 @@ table {
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
-              <i class="bi bi-grid-3x3-gap"></i> Category Management
+              <i class="bi bi-grid-3x3-gap"></i> Category 
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
-              <i class="bi bi-tags-fill"></i> Coupon Management
+              <i class="bi bi-tags-fill"></i> Coupon 
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-light" href="/admin/addproduct">
-              <i class="bi bi-plus"></i> Add Products
+            <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+              <i class="fas fa-flag"></i> Banner
             </a>
           </li>
+          
         </ul>
       </div>
       <div class="col-lg-10 col-sm-10">
@@ -238,7 +249,7 @@ table {
           <div><button class="btn bg-secondary "><a class="text-light text-decoration-none" href="/admin/editproduct?id=<%=product[i]._id%>">Edit</a></button></div>
         </td>
         <td>
-          <div><button class="btn bg-danger text-light"><a class="text-light text-decoration-none" href="/admin/deleteproduct?id=<%=product[i]._id%>">Delete</a></button></div>
+          <div><button class="btn bg-danger text-light"><a class="text-light text-decoration-none" href="/admin/deleteproduct?id=<%=product[i]._id%>" onclick="confirmDelete(event,'<%=product[i]._id%>')">Delete</a></button></div>
         </td>
         <% }else{%>
         <td>
@@ -260,7 +271,7 @@ table {
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script> 
 
 
 
@@ -275,6 +286,28 @@ table {
         $('.navbar-brand.me-auto.btn.text-decoration-none').slideToggle('slow');
       });
     });
+
+    function confirmDelete(event,id) {
+    event.preventDefault(); // Prevents the default behavior of the link
+
+    // Display the confirmation SweetAlert
+    Swal.fire({
+      title: "Confirmation",
+      text: "Are you sure you want to remove this product?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, remove it!",
+      cancelButtonText: "No, cancel",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // If confirmed, proceed with the deletion by redirecting to the link
+        window.location.href =`/admin/deleteproduct/?id=${id}` ;
+      }
+    });
+
+    return false; // Prevents the link from navigating immediately
+  }
   </script>
 
   <%- include('../layout/footer.ejs',{admin:true}) %>

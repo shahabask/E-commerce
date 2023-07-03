@@ -8,7 +8,7 @@ const Order = require("../Model/orderModel");
 const Coupon = require("../Model/couponModel");
 const { urlencoded } = require("body-parser");
 
-const updateItem = async (req, res) => {
+const  updateItem = async (req, res) => {
   try {
     const userId = req.session.userId;
     // console.log(userId)
@@ -19,17 +19,29 @@ const updateItem = async (req, res) => {
     const productId = cart.product[productIndexInCart].productId;
     // console.log(productId);
     const product = await Product.findOne({ _id: productId });
+    console.log('PRODUCT',product)
+    if(product.discount){
+
+      var offerPrice=Math.floor((product.price*(100-product.discount))/100)
+    }else{
+      var offerPrice=product.price
+    }
+    console.log('OFFER PRICE',offerPrice)
     if (cart.product[productIndexInCart].quantity < quantity) {
-      cart.product[productIndexInCart].total += product.price;
-      cart.grandTotal += product.price;
+      cart.product[productIndexInCart].total += offerPrice;
+      cart.grandTotal += offerPrice;
     } else if (cart.product[productIndexInCart].quantity > quantity) {
-      cart.product[productIndexInCart].total -= product.price;
-      cart.grandTotal -= product.price;
+      cart.product[productIndexInCart].total -= offerPrice;
+      cart.grandTotal -= offerPrice;
     }
     cart.product[productIndexInCart].quantity = quantity;
     const displayQuantity=cart.product[productIndexInCart].quantity;
     const c = await cart.save();
-        res.send({displayQuantity})
+    const total=c.product[productIndexInCart].total
+   const subTotal=c.product[productIndexInCart].quantity*product.price
+   const grandTotal=c.grandTotal
+   const discount=subTotal-grandTotal
+        res.send({displayQuantity,total,subTotal,grandTotal,discount})
     //   await Cart.updateOne(
     //     {userId: new mongoose.Types.ObjectId(userId)},
     //     {$set: {'product.$[elem].quantity': quantity}},
@@ -79,7 +91,6 @@ const  getCart = async (req, res) => {
           foreignField: "_id",
           as: "productData",
         },
-
       },
       {
         $unwind: "$productData",
@@ -94,17 +105,33 @@ const  getCart = async (req, res) => {
           category: "$productData.category",
           image: { $arrayElemAt: ["$productData.image", 0] },
           stock: "$productData.quantity",
-          quantity: "$product.quantity",
+          quantity: {
+            $cond: {
+              if: {
+                $or: [
+                  { $gt: ["$product.quantity", "$productData.quantity"] },
+                  { $eq: ["$productData.quantity", 0] }
+                ]
+              },
+              then: "$productData.quantity",
+              else: "$product.quantity"
+            }
+          },
           size: "$product.size",
           color: "$product.color",
           total: { $multiply: ["$product.quantity", "$productData.price"] },
+          discountTotal: { $multiply: ["$product.quantity", "$product.price"] }
         },
+      },
+      {
+        $match: { "quantity": { $gt: 0 } }
       },
       {
         $group: { 
           _id: null,
           products: { $push: "$$ROOT" },
           grandTotal: { $sum: "$total" },
+          discountTotal: { $sum: '$discountTotal' }
         },
       },
     ];
@@ -112,7 +139,7 @@ const  getCart = async (req, res) => {
     const cart2 = await Cart.aggregate(pipeline);
 
     if (cart2.length > 0) {
-      const { _id, products, grandTotal } = cart2[0];
+      const { _id, products, grandTotal,discountTotal } = cart2[0];
 
       let shippingCharge = 0;
       //  console.log(typeof grandTotal)
@@ -121,10 +148,15 @@ const  getCart = async (req, res) => {
       }
       //  console.log(grandTotal)
       //  console.log(shippingCharge)
+      const discount=grandTotal-discountTotal
+
       res.render("usercart", {
         products: products,
         total: grandTotal,
         shipping: shippingCharge,
+        discount,
+        discountTotal
+
       });
     } else {
       res.render("usercart", {
@@ -139,13 +171,19 @@ const  getCart = async (req, res) => {
   }
 };
 
-const  addToCart = async (req, res) => {
+const addToCart = async (req, res) => {
   try {
     let proid = req.body.id;
     let prosize = req.body.size;
     let procolor = req.body.color;
     let cart = await Cart.findOne({ userId: req.session.userId });
-
+    
+    var product = await Product.findOne({ _id: proid });
+    const offerPrice=Math.floor((product.price*(100-product.discount))/100)
+     var productPrice=offerPrice
+  if(!product.discount){
+    productPrice=product.price
+  }
     if (!cart) {
       let newCart = new Cart({ userId: req.session.userId, product: [] });
       await newCart.save();
@@ -160,24 +198,23 @@ const  addToCart = async (req, res) => {
     );
     //  console.log(existingproductindex);
 
-    var product = await Product.findOne({ _id: proid });
     if (existingproductindex == -1) {
       cart.product.push({
         productId: proid,
-        price:product.price,
+        price: productPrice,
         quantity: 1,
         size: prosize,
         color: procolor,
-        total: product.price,
+        total:  productPrice,
      });
-      cart.grandTotal += product.price;
+      cart.grandTotal +=  productPrice;
     } else {
       cart.product[existingproductindex].quantity += 1;
-      cart.product[existingproductindex].size = req.body.size;
-      cart.product[existingproductindex].color = req.body.color;
+      // cart.product[existingproductindex].size = req.body.size;
+      // cart.product[existingproductindex].color = req.body.color;
 
-      cart.product[existingproductindex].total += product.price;
-      cart.grandTotal += product.price;
+      cart.product[existingproductindex].total +=  productPrice;
+      cart.grandTotal +=  productPrice;
     }
  
     const c = await cart.save();
@@ -224,7 +261,61 @@ const buyProductsFromCart = async (req, res) => {
   }
 };
 
+const addToCartHome=async(req,res)=>{
+  try{
+  const proid=(req.query.id).trim() 
+    
+  var product = await Product.findOne({ _id: proid });
+ console.log(product)
+ 
+ var offerPrice=Math.floor((product.price*(100-product.discount))/100)
+ if(product.discount==0||!product.discount){
+    offerPrice=product.price
+ }
+ console.log(typeof product.discount)
+ const color=product.color
+ const size=product.size
+  let cart = await Cart.findOne({ userId: req.session.userId });
 
+  if (!cart) {
+    let newCart = new Cart({ userId: req.session.userId, product: [] });
+    await newCart.save();
+    cart = newCart;
+  }
+  //  console.log( cart.userId);
+  const existingproductindex = cart?.product.findIndex(
+    (product) =>
+      product.productId == proid 
+  );
+  //  console.log(existingproductindex);
+
+  if (existingproductindex == -1) {
+    cart.product.push({
+      productId: proid,
+      price:offerPrice,
+      quantity: 1,
+      size: size,
+      color: color,
+      total: offerPrice,
+   });
+    cart.grandTotal += offerPrice;
+    
+  } else {
+    cart.product[existingproductindex].quantity += 1;
+    // cart.product[existingproductindex].size = req.body.size;
+    // cart.product[existingproductindex].color = req.body.color;
+
+    cart.product[existingproductindex].total += offerPrice;
+    cart.grandTotal += offerPrice;
+ 
+  }
+
+  const c = await cart.save();
+  res.send('heloooooo')
+  }catch(error){
+    console.log(error.message)
+  }
+}
 module.exports = {
   buyProductDirectly,
   buyProductsFromCart,
@@ -232,5 +323,5 @@ module.exports = {
   addToCart,
   updateItem,
   removeFromCart,
-  
+  addToCartHome,
 };

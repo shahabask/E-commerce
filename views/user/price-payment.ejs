@@ -16,8 +16,8 @@
 
 
     .container {
-      max-width: 800px;
-      margin: 50px auto;
+      max-width: 100%;
+      /* margin: 50px auto; */
       background-color: #e9f3f8;
       padding: 20px;
       border-radius: 10px;
@@ -49,11 +49,11 @@
       border-radius: 10%;
       object-fit: cover;
     }
-
+/* 
     .total-amount {
-      text-align: right;
-      flex: 0 0 200px;
-    }
+      /* text-align: right; */
+      /* flex: 0 0 0px; */
+    /* } */ */
 
     .total-amount h2 {
       color: #1a237e;
@@ -70,9 +70,14 @@
       color: #fff;
       padding: 10px;
       border-radius: 5px;
-      margin-top: 20px;
+      margin-top: 0px;
+      margin-bottom: 200px;
     }
-
+    .payment-submission
+{
+  /* margin-top: 200px; */
+  background-color: #fff;
+}
     .payment-options h2 {
       color: #fff;
       margin-bottom: 10px;
@@ -85,8 +90,8 @@
 
     .place-order-button {
       margin-top: 20px;
-      background-color: #1a237e;
-      color: #fff;
+      background-color: #fff;
+      color: #1a237e;
       border: none;
     }
 
@@ -246,11 +251,13 @@
       }
     }
     .coupon-form {
-          margin-top: 20px;
-          padding: 20px;
+          /* margin-top: 20px;
+         
           background-color: #f8f9fa;
           border-radius: 5px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+          padding-bottom: 10px;
+         
         }
 
         .coupon-field {
@@ -261,9 +268,10 @@
         .coupon-input {
           flex: 1;
           padding: 5px;
-          border: 1px solid #ccc;
+          /* border: 1px solid #ccc; */
+          
           border-radius: 5px;
-          margin-right: 10px;
+          /* margin-right: 10px; */
         }
 
         .apply-btn {
@@ -301,12 +309,12 @@
       <span class="step-heading">Order Complete</span>
     </div>
   </div>
-  </div>
+  
   <div class="row">
       
 
    
-        <div class="col-md-8 col-lg-8">
+        <div class="col-md-12 col-lg-12">
   <div class="container" >
 
     <div class="product-details">
@@ -341,7 +349,10 @@
         <div class="card-header">
           <h2>Payment Details</h2>
         </div>
-        <div class="card-body">
+        <div class="row">
+
+        
+        <div class="card-body col-6" >
           <!-- <p>Discount: $10</p> -->
           <h6>Total: <span> <%= total %></span></h6>
          
@@ -350,12 +361,27 @@
           
           <p>Delivery Charges: &#8377;<%=shipping%></p>
         </div>
+        <div class="total-amount col-6" >
+          <h2>Total Amount</h2>
+          <h4 id="grandTotal">Total Price: &#8377; <%=grandTotal%></h4>
+        </div>
+      </div>
       </div>
 
-      <div class="total-amount">
-        <h2>Total Amount</h2>
-        <h4 id="grandTotal">Total Price: &#8377; <%=grandTotal%></h4>
+     
+      <div class="col-md-3" style=" margin-right: 0px;">
+  <div class="coupon-form">
+    <h4>Apply Coupon</h4>
+    <form>
+      <div class="coupon-field">
+        <input type="text" id="couponInput" name="coupon" class="coupon-input" placeholder="Enter coupon code">
+
+        <button type="button" class="apply-btn" onclick="checkCouponValidate()">Apply Coupon</button>
       </div>
+    </form>
+
+  </div>
+</div>
       <form action="">
         <div class="payment-options">
           <h2>Select Payment Option</h2>
@@ -376,15 +402,16 @@
             <input class="form-check-input" type="radio" name="paymentOption" id="wallet" value="wallet-payment">
             <label class="form-check-label" for="wallet">Wallet Payment</label>
           </div>
-        </div>
-        <input type="text" name="addressIndex" value="<%=addressIndex%>" hidden>
-        <input type="button" class="btn btn-block place-order-button" onclick="placeOrder()" value="Place Your Order">
-        <!-- <button  ><a href="/userorder" style="text-decoration: none;color: #fff;"></a> </button> -->
-      </form>
+          <div class="payment-submission">
+          <input type="text" name="addressIndex" value="<%=addressIndex%>" hidden>
+          <input type="button" class="btn btn-block place-order-button" onclick="placeOrder()" value="Place Your Order">
+          <!-- <button  ><a href="/userorder" style="text-decoration: none;color: #fff;"></a> </button> -->
+        </div> 
+        </div></form>
     </div>
   </div>
 </div>
-<div class="col-md-3" style="margin-top: 80px; margin-right: 50px;">
+<!-- <div class="col-md-3" style="margin-top: 80px; margin-right: 50px;">
   <div class="coupon-form">
     <h4>Apply Coupon</h4>
     <form>
@@ -396,7 +423,7 @@
     </form>
 
   </div>
-</div>
+</div> -->
 </div>
  
 
@@ -587,7 +614,8 @@ function checkCouponValidate() {
     coupon: couponValue,
     total: grandTotal
   };
-  // console.log(couponValue)
+  
+  console.log(grandTotal)
   // Send the AJAX request
   fetch('/applycoupon', {
       method: 'POST',

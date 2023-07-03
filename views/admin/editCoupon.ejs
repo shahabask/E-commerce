@@ -80,12 +80,12 @@
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
-              <i class="bi bi-grid-3x3-gap"></i> Category Management
+              <i class="bi bi-grid-3x3-gap"></i> Category 
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
-              <i class="bi bi-tags-fill"></i> Coupon Management
+              <i class="bi bi-tags-fill"></i> Coupon 
             </a>
           </li>
           <!-- <li class="nav-item">
@@ -102,38 +102,41 @@
             <h2>Edit Coupon</h2>
           </div>
           <div>
-            <form action="/admin/edit-coupon" method="post" enctype="multipart/form-data">
+            <form action="/admin/edit-coupon" onsubmit="return validateDate(event)" method="post" enctype="multipart/form-data" >
               <div class="form-group my-3">
                 <input type="text" name="couponId" value="<%=coupon._id%>" hidden>
       
                 <label for="nameInput">Coupon Code</label>
                 <input type="text" class="form-control form-control-sm" id="nameInput" name="code" placeholder="Enter coupon code" required value="<%=coupon.couponCode%>">
               </div>
+              <%if(typeof message!=undefined&&err==2){%>
+                <p id="message" style="color: red;"><%=message%></p> 
+              <% }%>
               <div class="form-group my-3">
                 <label for="nameInput">Coupon Offer Percentage</label>
-                <input type="number" class="form-control form-control-sm" id="nameInput" name="percentage" placeholder="Enter Offer Percentage" required value="<%=coupon.percentage%>">
+                <input type="number" class="form-control form-control-sm"  name="percentage" placeholder="Enter Offer Percentage" required value="<%=coupon.percentage%>">
+              </div>
+              <%if(typeof message!=undefined&&err==1){%>
+                <p id="message" style="color: red;"><%=message%></p> 
+              <% }%>
+              <div class="form-group my-3">
+                <label for="nameInput">Coupon Starting Date</label>
+                <input type="date" class="form-control form-control-sm" name="startingDate" placeholder="Enter date" id="startingDateInput" required>
               </div>
               <div class="form-group my-3">
                 <label for="nameInput">Coupon Expire Date</label>
-                <input type="date" class="form-control form-control-sm" id="nameInput" name="expiryDate" placeholder="Enter date" required value="formatDate1(<%=coupon.expiryDate%>)">
+                <input type="date" class="form-control form-control-sm"  name="expiryDate" placeholder="Enter date" required id="expiryDateInput">
               </div>
               <div class="form-group my-3">
                 <label for="nameInput">Coupon Description</label>
-                <input type="text" class="form-control form-control-sm" id="nameInput" name="description" placeholder="Enter description" required value="<%=coupon.description%>">
+                <input type="text" class="form-control form-control-sm"  name="description" placeholder="Enter description" required value="<%=coupon.description%>">
               </div>
               <div>
                 <label for="">upload Coupon Image</label>
                 <input type="file" name="image" value="">
               </div>
             
-              <!-- <div class="form-group my-3">
-                      <label for="nameInput">Minimum Amount</label>
-                      <input type="number" class="form-control form-control-sm" id="nameInput" name="minimumAmount" placeholder="Enter Minimum Amounts" required>
-                  </div> -->
-              <!-- <div class="form-group my-3">
-                    <label for="nameInput">Category</label>
-                    <input type="text" class="form-control form-control-sm" id="nameInput" name="category" placeholder="Enter Category" required>
-                </div>     -->
+          
               <div>
                 <p class="text-success"></p>
               </div>
@@ -149,20 +152,64 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/2.3.0/luxon.min.js"></script>
 <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+<script>
+  // Check if the message element exists
+  var messageElement = document.getElementById('message');
+  if (messageElement) {
+    // Set a timeout to remove the message after 2 seconds
+    setTimeout(function() {
+      messageElement.remove();
+    }, 2000);
+  }
+</script>
 <script>
   function formatDate1(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    let month = (date.getMonth() + 1).toString();
-    if (month.length === 1) {
-      month = '0' + month; // Adding leading zero if needed
-    }
-    const day = date.getDate().toString().padStart(2, '0'); // Adding leading zero if needed
+    let month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+  
+  // Get the expiryDate value from the coupon variable
+  const expiryDate = '<%= coupon.expiryDate %>';
+  const startingDate='<%= coupon.startingDate%>';
+  // Format the expiryDate using the formatDate1 function
+  const formatStartingDate=(formatDate1(startingDate))
+  const formattedDate = formatDate1(expiryDate);
+
+  // Set the formatted date as the value of an input field
+  document.getElementById('expiryDateInput').value = formattedDate;
 </script>
+<script>
+  function validateDate(event) {
+    var selectedDateStr = document.getElementById("expiryDateInput").value;
+    var selectedDate = luxon.DateTime.fromFormat(selectedDateStr, 'dd-MM-yyyy');
+    
+    var currentDate = luxon.DateTime.local();
+    var minimumDate = currentDate.plus({ days: 3 });
+
+    if (selectedDate < minimumDate) {
+      event.preventDefault(); // Prevent form submission
+      alert("Please select a date at least 3 days from today.");
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
 
 
   <%- include('../layout/footer.ejs',{admin:true}) %>

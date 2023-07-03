@@ -30,7 +30,9 @@
   .btn-add-to-wishlist {
     margin: 10px 2px;
   }
+
 </style>
+
 </head>
 
 <body>
@@ -64,7 +66,30 @@
           <%= product.modelName %>
         </h2>
         <h4><%=product.brand%></h4>
-        <p class="product-price">₹<%= product.price %></p>
+        <div style="display: flex; align-items: center;">
+          <div >
+            <%if(product.discount){%>
+
+              <label style="color: green; font-weight: 600; font-family: sans-serif;" for="additional-info">Product Offer:</label>
+              <span id="additional-info" style="color: green; font-weight: 400; font-family: sans-serif; font-size: large;"><%= product.discount %>%</span>
+              <p style="text-decoration: line-through;" class="product-price">₹<%=product.price %></p>
+          <%  }else{%>
+              <!-- // <label style="color: green; font-weight: 600; font-family: sans-serif;" for="additional-info">Product Offer:</label> -->
+              <!-- // <span id="additional-info" style="color: green; font-weight: 400; font-family: sans-serif; font-size: large;"><%= product.discount %>%</span> -->
+              <p class="product-price">₹<%=product.price %></p>
+           <% }%>
+            
+          </div>
+          <div style="margin-left:-60px;margin-top: 33px;">
+            <%if(product.discount){%>
+
+              <p class="product-price">₹<%=  offerPrice%></p>
+           <% }else{%>
+              
+           <% }%>
+              </div>
+        </div>
+        
         <div>
           <form id="productForm" action="">
             <input type="hidden" id="selectedColor" name="selectedColor" value="">
@@ -83,6 +108,7 @@
               <input type="radio" name="size" value="<%=size[j]%>">
               <label for=""><%=size[j]%></label>
               <% } %>
+             
             </div>
 
             <a class="nav-link" href="#">
@@ -183,6 +209,12 @@
 
           success: function(response) {
             // Handle the success response
+            Swal.fire({
+        title: "Item Added Successfully to Cart",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500 // Automatically close after 1 second
+      });
             console.log('Data sent successfully!');
           },
           error: function(error) {
@@ -202,6 +234,7 @@
       });
     });
   </script>
+  
   <script>
     $(document).ready(function() {
       // Handle button click event

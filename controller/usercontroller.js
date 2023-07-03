@@ -8,6 +8,7 @@ const Cart = require("../Model/cartModel");
 const Order = require("../Model/orderModel");
 const Coupon = require("../Model/couponModel");
 const Wallet = require("../Model/walletModel");
+const Banner = require("../Model/bannerModel");
 const { default: mongoose } = require("mongoose");
 
 const securePassword = async (password) => {
@@ -62,6 +63,15 @@ const loadRegisterForm = (req, res) => {
 const insertUser = async (req, res) => {
   try {
     const spassword = await securePassword(req.body.password);
+
+    let characters =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let referralCode = "";
+
+    for (let i = 0; i < 20; i++) {
+      let randomIndex = Math.floor(Math.random() * characters.length);
+      referralCode += characters.charAt(randomIndex);
+    }
     const user = new User({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -70,7 +80,30 @@ const insertUser = async (req, res) => {
       isAdmin: false,
       isBlock: false,
       isVerified: 1,
+      referralCode: referralCode,
     });
+    if (req.body.referralCode) {
+      const enteredReferralCode = req.body.referralCode;
+      console.log(enteredReferralCode);
+      const user = await User.findOne({ referralCode: enteredReferralCode });
+      console.log(user);
+      if (user && user.referralCodeUsed == 0) {
+        let userWallet = await Wallet.findOne({ userId: user._id });
+        if (!userWallet) {
+          const newWallet = new Wallet({ userId: user._id });
+          userWallet = newWallet;
+        }
+        userWallet.balance += 200;
+        userWallet.history.push({
+          transactionDate: new Date(),
+          amount: 200,
+          description: "ReferralOffer",
+        });
+        user.referralCodeUsed = 1;
+        await user.save();
+        await userWallet.save();
+      }
+    }
 
     const userData = await user.save();
     req.session.userId = userData._id;
@@ -93,6 +126,7 @@ const loadLoginForm = (req, res) => {
 };
 const loadForgetPassword = (req, res) => {
   try {
+    
     res.render("forgetpassword");
   } catch (error) {
     console.log(error.message);
@@ -105,7 +139,10 @@ const loadOtpVerification = async (req, res) => {
     otp = otp.toString();
     console.log(otp);
     const userData = await User.findOne({ email: email });
+    const otpExpiration = new Date(Date.now() + 1 * 30 * 1000);
     if (userData) {
+      userData.otpExpiration = otpExpiration;
+      await userData.save()
       const update = await User.updateOne(
         { email: email },
         { $set: { OTP: otp } }
@@ -113,7 +150,7 @@ const loadOtpVerification = async (req, res) => {
 
       sendOTPtoMail(userData.firstName, userData.email, userData.OTP);
 
-      res.render("verifyotp");
+      res.render("verifyotp",{userData});
     } else {
       res.render("forgetpassword", { message: "User not found" });
     }
@@ -124,13 +161,23 @@ const loadOtpVerification = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const otp = req.body.otp;
-    const userData = await User.findOne({ OTP: otp });
+    var userData = await User.findOne({ OTP: otp });
 
+    const currentTime = new Date();
     if (userData) {
-      console.log(userData._id);
-      res.render("passwordreset", { userId: userData._id });
+     
+
+      if (currentTime <= userData.otpExpiration) {
+
+        res.render("passwordreset", { userId: userData._id });
+        
+        // res.render("user/home1");
+      }else{
+        res.render("verifyotp", { message: "Re-verify your Account",userData:userData });
+      }
     } else {
-      res.render("verifyotp", { message: "Incorrect OTP" });
+      userData=await User.findOne({email:req.body.email})
+      res.render("verifyotp", { message: "Incorrect OTP" ,userData:userData});
     }
   } catch (error) {
     console.log(error.message);
@@ -213,9 +260,12 @@ const sendOtpForOtpLogin = async (req, res) => {
   try {
     const email = req.body.email;
     const userData = await User.findOne({ email: email });
+ 
     if (userData) {
+      const otpExpiration = new Date(Date.now() + 1 * 120 * 1000);
+      userData.otpExpiration = otpExpiration;
+      await userData.save()
       let otp = Math.floor(100000 + Math.random() * 900000);
-
       otp = otp.toString();
       console.log(otp);
       const updateOtp = await User.updateOne(
@@ -223,7 +273,7 @@ const sendOtpForOtpLogin = async (req, res) => {
         { $set: { OTP: otp } }
       );
       sendOTPtoMail(userData.firstName, email, otp);
-      res.render("otplogin");
+      res.render("otplogin",{userData});
     } else {
       res.render("loademailotplogin", { message: "invalid user" });
     }
@@ -234,12 +284,23 @@ const sendOtpForOtpLogin = async (req, res) => {
 const otpLoginVerify = async (req, res) => {
   try {
     const otp = req.body.otp;
-    const userData = await User.findOne({ OTP: otp });
+   var userData = await User.findOne({ OTP: otp });
     if (userData) {
-      req.session.userId = userData._id;
-      res.redirect("/");
+      const currentTime = new Date();
+      
+      if (currentTime <= userData.otpExpiration) {
+        req.session.userId = userData._id;
+
+        res.redirect("/");
+        
+        // res.render("user/home1");
+      }else{
+        res.render("otplogin", { message: "Re-verify your Account",userData });
+      }
+     
     } else {
-      res.render("otplogin", { message: "incorrect otp" });
+     userData=await User.findOne({email:req.body.email})
+      res.render("otplogin", { message: "incorrect otp",userData });
     }
   } catch (error) {
     console.log(error.message);
@@ -247,6 +308,7 @@ const otpLoginVerify = async (req, res) => {
 };
 const loadHome = async (req, res) => {
   try {
+    const banner = await Banner.findOne({ status: 1 });
     const user = await User.findOne({ _id: req.session.userId });
 
     if (user.isBlock == false) {
@@ -275,6 +337,7 @@ const loadHome = async (req, res) => {
         totalPages,
         category: category,
         user: user,
+        banner,
       });
 
       //    res.render('u-home',{products:products,category:category,user:user})
@@ -416,8 +479,8 @@ const deleteAddress = async (req, res) => {
 
 const loadUserWallet = async (req, res) => {
   try {
-    const wallet=await Wallet.findOne({userId:req.session.userId})
-    res.render("userWallet",{wallet:wallet});
+    const wallet = await Wallet.findOne({ userId: req.session.userId });
+    res.render("userWallet", { wallet: wallet });
   } catch (error) {
     console.log(error.message);
   }

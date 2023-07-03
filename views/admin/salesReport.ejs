@@ -1,0 +1,397 @@
+<%- include('../layout/header.ejs',{admin:true}) %>
+<link rel="stylesheet" href="/public/css/style.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+<style>
+  .sidebar {
+    background-color: #FCC114;
+    height: 100vh;
+    padding-top: 20px;
+
+    color: black
+  }
+
+  .sidebar-header {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .sidebar-brand {
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: none;
+  }
+
+  .nav-item {
+    margin-bottom: 10px;
+  }
+
+  .nav-link {
+    color: #7E7E7E;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+
+  .nav-link.active {
+    color: #575757;
+  }
+
+  .nav-link:hover {
+    color: #FFFFFF;
+  }
+
+  .sidebar .nav-link.active {
+    background-color: #000;
+    border-radius: 10px;
+  }
+ 
+  .sales-table {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    
+    .sales-table th {
+      background-color: #f8f9fa;
+      text-align: center;
+      font-weight: bold;
+    }
+    
+    .carousel-item {
+      padding: 20px;
+      text-align: center;
+    }
+    .carousel-control-custom {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.5);
+      border: none;
+      outline: none;
+      font-size: 24px;
+      padding: 10px;
+      color: #333;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .carousel-control-custom:hover {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .carousel-control-prev-custom {
+      left: 0;
+    }
+    
+    .carousel-control-next-custom {
+      right: 0;
+    }
+    .carousel-text-left,
+    .carousel-text-right {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #555;
+    }
+    
+    .carousel-text-left {
+      left: 0;
+      margin-left: 20px;
+    }
+    
+    .carousel-text-right {
+      right: 0;
+      margin-right: 20px;
+    }
+    .carousel-item {
+      position: relative;
+    }
+  </style>
+
+<div class="container-fluid">
+
+    <div class="row">
+      <div class="col-lg-2 col-sm-2 sidebar">
+        <!-- <div class="sidebar-header">
+          <a class="sidebar-brand" href="/admin">
+            Golon Sports
+          </a>
+        </div> -->
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'dashboard') { %>active<% } %>" href="/admin/home">
+              <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'salesReport') { %>active<% } %>" href="/admin/sales-report">
+              <i class="fas fa-chart-line"></i> Sales Report
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
+              <i class="bi bi-basket"></i> Products
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'users') { %>active<% } %>" href="/admin/users">
+              <i class="bi bi-people"></i> Users
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'orders') { %>active<% } %>" href="/admin/orders">
+              <i class="bi bi-file-earmark-text"></i> Orders
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
+              <i class="bi bi-grid-3x3-gap"></i> Category Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
+              <i class="bi bi-tags-fill"></i> Coupon Management
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+              <i class="fas fa-flag"></i> Banner Management
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-10 col-sm-10">
+        <div id="salesCarousel" class="carousel slide" data-ride="carousel">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <li data-target="#salesCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#salesCarousel" data-slide-to="1"></li>
+            <li data-target="#salesCarousel" data-slide-to="2"></li>
+            <li data-target="#salesCarousel" data-slide-to="3"></li>
+            <li data-target="#salesCarousel" data-slide-to="4"></li>
+          </ol>
+        
+          <!-- Carousel items -->
+          <div class="carousel-inner">
+            <!-- Daily Sales Report -->
+            <div class="carousel-item active">
+              <h3>Daily Sales Report</h3>
+              <div class="container">
+                <table class="sales-table table table-bordered">
+                  <!-- Table Header -->
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <!-- Table Body -->
+                  <tbody>
+                    <!-- Daily sales data goes here -->
+                    <%for(let i=0;i<dailyOrders.length;i++){%>
+                    <tr>
+                      <td><%=i+1%></td>
+                      <td><%=dailyOrders[i].productName[0].name%></td>
+                      <td><%=dailyOrders[i].quantity%></td>
+                      <td>₹ <%=dailyOrders[i].totalAmount%></td>
+                    </tr>
+                    <%}%>
+                    <!-- Add more rows for each day's sales data -->
+                  </tbody>
+                </table>
+                <div class="carousel-text-left">Total</div>
+                <div class="carousel-text-right">Weekly</div>
+                <button class="carousel-control-custom carousel-control-prev-custom" type="button" data-target="#salesCarousel" data-slide="prev">
+                  <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control-custom carousel-control-next-custom" type="button" data-target="#salesCarousel" data-slide="next">
+                  <i class="fa fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+        
+            <!-- Weekly Sales Report -->
+            <div class="carousel-item">
+              <h3>Weekly Sales Report</h3>
+              <div class="container">
+                <div class="carousel-text-left">Daily</div>
+                <div class="carousel-text-right">Monthly</div>
+                <table class="sales-table table table-bordered">
+                  <!-- Table Header -->
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <!-- Table Body -->
+                  <tbody>
+                    <!-- Weekly sales data goes here -->
+                    <%for(let i=0;i<weeklyOrders.length;i++){%>
+                      <tr>
+                        <td><%=i+1%></td>
+                        <td><%=weeklyOrders[i].productName[0].name%></td>
+                        <td><%=weeklyOrders[i].quantity%></td>
+                        <td>₹ <%=weeklyOrders[i].totalAmount%></td>
+                      </tr>
+                      <%}%>
+                    <!-- Add more rows for each week's sales data -->
+                  </tbody>
+                </table> 
+             
+              
+              </div>
+            </div>
+            <button class="carousel-control-custom carousel-control-prev-custom" type="button" data-target="#salesCarousel" data-slide="prev">
+              <i class="fa fa-chevron-left"></i>
+            </button>
+            <button class="carousel-control-custom carousel-control-next-custom" type="button" data-target="#salesCarousel" data-slide="next">
+              <i class="fa fa-chevron-right"></i>
+            </button>
+            <!-- Monthly Sales Report -->
+            <div class="carousel-item">
+              <h3>Monthly Sales Report</h3>
+              <div class="container">
+                <table class="sales-table table table-bordered">
+                  <!-- Table Header -->
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <!-- Table Body -->
+                  <tbody>
+                    <!-- Monthly sales data goes here -->
+                    <%for(let i=0;i<monthlyOrders.length;i++){%>
+                      <tr>
+                        <td><%=i+1%></td>
+                        <td><%=monthlyOrders[i].productName[0].name%></td>
+                        <td><%=monthlyOrders[i].quantity%></td>
+                        <td>₹ <%=monthlyOrders[i].totalAmount%></td>
+                      </tr>
+                      <%}%>
+                    <!-- Add more rows for each month's sales data -->
+                  </tbody>
+                </table>
+                <div class="carousel-text-left">Weekly</div>
+                <div class="carousel-text-right">Yearly</div>
+                <button class="carousel-control-custom carousel-control-prev-custom" type="button" data-target="#salesCarousel" data-slide="prev">
+                  <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control-custom carousel-control-next-custom" type="button" data-target="#salesCarousel" data-slide="next">
+                  <i class="fa fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+        
+            <!-- Yearly Sales Report -->
+            <div class="carousel-item">
+              <h3>Yearly Sales Report</h3>
+              <div class="container">
+                <table class="sales-table table table-bordered">
+                  <!-- Table Header -->
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <!-- Table Body -->
+                  <tbody>
+                    <!-- Yearly sales data goes here -->
+                    <%for(let i=0;i<yearlyOrders.length;i++){%>
+                      <tr>
+                        <td><%=i+1%></td>
+                        <td><%=yearlyOrders[i].productName[0].name%></td>
+                        <td><%=yearlyOrders[i].quantity%></td>
+                        <td>₹ <%=yearlyOrders[i].totalAmount%></td>
+                      </tr>
+                      <%}%>
+                    <!-- Add more rows for each year's sales data -->
+                  </tbody>
+                </table>
+                <div class="carousel-text-left">Monthly</div>
+                <div class="carousel-text-right">Total</div>
+                <button class="carousel-control-custom carousel-control-prev-custom" type="button" data-target="#salesCarousel" data-slide="prev">
+                  <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control-custom carousel-control-next-custom" type="button" data-target="#salesCarousel" data-slide="next">
+                  <i class="fa fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+        
+            <!-- Total Sales Report -->
+            <div class="carousel-item">
+              <h3>Total Sales Report</h3>
+              <div class="container">
+                <table class="sales-table table table-bordered">
+                  <!-- Table Header -->
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <!-- Table Body -->
+                  <tbody>
+                    <!-- Total sales data goes here -->
+                    <tr>
+                      <td>Product A</td>
+                      <td>3000</td>
+                      <td>$150,000</td>
+                    </tr>
+                    <!-- Add more rows for each product's total sales data -->
+                  </tbody>
+                </table>
+                <div class="carousel-text-left">Yearly</div>ll
+                <div class="carousel-text-right">Daily</div>
+                <button class="carousel-control-custom carousel-control-prev-custom" type="button" data-target="#salesCarousel" data-slide="prev">
+                  <i class="fa fa-chevron-left"></i>
+                </button>
+                <button class="carousel-control-custom carousel-control-next-custom" type="button" data-target="#salesCarousel" data-slide="next">
+                  <i class="fa fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Carousel controls -->
+          <a class="carousel-control-prev" href="#salesCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#salesCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      
+      
+      
+
+ </div>
+
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<%- include('../layout/footer.ejs',{admin:true}) %>

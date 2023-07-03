@@ -1,6 +1,7 @@
-<%- include('../layout/header.ejs',{admin:true}) %>
-<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"> -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.css">
+<%-include('../layout/header.ejs',{admin:true})%>
+
+
+
 <style>
   .navbar {
     background-color: #575757;
@@ -162,7 +163,60 @@ button {
 
 </style>
 
+<style>
+  /* Modal Styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 
+  .modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 60%;
+    border-radius: 5px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-header h2 {
+    margin-top: 0;
+  }
+
+  .modal-body {
+    margin-bottom: 20px;
+  }
+
+  .modal-footer {
+    text-align: right;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .btn-decline {
+    background-color: #dc3545;
+    margin-right: 8px;
+  }
+
+  .btn-accept {
+    background-color: #28a745;
+  }
+</style>
 
 <div class="container-fluid">
   <div class="row">
@@ -171,6 +225,11 @@ button {
         <li class="nav-item">
           <a class="nav-link text-light <% if (currentPage === 'dashboard') { %>active<% } %>" href="/admin/home">
             <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'salesReport') { %>active<% } %>" href="/admin/sales-report">
+            <i class="fas fa-chart-line"></i> Sales Report
           </a>
         </li>
         <li class="nav-item">
@@ -190,12 +249,17 @@ button {
         </li>
         <li class="nav-item">
           <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
-            <i class="bi bi-grid-3x3-gap"></i> Category Management
+            <i class="bi bi-grid-3x3-gap"></i> Category 
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
-            <i class="bi bi-tags-fill"></i> Coupon Management
+            <i class="bi bi-tags-fill"></i> Coupon
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+            <i class="fas fa-flag"></i> Banner
           </a>
         </li>
       </ul>
@@ -208,9 +272,9 @@ button {
           <thead class="badge-warning" style="margin-top: 250px;">
             <tr>
               <th>NO:</th>
-              <th>Order Details</th>
+              <th>Order Date</th>
 
-              <th>Product details</th>
+              <th>No of Products</th>
               <th>Quantity</th>
               <th>Price</th>
               <th>User details</th>
@@ -243,13 +307,12 @@ button {
 
               <td>
                 <%for(let j=0;j<orders[i].products.length;j++){%>
-                <div class="d-flex align-items-center">
-                  <img src="/public/adminimage/<%=orders[i].products[j].image%>" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                  <div class="ms-3">
-                    <p class="fw-bold mb-1"><%=orders[i].products[j].name%></p>
-                    <p class="text-muted mb-0">size:<%=orders[i].products[j].size%></p>
-                  </div>
-                </div>
+                  <%if(j==0){%>
+                     <div class="d-flex align-items-center">
+
+                     <p><%=orders[i].products.length%></p>
+                     </div>
+                  <% }%>
                 <%}%>
                 </td>
                 <td>
@@ -302,6 +365,10 @@ button {
                     <td>
                       <span style="background-color:darkslateblue" class="badge rounded-pill d-inline"><%=orders[i].products[j].status%></span>
                     </td>
+                    <%}else if(orders[i].products[j].status==='request-denied'){%>
+                      <td>
+                        <span class="badge rounded-pill d-inline" style="background-color: rgb(249, 163, 3);"><%=orders[i].products[j].status%></span>
+                      </td>
                     <%}else{%>
                       <td>
                         <span class="badge badge-primary rounded-pill d-inline"><%=orders[i].products[j].status%></span>
@@ -314,13 +381,14 @@ button {
                 <a style="background-color: grey; color: #fff" href="#" class="btn cancel-request-button" data-order-id="<%=orders[i].products[0]._id%>">check</a>
               </td>
               <%}else{%>
-              <td>
-                <a style="background-color: rgb(39,129,133); color: #fff" href="#" class="btn status-button" data-order-id="<%=orders[i].products[0]._id%>">Status</a>
-              </td>
+                <td>
+                  <a style="background-color: rgb(39,129,133); color: #fff" href="#" class="btn status-button" data-order-id="<%=orders[i].products[0]._id%>">Status</a>
+                </td>
               <%}%>
               <td>
-                <div><button class="btn bg-danger text-light"><a class="text-light text-decoration-none" href="/admin/cancelorder?orderId=<%=orders[i].products[0]._id%>">Cancel</a></button></div>
-              </td>
+                <div>
+                  <button class="btn bg-danger text-light" onclick="showModal('<%= orders[i].products[0]._id %>')">Cancel</button>
+                </div>              </td>
               <%}%><%}%><%}%>
               </tr>
               <% }%>
@@ -332,79 +400,72 @@ button {
 </div>
 
 
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Change Status</h5>
-        <button type="button" style="background-color: #a9c2dd;color: rgb(255, 255, 255);" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div id="changeStatusModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Change Order Status</h3>
+    <form id="statusForm" action="/admin/edit-status" method="post">
+      <div class="mb-3">
+        <label for="status">Status:</label>
+        <select class="form-select" id="status" name="status">
+          <option value="pending">Pending</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="returned">Returned</option>
+        </select>
       </div>
-      <div class="modal-body">
-        <form id="statusForm" action="/admin/edit-status" method="post">
-          <input type="text" id="orderDetails" name="orderid" hidden>
-          <div class="d-flex justify-content-center">
-            <select name="statusSelect" id="statusSelect" class="form-select">
-
-              <option value="shipping">Shipped</option>
-              <option value="pending">Pending</option>
-              <option value="delivered">Delivered</option>
-              <option value="return">Return</option>
-              <option value="returned">Returned</option>
-            </select>
-          </div>
+      <input type="text" name="orderId" id="orderId" hidden>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="saveOrderStatus()">Save</button>
+        <button class="btn btn-secondary" id="cancelButton" >Cancel</button>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn" style="background-color: rgb(3, 134, 106);color: #fff;">Save changes</button>
-      </div>
-      </form>
-    </div>
+    </form>
   </div>
- 
 </div>
 
 
-<!-- <div class="modal fade" id="modalForCheckRequest" tabindex="-1" role="dialog" aria-labelledby="modalForCheckRequestTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">REQUEST FOR RETURN</h5>
-        <button type="button" style="background-color: #a9c2dd;color: rgb(255, 255, 255);" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="statusForm" action="/admin/cancel-request" method="post">
-          <input type="text" id="orderDetailsRtn" name="orderid" >
-             <h6>proceed or cancel the return request</h6>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel request</button>
-        <button type="submit" class="btn btn" style="background-color: rgb(3, 134, 106);color: #fff;">Proceed Return</button>
-      </div>
+<div id="returnRequestModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Return Request</h2>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to accept this return request?</p>
+    </div>
+    <div class="modal-footer">
+      <form id="returnRequestForm">
+        <input type="hidden" id="returnAction" name="action" />
+        <input type="hidden" id="returnOrderId" name="orderId" />
+        <button type="button" class="btn btn-decline" onclick="handleReturnRequest('request-denied')">Decline</button>
+        <button type="button" class="btn btn-accept" onclick="handleReturnRequest('returned')">Accept</button>
       </form>
     </div>
   </div>
- 
-</div> -->
+</div>
+
+
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"></script> 
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
 
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha384-UqzqXxBySbx7mM/SMiFm9LxVukus07Vj6j8yDdPcgwZzQNfC5DnBqmcvQ6R+79D9" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script> -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha384-xnJUN5UHehFu2wydXJ7fnJv2VTvJf2jN9SQnKF9fHT62OHNfPX7orY6xfCXD6KjW" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script src="/path/to/bootstrap.bundle.min.js"></script>
+
 
 
 <!-- <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script> -->
@@ -414,59 +475,166 @@ button {
     $('.table').DataTable();
   });
 
-  // var orderStatus =document.querySelectorAll('.orderStatus')
 
-  // orderStatus.forEach(function(status){
-  //   status.addEventListener('click',function(){
-
-  //     var orderID=status.getAttribute(data-bs-orderid)
-
-  //     var orderDetailsElement =document.getElementById('orderDetails')
-  //   })
-  // })
 </script>
+<script>
+  // Existing code
+  // ...
+
+  // Event listener for status button click
+  var modal = document.getElementById('changeStatusModal');
+  var cancelButton = document.getElementById('cancelButton');
+// Event listener for status button click
+var statusButtons = document.getElementsByClassName('status-button');
+for (var i = 0; i < statusButtons.length; i++) {
+  statusButtons[i].addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+    var orderId = this.getAttribute('data-order-id');
+    openChangeStatusModal(orderId);
+  });
+}
+cancelButton.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default button behavior
+    closeChangeStatusModal();
+  });
+// Function to open the modal
+function openChangeStatusModal(orderId) {
+  modal.style.display = 'block';
+  document.getElementById('statusForm').setAttribute('data-order-id', orderId);
+}
+
+// Save order status
+function saveOrderStatus() {
+  var status = document.getElementById('status').value; 
+  var orderId = document.getElementById('statusForm').getAttribute('data-order-id');
+  // TODO: Implement logic to save the order status
+  document.getElementById('orderId').value=orderId
+  console.log('Selected status:', status);
+  console.log('Order ID:', orderId);
+  closeChangeStatusModal();
+}
+function closeChangeStatusModal() {
+    modal.style.display = 'none';
+  }
+</script>
+
+
 
 <script>
-  $(document).ready(function() {
-  $('#exampleModalCenter').modal('hide'); // Hide the modal by default
-});
-document.addEventListener('DOMContentLoaded',()=>{
-    const statusButtons = document.querySelectorAll('.status-button');
-    statusButtons.forEach(button => {
-      button.addEventListener('click', (event) => {
-        event.preventDefault();
-        const orderId = button.dataset.orderId; // Get the order ID from the button's data attribute
-        openModal(orderId); // Open the modal with the order ID
-      });
+  // Existing code
+  // ...
+
+  // Get a reference to the return request modal
+  var returnRequestModal = document.getElementById('returnRequestModal');
+
+  // Event listener for return request button click
+  var returnRequestButtons = document.getElementsByClassName('cancel-request-button');
+  for (var i = 0; i < returnRequestButtons.length; i++) {
+    returnRequestButtons[i].addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default link behavior
+      var orderId = this.getAttribute('data-order-id');
+      openReturnRequestModal(orderId);
     });
-  });
-  // Function to set the order ID and open the modal
-  function openModal(orderId) {
-    document.getElementById('orderDetails').value = orderId; // Set the order ID
-    const modal = new bootstrap.Modal(document.getElementById('exampleModalCenter')); // Initialize the modal
-    modal.show(); // Open the modal
   }
 
-  // Event listener for the status button click 
+  // Function to open the return request modal
+  function openReturnRequestModal(orderId) {
+    returnRequestModal.style.display = 'block';
+    document.getElementById('returnOrderId').value = orderId;
+  }
+
+  // Function to handle return request
+  function handleReturnRequest(action) {
+    document.getElementById('returnAction').value = action;
+    var returnOrderId = document.getElementById('returnOrderId').value;
+    // TODO: Implement logic to handle return request
+    console.log('Return action:', action);
+    console.log('Return order ID:', returnOrderId);
+    $.ajax({
+        url: '/admin/return-request',
+        method: 'POST',
+        data: {
+         action:action,
+         id:returnOrderId
+        },
+        success: function(response) {
+          console.log('successful')
+
+          closeReturnRequestModal();
+          window.location.reload()
+         },
+        error: function(error) {
+          // Handle the error response
+          res.send("payment is not successful")
+        }
+      })
+   
+  }
+
+  // Function to close the return request modal
+  function closeReturnRequestModal() {
+    returnRequestModal.style.display = 'none';
+  }
 
 
 
-  // Event listener for form submission
-  document.getElementById('statusForm').addEventListener('submit', (event) => {
-    const selectedStatus = document.getElementById('statusSelect').value; // Get the selected status
-    document.getElementById('statusSelect').value = selectedStatus; // Update the value to submit
-    const orderId = document.getElementById('orderDetails').value; // Get the order ID
-    document.getElementById('orderDetails').value = orderId; // Update the value to submit
-    // You can perform additional logic or submit the form using AJAX here
-    // ...
-    // event.preventDefault(); // Uncomment this line if you want to prevent default form submission
-  });
 
+
+  function showModal(orderId) {
+  // Create the modal HTML dynamically
+  const modalHTML = `
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cancelModalLabel">Cancel Order</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to cancel this order?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" onclick="confirmCancel('${orderId}')">Confirm Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="viewOrderDetails('${orderId}')">View Order Details</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Append the modal HTML to the body
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+  // Show the modal using Bootstrap's JavaScript
+  const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+  cancelModal.show();
+}
+
+function confirmCancel(orderId) {
+  // TODO: Perform the cancel order action
+  window.location.href=`/admin/cancelorder?id=${orderId}`
+  console.log('Order canceled:', orderId);
+  closeModal();
+}
+
+function viewOrderDetails(orderId) {
+  // TODO: Perform the view order details action
+
+  window.location.href=`/admin/orderDetails-admin?id=${orderId}`
+  console.log('View order details:', orderId);
+  closeModal();
+}
+
+function closeModal() {
+  // Hide the modal using Bootstrap's JavaScript
+  const cancelModal = bootstrap.Modal.getInstance(document.getElementById('cancelModal'));
+  cancelModal.hide();
+
+  // Remove the modal HTML from the body
+  document.getElementById('cancelModal').remove();
+}
 </script>
-
-  
-  
-<!-- </script> -->
 
   
 

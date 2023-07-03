@@ -54,6 +54,7 @@ userRoute.post("/verifyotp", userController.verifyOtp);
 
 userRoute.post("/confirm", userController.verifyPassword);
 
+userRoute.post('/searchProducts',productController.searchProduct);
 userRoute.post("/filter", productController.filterProducts);
 // userRoute.get('/categoryproduct',auth.isUserLoggedIn,productController.loadCategoryProducts)
 userRoute.get(
@@ -100,6 +101,7 @@ userRoute.get(
 
 userRoute.post("/buyproduct", cartController.buyProductDirectly);
 userRoute.post("/addtocart", cartController.addToCart);
+userRoute.get('/addtocart-home',auth.isUserLoggedIn,cartController.addToCartHome)
 userRoute.get(
   "/removeitem",
   auth.isUserLoggedIn,
@@ -130,9 +132,9 @@ userRoute.post('/return-order',orderController.returnOrder)
 userRoute.get(
   "/order-history",
   auth.isUserLoggedIn,
-  orderController.orderHistory
+  orderController.orderHistory   
 );
-userRoute.get("/cancel-order", orderController.cancelOrder);
+userRoute.get("/cancel-order",auth.isUserLoggedIn, orderController.cancelOrder);
 userRoute.get(
   "/order-details",
   auth.isUserLoggedIn,

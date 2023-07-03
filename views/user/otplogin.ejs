@@ -16,9 +16,10 @@
 
         <form id="otp-form" action="/otplogin" method="post">
           <div class="mb-3">
-
+            <input type="hidden" name="email" value="<%=userData.email%>">
             <input type="text" class="form-control mt-1" id="OTP" name="otp" required placeholder="Enter OTP">
           </div>
+          <div class="mt-2 ms-1" id="otp-timer"></div>
           <div class="text-center">
             <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Verify OTP</button>
           </div>
@@ -39,7 +40,29 @@
 <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+<script>
+  let otpExpirationTime = new Date('<%=userData.otpExpiration%>').getTime();
+        console.log('<%=userData.otpExpiration%>')
+        let otpTimerElement = document.getElementById('otp-timer')
 
+        function updateOTPTimer() {
+            const currentTime = new Date().getTime();
+            const remainingTime = Math.max(0, otpExpirationTime - currentTime);
+            const seconds = Math.floor((remainingTime / 1000) % 60);
+            const minutes = Math.floor((remainingTime / 1000 / 60) % 60);
+            otpTimerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (remainingTime > 0) {
+                setTimeout(updateOTPTimer, 1000);
+            } else {
+                // OTP has expired
+            }
+        }
+
+        updateOTPTimer();
+  
+  
+  </script>
 
 
   </div>

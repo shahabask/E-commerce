@@ -287,15 +287,30 @@
   .sidebar-color.selected {
     border: 2px solid #fcc114;
   }
+  .stock-message {
+  color: red;
+  display: none;
+}
 </style>
 
 <body>
 
-  <div><img src="/public/userImage/extreme-hillside-mountain-biking-r1krl4pwqdgya6wz.jpg" alt="Full Width Image" class="full-width-image"></div>
+  <div><img src="/public/adminimage/<%=banner.image%>" alt="Full Width Image" class="full-width-image"></div>
   <div class="container-fluid">
     <div class="row mt-4">
       <div class="col-lg-2 col-md-4 col-sm-12">
         <div class="sidebar">
+          <div class="sidebar-option">
+            <form action="/searchProducts" method="post">
+            <div class="input-group">
+             
+              <input type="text" id="search-input" name="search" class="form-control" placeholder="Search">
+              <button type="submit" class="btn btn-primary" id="search-btn">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </form>
+          </div>
           <form action="/filter" method="post">
             <h5 class="sidebar-title">Filter</h5>
             <div class="sidebar-option">
@@ -354,7 +369,8 @@
               <div class="product-card-body">
                 <h5 class="product-card-title"><%= products[i].name %></h5>
                 <p class="product-card-price">₹<%= products[i].price %></p>
-                <a href="#" class="btn btn-primary">Add to Cart</a>
+                <span id="stock-message-<%= products[i]._id %>" class="stock-message"></span>
+                <a onclick="addToCart('<%=products[i]._id%>','<%=products[i].quantity%>')" class="btn btn-primary">Add to Cart</a>
               </div>
             </div>
           </div>
@@ -396,9 +412,43 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
 
   <script>
+    function addToCart(productId,stock){
+   console.log(stock)
+      const id=productId
+      if(stock>0){
+        $.ajax({
+        url: `/addtocart-home?id=+${id}`,
+        method: 'GET',
+       
+        success: function(response) { 
+          Swal.fire({
+        title: "Item Added Successfully to Cart",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1500 // Automatically close after 1 second
+      });
+            console.log('added to cart')
+         },
+                
+        error: function(error) {
+          // Handle the error response
+          console.log("can't add to cart")
+        }
+    })
+    }else{
+      const stockMessage = document.querySelector(`#stock-message-${productId}`);
+    stockMessage.textContent = 'Out of stock';
+    stockMessage.style.display = 'block';
+    setTimeout(function () {
+      stockMessage.style.display = 'none';
+    }, 3000);
+    }
+      }
+      
     // Assuming you have a button with the id "apply-filter-btn" to trigger the AJAX request
     // document.getElementById("apply-filter-btn").addEventListener("click", function() {
     //   // Get the selected category

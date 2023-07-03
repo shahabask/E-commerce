@@ -147,6 +147,11 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'salesReport') { %>active<% } %>" href="/admin/sales-report">
+              <i class="fas fa-chart-line"></i> Sales Report
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
               <i class="bi bi-basket"></i> Products
             </a>
@@ -163,12 +168,17 @@
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
-              <i class="bi bi-grid-3x3-gap"></i> Category Management
+              <i class="bi bi-grid-3x3-gap"></i> Category 
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
-              <i class="bi bi-tags-fill"></i> Coupon Management
+              <i class="bi bi-tags-fill"></i> Coupon 
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+              <i class="fas fa-flag"></i> Banner
             </a>
           </li>
         </ul>
@@ -185,6 +195,7 @@
               <th>Email</th>
               <th>Phone Number</th>
               <th>Number Of Orders</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -205,10 +216,14 @@
                 <div class="d-flex align-items-center">
                   <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
                 </div>
-              </td>
+              </td> 
               <td>
                 <div>
-                  <p><%= user[i].address[0].head %></p>
+                  <%if(user[i].address?.[0]?.head){%>
+                  <p><%=user[i].address[0].head%></p>
+                  <%}else{%>
+                <p></p>
+                  <%}%>
                 </div>
               </td>
               <td>
@@ -218,14 +233,30 @@
               </td>
               <td>
                 <div>
+                  <%if(user[i]?.phone ){%>
                   <p><%= user[i].phone %></p>
+                  <%}else{%>
+                    <p>
+                     
+                    </p>
+                    <%}%>
                 </div>
               </td>
               <td>
                 <div>
-                  <p></p>
+                  <p><%=user[i].totalOrders%></p>
                 </div>
               </td>
+              <% if(user[i].isBlock==true){ %>
+                <td>
+                  <span class="badge badge-danger rounded-pill d-inline">blocked</span>
+                </td>
+                <% }else{ %>
+                <td>
+                  <span class="badge badge-success rounded-pill d-inline">Active</span>
+                </td>
+                <% } %>
+
               <% if(user[i].isBlock==true){ %>
               <td>
                 <div class="btn bg-secondary"><a class="text-light text-decoration-none unblock-link" href="/admin/unblock?id=<%= user[i]._id %>">Unblock</a></div>

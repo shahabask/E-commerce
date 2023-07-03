@@ -8,8 +8,13 @@
       <label for="categoryName" class="form-label">Category Name</label>
       <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%= category.category_name %>" required>
     </div>
+    <%if(typeof message!='undefined'){%>
+     <div>
+      <p style="color: red;"><%=message%></p>
+     </div>
+   <% }%>
     <div class="mb-3">
-      <label for="categoryName" class="form-label">Category Name</label>
+      <label for="categoryName" class="form-label">Category Discount</label>
       <input type="number" class="form-control" id="categoryDiscount" name="categoryDiscount" value="<%= category.discount %>" required>
     </div>
     <input type="text" name="categoryId" value="<%= category._id %>" hidden>

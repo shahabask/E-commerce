@@ -47,13 +47,44 @@ const orderPlaced = async (req, res) => {
     if (cart.grandTotal < 1000) {
       shipping = 99;
     }
+    let fullAddress = '';
 
+    if (address.head) {
+      fullAddress += address.head + ', ';
+    }
+    
+    if (address.street) {
+      fullAddress += address.street + ', ';
+    }
+    
+    if (address.city) {
+      fullAddress += address.city + ', ';
+    }
+    
+    // if (address.landmark) {
+    //   fullAddress += address.landmark + ', ';
+    // }
+    
+    // if (address.pincode) {
+    //   fullAddress += address.pincode + ', ';
+    // }
+    
+    if (address.state) {
+      fullAddress += address.state + ', ';
+    }
+    
+    // if (address.country) {
+    //   fullAddress += address.country;
+    // } 
+    
+    // Remove trailing comma and whitespace if present
+    fullAddress = fullAddress.replace(/,\s*$/, '');
 
     let newOrder = new Order({
       userId: req.session.userId,
       products: cart.product,
       paymentMethod: paymentMethod,
-      address: address.head,
+      address: fullAddress,
       phone: phone,
       email: email,
       grandTotal: cart.grandTotal + shipping,
@@ -89,6 +120,7 @@ const orderPlaced = async (req, res) => {
           //   res.send(order)
           // console.log("new order",order);
         } else {
+          await Order.deleteOne({userId:userId})
           console.log(err);
         }
       });
@@ -408,7 +440,7 @@ const orderDetails = async (req, res) => {
     {
       $group: {
         _id: "$_id",
-        // status: { $push: "$status" },
+        status: { $push: "$status" },
         // paymentMethod: { $push: "$paymentMethod" },
         products: { $push: "$$ROOT" },
       },
@@ -429,6 +461,7 @@ const orderDetails = async (req, res) => {
   var returnStatus=false
 
  }
+
 //  console.log(order.products[0].status)
 //   console.log('vannada moone elaam vannu ini pani thodangikko',order)
     res.render("orderDetails", { admin: false, order: order ,returnStatus:returnStatus});

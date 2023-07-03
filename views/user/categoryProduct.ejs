@@ -272,15 +272,47 @@
   .sidebar-color.selected {
     border: 2px solid #fcc114;
   }
+  .stock-message {
+  color: red;
+  display: none;
+}
+.badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 50px;
+            margin-top: 15px;
+            background-color: green;
+            border-bottom: 1px solid #ccc;
+            font-family: Arial, sans-serif;
+            font-size: 20px;
+            color: #f2f1f1;
+        }
 </style>
 
 <body>
 
   <div><img src="/public/userImage/extreme-hillside-mountain-biking-r1krl4pwqdgya6wz.jpg" alt="Full Width Image" class="full-width-image"></div>
   <div class="container-fluid">
+    <%if(categoryOffer){%>
+      <div class="badge">Category Offer:<%=categoryOffer%>%</div>
+
+    <%}%>
     <div class="row mt-4">
+    
       <div class="col-lg-2 col-md-4 col-sm-12">
         <div class="sidebar">
+          <div class="sidebar-option">
+            <form action="/searchProducts" method="post">
+            <div class="input-group">
+              <input type="text" id="search-input" class="form-control" placeholder="Search">
+              <input type="text" name="categoryName" value="<%=categoryName%>" hidden>
+              <button type="submit" class="btn btn-primary" id="search-btn">
+                <i class="bi bi-search"></i>
+              </button>
+            </div></form>
+          </div>
           <form action="/filter" method="post">
             <h5 class="sidebar-title">Filter</h5>
             <div class="sidebar-option">
@@ -327,7 +359,7 @@
           </form>
         </div>
       </div>
-
+    
       <div class="col-lg-9 col-md-8 col-sm-12">
         <div id="product-cards" class="row">
           <% for (let i = 0; i < products.length; i++) { %>
@@ -341,7 +373,9 @@
               <div class="product-card-body">
                 <h5 class="product-card-title"><%= products[i].name %></h5>
                 <p class="product-card-price">Price: <%= products[i].price %></p>
-                <a href="#" class="btn btn-primary">Add to Cart</a>
+                <span id="stock-message-<%= products[i]._id %>" class="stock-message"></span>
+
+              <a onclick="addToCart('<%=products[i]._id%>','<%=products[i].quantity%>')" class="btn btn-primary">Add to Cart</a>
               </div>
             </div>
           </div>
@@ -385,5 +419,42 @@
 <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+<!-- Include the SweetAlert library -->
+
   <!-- Footer -->
+  <script>
+  function addToCart(productId,stock){
+    console.log('heloooo')
+       const id=productId
+       if(stock>0){
+         $.ajax({
+         url: `/addtocart-home?id=+${id}`,
+         method: 'GET',
+        
+         success: function(response) { 
+        
+          Swal.fire({
+        title: "Item Added Successfully to Cart",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1000 // Automatically close after 1 second
+      });
+             console.log('added to cart')
+          },
+                 
+         error: function(error) {
+           // Handle the error response
+           console.log("can't add to cart")
+         }
+     })
+     }else{
+       const stockMessage = document.querySelector(`#stock-message-${productId}`);
+     stockMessage.textContent = 'Out of stock';
+     stockMessage.style.display = 'block';
+     setTimeout(function () {
+       stockMessage.style.display = 'none';
+     }, 3000);
+     }
+       }
+      </script> 
   <%- include('../layout/footer.ejs',{admin:false}) %>

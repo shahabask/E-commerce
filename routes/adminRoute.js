@@ -13,7 +13,7 @@ const path = require("path");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "../public/adminimage"));
-  },
+  }, 
   filename: (req, file, cb) => {
     const name = Date.now() + "-" + file.originalname;
     cb(null, name);
@@ -62,6 +62,7 @@ adminRoute.post("/addcategory", adminController.addCategory);
 adminRoute.post("/updatecategory", adminController.updateCategory);
 
 adminRoute.get("/block", auth.isAdminLoggedIn, adminController.blockUser);
+
 adminRoute.get("/unblock", auth.isAdminLoggedIn, adminController.unBlockUser);
 adminRoute.get(
   "/cancelorder",
@@ -72,9 +73,9 @@ adminRoute.get(
 // adminRoute.get('/deleteorder',auth.isAdminLoggedIn,adminController.deleteOrder)
 adminRoute.post(
   "/edit-status",
-  auth.isAdminLoggedIn,
   adminController.editStatus
 );
+adminRoute.post('/return-request',adminController.returnRequest)
 
 adminRoute.get("/coupon", auth.isAdminLoggedIn, adminController.loadCoupon);
 adminRoute.get(
@@ -94,4 +95,11 @@ adminRoute.get(
   auth.isAdminLoggedIn,
   adminController.deleteCoupon
 );
+adminRoute.get('/orderDetails-admin',auth.isAdminLoggedIn,adminController.viewOrderDetails)
+adminRoute.get('/banner',auth.isAdminLoggedIn,adminController.loadBannerManagement)
+adminRoute.post('/add-banner',upload.single("image"),adminController.uploadBannerImage)
+adminRoute.get('/change-banner-status',auth.isAdminLoggedIn,adminController.changeBanner)
+adminRoute.get('/delete-banner',auth.isAdminLoggedIn,adminController.deleteBanner)
+adminRoute.get('/sales-report',auth.isAdminLoggedIn,adminController.loadSalesReport)
+adminRoute.post('/delete-product-image',adminController.deleteProductImage)
 module.exports = adminRoute;

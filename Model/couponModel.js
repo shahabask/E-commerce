@@ -17,6 +17,10 @@ const coupon = new mongoose.Schema({
     type: String,
     required: false,
   },
+  startingDate:{
+    type:Date,
+    required:true,
+  },
   expiryDate: {
     type: Date,
     required: true,
@@ -25,6 +29,7 @@ const coupon = new mongoose.Schema({
     type: String,
     default: "Active",
   },
+
 });
 
 module.exports = mongoose.model("Coupon", coupon);

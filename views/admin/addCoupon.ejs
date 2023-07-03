@@ -80,12 +80,17 @@
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
-              <i class="bi bi-grid-3x3-gap"></i> Category Management
+              <i class="bi bi-grid-3x3-gap"></i> Category 
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
-              <i class="bi bi-tags-fill"></i> Coupon Management
+              <i class="bi bi-tags-fill"></i> Coupon 
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+              <i class="fas fa-flag"></i> Banner 
             </a>
           </li>
           <!-- <li class="nav-item">
@@ -102,18 +107,28 @@
             <h2>Add Coupon</h2>
           </div>
           <div>
-            <form action="/admin/addCoupon" method="post" enctype="multipart/form-data">
+            <form action="/admin/addCoupon" method="post" enctype="multipart/form-data" onsubmit="return validateDate()">
               <div class="form-group my-3">
                 <label for="nameInput">Coupon Code</label>
-                <input type="text" class="form-control form-control-sm" id="nameInput" name="code" placeholder="Enter coupon code" required>
+                <input type="text" class="form-control form-control-sm" id="nameInput" name="code" placeholder="Enter coupon code" minlength="4" required>
               </div>
+              <%if(typeof message!='undefined'&&err==1){%>
+               <p style="color: red;"><%=message%></p> 
+             <% }%>
               <div class="form-group my-3">
                 <label for="nameInput">Coupon Offer Percentage</label>
-                <input type="number" class="form-control form-control-sm" id="nameInput" name="percentage" placeholder="Enter Offer Percentage" required>
+                <input type="number" class="form-control form-control-sm" id="nameInput" name="percentage" min="0" max="50" placeholder="Enter Offer Percentage" required>
+              </div>
+              <%if(typeof message!='undefined'&&err==2){%>
+                <p style="color: red;"><%=message%></p> 
+              <% }%>
+              <div class="form-group my-3">
+                <label for="nameInput">Coupon Starting Date</label>
+                <input type="date" class="form-control form-control-sm" id="nameInput" name="startingDate" placeholder="Enter date" id="validity" required>
               </div>
               <div class="form-group my-3">
                 <label for="nameInput">Coupon Exprire Date</label>
-                <input type="date" class="form-control form-control-sm" id="nameInput" name="expiryDate" placeholder="Enter date" required>
+                <input type="date" class="form-control form-control-sm" id="nameInput" name="expiryDate" placeholder="Enter date" id="validity" required>
               </div>
               <div class="form-group my-3">
                 <label for="nameInput">Coupon Description</label>
@@ -151,7 +166,21 @@
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+  <script>
+    function validateDate() {
+      var selectedDate = new Date(document.getElementById("validity").value);
+      var today = new Date();
+      var minimumDate = new Date();
+      minimumDate.setDate(today.getDate() + 3);
   
+      if (selectedDate < minimumDate) {
+        alert("Please select a date at least 3 days from today.");
+        return false;
+      }
+  
+      return true;
+    }
+  </script>
 
   <%- include('../layout/footer.ejs',{admin:true}) %>
 </body>

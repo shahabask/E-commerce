@@ -27,7 +27,7 @@
   <section class="h-100 gradient-custom">
     <div class="container h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-lg-10 col-xl-8">
+        <div class="col-lg-12 col-xl-10">
           <%for(let i=0;i<orders.length;i++){%>
 
 
@@ -44,7 +44,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-2">
-                      <img src="/public/adminimage/<%=orders[i].products[j].image%>" class="img-fluid" alt="Phone">
+                      <img style="width: 40px;height: 30px;" src="/public/adminimage/<%=orders[i].products[j].image%>" class="img-fluid" alt="Phone">
                     </div>
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0"><%=orders[i].products[j].name%></p>
@@ -77,43 +77,9 @@
 
         </div>
         <div class="row card-footer border-0 py-4" style="background-color: #221e1e; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-          <!-- <div class="col-md-6">
-             <%if(orders[i].status[0]=='cancelled'){%>
-
-             
-                  <div class="d-flex">
-                      <h6 class="text-danger mt-2"><b>This order has been Cancelled</b></h6>
-                  </div>
-              {{else if (eq this.status "Delivered")}} <%}else if(orders[i].status[0]=='delivered'){%>
-                  {{#if this.return}}
-                      <div class="d-flex align-items-start">
-                          <h6 class="text-warning mt-2"><b>This order has been Returned</b></h6>
-                      </div>
-                  {{else}}
-                      <div class="d-flex align-items-start">
-                          <a class="btn btn-warning return-button" data-bs-orderid="{{this.id}}"  data-bs-toggle="modal" data-bs-target="#returnProduct">Return Order</a>
-                      </div>
-                      {{#if returnErr}}
-                      <div class="mt-2">
-                          <p class="text-danger">{{returnErr}}</p>
-                      </div>
-                      {{else}}
-                      <div class="mt-2">
-                          <p class="text-light">You can only return before 7 days from the date of Delivery.</p>
-                      </div>
-                      {{/if}}
-                  {{/if}}
-              {{else}}  <%}else{%>
-                  <div class="d-flex align-items-start">
-                      <a class="btn btn-danger text-white" onclick="cancelOrder('{{this.id}}')">Cancel Order</a>
-                  </div>
-              {{/if}} <%}%>
-            </div> -->
-          <!-- <div class="col-md-6 text-right">
-              <button class="btn btn-secondary btn-sm" onclick="invoiceGenerate('{{this.id}}')" style="font-size: 12px;">Download Invoice</button>
-            </div> -->
+     
           
-            <% if(orders[i].status[0]!='delivered'&& orders[i].status[0]!='cancelled'&&orders[i].status[0]!='returned'){%>
+            <% if(orders[i].status[0]!='delivered'&& orders[i].status[0]!='cancelled'&&orders[i].status[0]!='returned'&&orders[i].status[0]!='request-denied'){%>
 
             <div class="d-flex align-items-start">
               <a class="btn btn-danger text-white" onclick="cancelOrder('<%=orders[i].products[0]._id%>')">Cancel Order</a>

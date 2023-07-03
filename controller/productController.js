@@ -3,24 +3,67 @@ const User = require("../Model/userModel");
 const Category = require("../Model/categoryModel");
 const Cart = require("../Model/cartModel");
 const Order = require("../Model/orderModel");
-
-// const loadCategoryProducts=async(req,res)=>{
-//     try{
-//     const products=req.query.products
-//     console.log(req.query)
-//     console.log('this is:',products[0])
-//       // const category=await Category.find({})
-//       if(products[0]){
-//         res.render('categoryProduct',{products:products})
-//       }else{
-//         res.render('categoryProduct',{message:'No product is remaining',})
-//       }
-
-//     }catch(error){
-//         console.log(error.message)
-
-//     }
-// }
+const Banner=require('../Model/bannerModel')
+const searchProduct=async(req,res)=>{
+  try{
+    
+    const banner = await Banner.findOne({ status: 1 });
+    const user = await User.findOne({ _id: req.session.userId });
+        const search = req.body.search;
+    
+        const searchregex = new RegExp(search, "i");
+        console.log(req.body.categoryName)
+        const page = parseInt(req.query.page) || 1; // Get the current page from the query parameter
+        const category = await Category.find({});
+        // Calculate the offset and limit based on the page number and number of products per page
+        const productsPerPage = 6;
+         // Number of products to display per page
+        const offset = (page - 1) * productsPerPage;
+  
+        // Retrieve the products from the database using the offset and limit
+        // Retrieve the products from the database using the offset and limit
+        var products = await Product.find({ modelName: { $regex: searchregex } }).skip(offset)
+        .limit(productsPerPage);
+        if(req.body.categoryName){
+          var products=await Product.find({ modelName: { $regex: searchregex },category:req.body.categoryName }).skip(offset)
+          .limit(productsPerPage);
+          var categoryOffer=category.discount
+      
+        }
+        const productCount = await Product.countDocuments({});
+        // Calculate the total number of pages based on the total number of products
+        const totalProducts = productCount;
+        const totalPages = Math.ceil(totalProducts / productsPerPage);
+          // var isLogin = req.session.userid ? true : false  
+        if (products) {
+          if(req.body.categoryName){
+            res.render("categoryProduct", { products: products,  currentPage: page,
+              totalPages,
+              category: category,
+              user: user,
+              banner,categoryName:req.body.categoryName,categoryOffer });
+          }else{
+            res.render("u-home", { products: products,  currentPage: page,
+              totalPages,
+              category: category,
+              user: user,
+              banner, });
+             
+          }
+          
+        } else {
+          if(req.body.categoryName){
+                 res.render('categoryProduct',{message:"No result found"})
+          }else{
+             
+            res.render("u-home", { message: "No results found" });
+          }
+        }
+     
+  }catch(error){
+    console.log(error)
+  }
+}
 const filterProducts = async (req, res) => {
   try {
     const color = req.body.color;
@@ -74,6 +117,11 @@ const filterProducts = async (req, res) => {
       // Calculate the total number of pages based on the total number of products
       const totalProducts = productCount;
       const totalPages = Math.ceil(totalProducts / productsPerPage);
+      const category=await Category.findOne({category_name:categoryName})
+      var categoryOffer=category.discount
+      // if(!categoryOffer){
+      //   categoryOffer=""
+      // }
       if (!categoryName) {
         categoryName = "All";
       }
@@ -84,6 +132,7 @@ const filterProducts = async (req, res) => {
         category: categories,
         currentPage: page,
         totalPages,
+        categoryOffer
       });
     } else {
       const page = parseInt(req.query.page) || 1; // Get the current page from the query parameter
@@ -121,11 +170,19 @@ const loadProductDetails = async (req, res) => {
     const product = await Product.findOne({ _id: id });
     const size = await Product.distinct("size", { category: category });
     const color = await Product.distinct("color", { category: category });
+    const offerPrice=Math.floor((product.price*(100-product.discount))/100)
+    // console.log(offerPrice)
+
+    productPrice=offerPrice
+    // if(!product.discount){
+    //   productPrice=product.price
+    // }
     res.render("productdetails", {
       product: product,
       admin: false,
       size: size,
       color: color,
+      offerPrice:productPrice
     });
   } catch (error) {
     console.log(error);
@@ -136,4 +193,5 @@ module.exports = {
   // loadCategoryProducts,
   loadProductDetails,
   filterProducts,
+  searchProduct,
 };

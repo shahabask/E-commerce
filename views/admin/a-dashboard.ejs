@@ -1,5 +1,6 @@
 <%- include('../layout/header.ejs',{admin:true}) %>
 <link rel="stylesheet" href="/public/css/style.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 <style>
   .sidebar {
@@ -44,6 +45,32 @@
     background-color: #000;
     border-radius: 10px;
   }
+
+
+    .card {
+      background-color: #f8f9fa;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+      font-size: 16px;
+      color: #555555;
+      margin-bottom: 8px;
+    }
+
+    .card-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333333;
+    }
+
+    #salesGraph,
+    #paymentPieChart {
+      height: 400px;
+    }
+ 
 </style>
 <div class="container-fluid">
 
@@ -58,6 +85,11 @@
         <li class="nav-item">
           <a class="nav-link text-light <% if (currentPage === 'dashboard') { %>active<% } %>" href="/admin/home">
             <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'salesReport') { %>active<% } %>" href="/admin/sales-report">
+            <i class="fas fa-chart-line"></i> Sales Report
           </a>
         </li>
         <li class="nav-item">
@@ -77,26 +109,136 @@
         </li>
         <li class="nav-item">
           <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
-            <i class="bi bi-grid-3x3-gap"></i> Category Management
+            <i class="bi bi-grid-3x3-gap"></i> Category 
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
-            <i class="bi bi-tags-fill"></i> Coupon Management
+            <i class="bi bi-tags-fill"></i> Coupon 
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+            <i class="fas fa-flag"></i> Banner
           </a>
         </li>
       </ul>
     </div>
     <div class="col-lg-10 col-sm-10">
-      <p>heloooooo, this is Dashboard</p>
-      <div><img src="/public/adminimage/Dashboard Screen for Quoting Software.png" alt=""></div>
+      <div class="row">
+        <div class="col-12">
+          <!-- <h1>Sales Dashboard</h1> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3 col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Sales</h5>
+              <p class="card-text"><%=totalSales%></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Revenue</h5>
+              <p class="card-text"><%=totalRevenue%></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Profit</h5>
+              <p class="card-text"><%=lastProfit%></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Orders</h5>
+              <p class="card-text"><%=numberOfOrders%></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-2 ">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Total Cost</h5>
+              <p class="card-text"><%=cost%></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 70px;">
+        <div class="col-sm-12 col-md-6" >
+          <div id="salesGraph"></div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+          <div id="paymentPieChart"></div>
+        </div>
+      </div>
+    </div>
+      <!-- <p>heloooooo, this is Dashboard</p>
+      <div><img src="/public/adminimage/Dashboard Screen for Quoting Software.png" alt=""></div> -->
     </div>
   </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 
+<script>
+  // Sales graph data
+  // var salesData =  JSON.stringify(salesData) 
+ var months=JSON.parse(decodeURIComponent('<%=month%>'))
+ var monthlySales=JSON.parse(decodeURIComponent('<%=monthlySales%>'))
+ if(months==undefined){
+  months=''
+ }
+  var salesOptions = {
+    chart: {
+      type: 'bar',
+      height: '400px'
+    },
+    series: [{
+      name: 'Sales Revenue',
+      data: monthlySales
+    }],
+    xaxis: {
+      categories: months
+    },
+    // colors: ['#FF4D4D', '#FFB84D', '#5EBD5E', '#4D79FF', '#A64DFF', '#FF4D88', '#4DFFFF', '#ADADAD', '#FFEA5D', '#A6FF4D', '#FF914D', '#4DADFF']
+  };
 
+  var salesChart = new ApexCharts(document.querySelector("#salesGraph"), salesOptions);
+  salesChart.render();
+
+  // Payment pie chart data
+  var paymentData =[
+  { _id: 'cashOnDelivery', totalGrandTotal: 89216 },
+  { _id: 'online-payment', totalGrandTotal: 3666 }
+]
+  
+var series = JSON.parse(decodeURIComponent('<%=series%>'))
+var labels =JSON.parse(decodeURIComponent('<%=labels%>'))
+
+
+  var paymentOptions = {
+    chart: {
+      type: 'donut',
+      height: '400px'
+    },
+    series: series,
+    labels:labels
+  };
+  var paymentData =  paymentOptions 
+  
+  var paymentChart = new ApexCharts(document.querySelector("#paymentPieChart"), paymentOptions);
+  paymentChart.render();
+</script>
 
 <%- include('../layout/footer.ejs',{admin:true}) %>

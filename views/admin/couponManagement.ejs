@@ -197,6 +197,11 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'salesReport') { %>active<% } %>" href="/admin/sales-report">
+              <i class="fas fa-chart-line"></i> Sales Report
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'products') { %>active<% } %>" href="/admin/products">
               <i class="bi bi-basket"></i> Products
             </a>
@@ -213,19 +218,25 @@
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'category') { %>active<% } %>" href="/admin/category">
-              <i class="bi bi-grid-3x3-gap"></i> Category Management
+              <i class="bi bi-grid-3x3-gap"></i> Category 
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-light <% if (currentPage === 'coupon') { %>active<% } %>" href="/admin/coupon">
-              <i class="bi bi-tags-fill"></i> Coupon Management
+              <i class="bi bi-tags-fill"></i> Coupon 
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link text-light" id="addCouponLink" href="/admin/addcoupon">
-              <i class="bi bi-plus"></i>Add Coupon
+              <i class="bi bi-plus" style="color: #000;"></i>Add Coupon
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link text-light <% if (currentPage === 'banner') { %>active<% } %>" href="/admin/banner">
+              <i class="fas fa-flag"></i> Banner 
+            </a>
+          </li>
+          
         </ul>
       </div>
 
@@ -241,6 +252,7 @@
               <div class="coupon-details">
                 <h2 class="coupon-code"><i class="fas fa-ticket-alt coupon-code-icon mx-1" style="color: rgb(109, 107, 107);"> <%= coupon.couponCode %></i></h2>
                 <p class="coupon-description"><%= coupon.description %></p>
+                <p class="coupon-starting">Starts on: <%= (coupon.startingDate).toLocaleDateString() %>
                 <p class="coupon-expiry">Expires on: <%= (coupon.expiryDate).toLocaleDateString() %>
                   <% if(coupon.status=='Active'){%>
                 <p class="coupon-status">Status: <span style="color: green; font-weight: 600;"><%= coupon.status %></span></p>
@@ -248,7 +260,7 @@
                 <p class="coupon-status">Status: <span style="color: red; font-weight: 600;"><%= coupon.status %></span></p>
                 <%}%>
                       
-                      <a href="/admin/deletecoupon/?id=<%= coupon._id %>" class="delete-link">
+                      <a href="/admin/deletecoupon/?id=<%= coupon._id %>" class="delete-link" onclick="return confirmDelete(event, '<%= coupon._id %>')">
                 <i class="bi bi-trash-fill"></i>
                 </a>
                 <a href="edit-coupon?id=<%= coupon._id %>" class="edit-icon" style="text-decoration: none;color: black;">
@@ -276,7 +288,28 @@
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+  <script>
+    function confirmDelete(event,couponId) {
+      event.preventDefault(); // Prevents the default behavior of the link
   
+      // Display the confirmation SweetAlert
+      Swal.fire({
+        title: "Are you sure you want to delete?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // If confirmed, proceed with the deletion by redirecting to the link
+          window.location.href =`/admin/deletecoupon/?id=${couponId}`;
+        }
+      });
+  
+      return false; // Prevents the link from navigating immediately
+    }
+  </script>
   <%- include('../layout/footer.ejs',{admin:true}) %>
 </body>
 
