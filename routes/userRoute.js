@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-userRoute.get("/", auth.isUserLoggedIn, userController.loadHome);
+userRoute.get("/",  userController.loadHome);
 
 userRoute.get(
   "/register",

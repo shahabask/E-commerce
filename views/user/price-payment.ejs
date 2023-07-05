@@ -22,7 +22,7 @@
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      display: flex;
+      /* display: flex; */
       /* justify-content: ; */
     }
 
@@ -282,6 +282,20 @@
           border-radius: 5px;
           cursor: pointer;
         }
+        @media (min-width: 992px) {
+  .payment-details {
+    width: 80%; /* Adjust the width as per your requirements */
+    margin: 0 auto; /* Center the element horizontally */
+  }
+  .payment-options{
+    width:80%;
+    margin:0 auto;
+
+  }
+  .coupon-form{
+    padding-left: 100px;
+  }
+}
   </style>
 </head>
 
@@ -299,7 +313,7 @@
       <div class="step-circle motion-effect">
         <i class="fas fa-check-circle"></i>
       </div>
-      <span class="step-heading">Checkout</span>
+      <span class="step-heading" style="color: #fcb20a;">Checkout</span>
     </div>
     <div class="step-line"></div>
     <div class="step-item">
@@ -317,31 +331,7 @@
         <div class="col-md-12 col-lg-12">
   <div class="container" >
 
-    <div class="product-details">
-      <h2>Product Details</h2>
-      <table class="product-table">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Model Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% for(let i=0; i<products.length; i++){%>
-          <tr>
-            <td>
-              <img class="product-image" src="/public/adminimage/<%=products[i].image%>" alt="Product Image">
-            </td>
-            <td><%=products[i].modelName%></td>
-            <td><%=products[i].quantity%></td>
-            <td><%=products[i].price%></td>
-          </tr>
-          <% } %>
-        </tbody>
-      </table>
-    </div>
+   
 
 
     <div class="payment-details">
@@ -408,6 +398,31 @@
           <!-- <button  ><a href="/userorder" style="text-decoration: none;color: #fff;"></a> </button> -->
         </div> 
         </div></form>
+    </div>
+    <div class="product-details">
+      <h2>Product Details</h2>
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Model Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i=0; i<products.length; i++){%>
+          <tr>
+            <td>
+              <img class="product-image" src="/public/adminimage/<%=products[i].image%>" alt="Product Image">
+            </td>
+            <td><%=products[i].modelName%></td>
+            <td><%=products[i].quantity%></td>
+            <td><%=products[i].price%></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

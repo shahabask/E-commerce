@@ -298,6 +298,9 @@
   <div><img src="/public/adminimage/<%=banner.image%>" alt="Full Width Image" class="full-width-image"></div>
   <div class="container-fluid">
     <div class="row mt-4">
+      <%if(typeof logout=='undefined'){%>
+
+       
       <div class="col-lg-2 col-md-4 col-sm-12">
         <div class="sidebar">
           <div class="sidebar-option">
@@ -354,9 +357,12 @@
             </div>
           </form>
         </div>
-      </div>
-
+      </div> <%}%>
+      <%if(typeof logout=='undefined'){%>
       <div class="col-lg-9 col-md-8 col-sm-12">
+        <%}else{%>
+           <div class="col-lg-9 col-md-8 col-sm-12 container">
+        <%}%>
         <div id="product-cards" class="row">
           <% for (let i = 0; i < products.length; i++) { %>
           <div class="col-lg-4 col-md-6 col-sm-12">

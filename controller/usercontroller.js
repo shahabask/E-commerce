@@ -311,34 +311,36 @@ const loadHome = async (req, res) => {
     const banner = await Banner.findOne({ status: 1 });
     const user = await User.findOne({ _id: req.session.userId });
 
+    const category = await Category.find({});
+
+    const page = parseInt(req.query.page) || 1; // Get the current page from the query parameter
+
+    // Calculate the offset and limit based on the page number and number of products per page
+    const productsPerPage = 6; // Number of products to display per page
+    const offset = (page - 1) * productsPerPage;
+
+    // Retrieve the products from the database using the offset and limit
+    // Retrieve the products from the database using the offset and limit
+    const products = await Product.find({ available: true })
+      .skip(offset)
+      .limit(productsPerPage);
+    const productCount = await Product.countDocuments({});
+    // Calculate the total number of pages based on the total number of products
+    const totalProducts = productCount;
+    const totalPages = Math.ceil(totalProducts / productsPerPage);
+    if(req.session.userId){
     if (user.isBlock == false) {
-      const category = await Category.find({});
 
-      const page = parseInt(req.query.page) || 1; // Get the current page from the query parameter
-
-      // Calculate the offset and limit based on the page number and number of products per page
-      const productsPerPage = 6; // Number of products to display per page
-      const offset = (page - 1) * productsPerPage;
-
-      // Retrieve the products from the database using the offset and limit
-      // Retrieve the products from the database using the offset and limit
-      const products = await Product.find({ available: true })
-        .skip(offset)
-        .limit(productsPerPage);
-      const productCount = await Product.countDocuments({});
-      // Calculate the total number of pages based on the total number of products
-      const totalProducts = productCount;
-      const totalPages = Math.ceil(totalProducts / productsPerPage);
-
+           res.render("u-home", {
+             products,
+             currentPage: page,
+             totalPages,
+             category: category,
+             user: user,
+             banner,
+           });
+      
       // Render the products template with the products and pagination data
-      res.render("u-home", {
-        products,
-        currentPage: page,
-        totalPages,
-        category: category,
-        user: user,
-        banner,
-      });
 
       //    res.render('u-home',{products:products,category:category,user:user})
     } else {
@@ -346,6 +348,17 @@ const loadHome = async (req, res) => {
 
       res.redirect("/");
     }
+  }else{
+    res.render("u-home", {
+      products,
+      currentPage: page,
+      totalPages,
+      category: category,
+      user: user,
+      banner,
+      logout:1
+    });
+  }
   } catch (error) {
     console.log(error.message);
   }
