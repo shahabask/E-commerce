@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 // mongoose.connect("mongodb://127.0.0.1:27017/golonSports");
-mongoose.connect("mongodb+srv://shahabas:w5hkEKjnPqX8H8zo@cluster0.faenisk.mongodb.net/?retryWrites=true&w=majority");
+mongoose.connect("mongodb+srv://shahabas:w5hkEKjnPqX8H8zo@cluster0.faenisk.mongodb.net/?retryWrites=true&w=majority",
+ {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 const express = require("express");
 const app = express();
 const nocache = require("nocache");
