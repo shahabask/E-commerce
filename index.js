@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/golonSports");
+// mongoose.connect("mongodb://127.0.0.1:27017/golonSports");
+mongoose.connect("mongodb+srv://shahabas:w5hkEKjnPqX8H8zo@cluster0.faenisk.mongodb.net/?retryWrites=true&w=majority");
 const express = require("express");
 const app = express();
 const nocache = require("nocache");
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: config.sessionSecret,
+    secret: config.SESSIONSECRET,
     resave: false,
     saveUninitialized: false,
   })

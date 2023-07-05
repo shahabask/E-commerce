@@ -8,10 +8,10 @@ const Wallet =require('../Model/walletModel');
 const Usercoupon=require('../Model/userCouponModel')
 const Razorpay = require("razorpay");
 const mongoose = require("mongoose");
-
+const config=require('../config/config')
 const instance = new Razorpay({
-  key_id: "rzp_test_PyP2RD55w0NgDZ",
-  key_secret: "ovSD6fcZOe6IY834dAYvNZCb",
+  key_id: config.RAZORPAY_KEY_ID,
+  key_secret: config.RAZORPAY_KEY_SECRET
 });
 const orderPlaced = async (req, res) => {
   try {
@@ -114,7 +114,7 @@ const orderPlaced = async (req, res) => {
             success: true,
             msg: "order created",
             amount: order.grandTotal * 100,
-            key_id: "rzp_test_PyP2RD55w0NgDZ",
+            key_id: config.RAZORPAY_KEY_ID,
             order: order,
           });
           //   res.send(order)

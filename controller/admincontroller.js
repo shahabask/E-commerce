@@ -16,12 +16,12 @@ const sendOtpToMail = (email, otp) => {
       secure: false,
       requireTLS: true,
       auth: {
-        order: config.smtpOwner,
-        pass: config.smtpKey,
+        order: config.SMTPOWNER,
+        pass: config.SMTPKEY,
       },
     });
     const mailOption = {
-      from: config.smtpOwner,
+      from: config.SMTPOWNER,
       to: email,
       subject: "OTP for admin",
       html: `use this otp ${otp} for reseting password`,

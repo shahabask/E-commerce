@@ -29,12 +29,12 @@ const sendOTPtoMail = (name, email, otp) => {
       secure: false,
       requireTLS: true,
       auth: {
-        user: "codept100@gmail.com",
-        pass: "zxzoiokxbinfulnb",
+        user: config.ADMIN_EMAIL,
+        pass: config.APP_PASSWORD,
       },
     });
     const mailOptions = {
-      from: config.smtpOwner,
+      from: config.SMTPOWNER,
       to: "shahabasg1@gmail.com",
       subject: "OTP for verifying your email",
       html: `<p> Hi ${name},Use this otp ${otp} to reset your password</p>`,
