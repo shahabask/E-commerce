@@ -412,8 +412,14 @@
 
   @media (min-width: 577px) and (max-width: 768px) {
     #empty-cart {
-      margin-left: /* Adjust the margin-left value for medium screens */;
-      margin-top: /* Adjust the margin-top value for medium screens */;
+      margin-left:200px /* Adjust the margin-left value for medium screens */;
+      margin-top:80px /* Adjust the margin-top value for medium screens */;
+    }
+  }
+  @media(min-width:769px){
+    #empty-cart{
+      margin-left:360px;
+      margin-top: 100px;
     }
   }
  </style>
@@ -507,7 +513,7 @@
                 </table>
                 <% if(products.length==0){%>
 
-                <div id="empty-cart" style="margin-left: 360px; margin-top: 100px;">
+                <div id="empty-cart">
                   <img src="/public/userImage/lidl-romania-lidl.gif" alt="">
                 </div>
 
