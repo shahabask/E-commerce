@@ -374,9 +374,10 @@
               </a>
               <div class="product-card-body">
                 <h5 class="product-card-title"><%= products[i].name %></h5>
+                <%if(typeof logout=='undefined'){%>
                 <p class="product-card-price">₹<%= products[i].price %></p>
                 <span id="stock-message-<%= products[i]._id %>" class="stock-message"></span>
-                <a onclick="addToCart('<%=products[i]._id%>','<%=products[i].quantity%>')" class="btn btn-primary">Add to Cart</a>
+                <a onclick="addToCart('<%=products[i]._id%>','<%=products[i].quantity%>')" class="btn btn-primary">Add to Cart</a> <%}%>
               </div>
             </div>
           </div>
