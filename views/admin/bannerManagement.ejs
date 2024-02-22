@@ -259,7 +259,7 @@
             <tbody>
               <%for(let i=0;i<banner.length;i++){%>
               <tr>
-                <td><img src="/public/adminimage/<%=banner[i].image%>" alt="Image 1"></td>
+                <td><img src="/public/adminimage/<%=banner[i]?.image%>" alt="Image 1"></td>
                 <td>
                   <%if(banner[i].status==1){%>
                     <span class="badge badge-success rounded-pill d-inline">Active</span>
@@ -270,13 +270,13 @@
                 <td></td>
                 <td>
                   <%if(banner[i].status==1){%>
-                    <a style=" color: #fff" class="btn btn-secondary" onclick="changeStatus('<%=banner[i]._id%>',0)">Deactivate</a>
+                    <a style=" color: #fff" class="btn btn-secondary" onclick="changeStatus('<%=banner[i]?._id%>',0)">Deactivate</a>
                   <%}else{%>
-                  <a style=" color: #fff" class="btn btn-success" onclick="changeStatus('<%=banner[i]._id%>',1)">Activate</a>
+                  <a style=" color: #fff" class="btn btn-success" onclick="changeStatus('<%=banner[i]?._id%>',1)">Activate</a>
                   <%}%>
                 </td>
                 <td>
-                  <a style=" color: #fff"  class="btn btn-danger status-button" onclick="deleteBanner('<%=banner[i]._id%>')">Delete</a>
+                  <a style=" color: #fff"  class="btn btn-danger status-button" onclick="deleteBanner('<%=banner[i]?._id%>')">Delete</a>
                 </td>
               </tr><% }%>
              

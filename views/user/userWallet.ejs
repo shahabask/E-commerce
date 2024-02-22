@@ -83,7 +83,7 @@
 <body>
   <div class="wallet">
     <div class="balance-container">
-      <div class="balance">Wallet Balance: &#8377;<%=wallet.balance%></div>
+      <div class="balance">Wallet Balance: &#8377;<%=wallet?.balance%></div>
       <img style="justify-content: center;border-radius: 5px;width: 120px;height: 100px;" class="gif" src="/public/wallet/wallet_blue_800x600_dribbble.gif" alt="Money GIF">
     </div>
     <div class="table-container">
@@ -96,16 +96,23 @@
           </tr>
         </thead>
         <tbody>
-          <%for(let i=0;i<wallet.history.length;i++){%>
+          
+          <%for(let i=0;i<wallet?.history?.length;i++){%>
           <tr>
-            <td style="font-weight: bold;"><%=wallet.history[i].transactionDate.toLocaleDateString()%></td>
-            <td class="description"><%=wallet.history[i].description%></td>
-            <td class="amount">&#8377;<%=wallet.history[i].amount%></td>
+            <td style="font-weight: bold;"><%=wallet?.history[i]?.transactionDate?.toLocaleDateString()%></td>
+            <td class="description"><%=wallet?.history[i]?.description%></td>
+            <td class="amount">&#8377;<%=wallet?.history[i]?.amount%></td>
           </tr>
           <%}%>
+         
        
         </tbody>
+        
       </table>
+      <%if(wallet?.history?.length==null ||wallet?.history?.length==undefined){%>
+        <div style="text-align: center;">
+           <p style="padding-top: 20px; color: white;">No Transaction Yet!</p></div>
+      <%}%>
     </div>
   </div>
 </body>

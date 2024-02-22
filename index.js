@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 // mongoose.connect("mongodb://127.0.0.1:27017/golonSports");
-mongoose.connect("mongodb+srv://shahabas:w5hkEKjnPqX8H8zo@cluster0.faenisk.mongodb.net/?retryWrites=true&w=majority",
+mongoose.connect("mongodb+srv://shahabas:MgJ30uUFDqYO0jIr@ecommerce.tbeenmc.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Ecommerce",
  {
   useNewUrlParser: true,
   useUnifiedTopology: true,

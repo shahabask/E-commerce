@@ -295,7 +295,7 @@
 
 <body>
 
-  <div><img src="/public/adminimage/<%=banner.image%>" alt="Full Width Image" class="full-width-image"></div>
+  <div><img src="/public/adminimage/<%=banner?.image%>" alt="Full Width Image" class="full-width-image"></div>
   <div class="container-fluid">
     <div class="row mt-4">
       <%if(typeof logout=='undefined'){%>
@@ -367,8 +367,7 @@
           <% for (let i = 0; i < products.length; i++) { %>
           <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="product-card">
-              <%if(typeof logout=='undefined'){%>
-              <a href="/productdetails?id=<%=products[i]._id%>&category=<%=products[i].category%>">  <% } %>
+              <a href="/productdetails?id=<%=products[i]._id%>&category=<%=products[i].category%>">
                 <div style="border-color: #060606;border-bottom: 5px;" class="col-md-8">
                   <img src="/public/adminimage/<%= products[i].image[0] %>" class="product-card-img" alt="Product Image">
                 </div>

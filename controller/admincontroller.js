@@ -150,7 +150,7 @@ const loadHome = async (req, res) => {
         $count: "totalCount",
       },
     ]);
-    totalSales = totalSales[0].totalCount;
+    totalSales = totalSales[0]?.totalCount;
     // totalRevenue
     let totalRevenue = await Order.aggregate([
       {
@@ -161,7 +161,7 @@ const loadHome = async (req, res) => {
       { $group: { _id: null, total: { $sum: "$grandTotal" } } },
     ]);
     // console.log(totalRevenue)
-    totalRevenue = totalRevenue[0].total;
+    totalRevenue = totalRevenue[0]?.total;
     //totalprofit
     let orginalPrice = await Order.aggregate([
       {
@@ -195,7 +195,7 @@ const loadHome = async (req, res) => {
         },
       },
     ]);
-    orginalPrice = orginalPrice[0].Total;
+    orginalPrice = orginalPrice[0]?.Total;
     let loss = orginalPrice - totalRevenue;
     let originalProfit = (orginalPrice * 30) / 100;
     let lastProfit = originalProfit - loss;
@@ -309,7 +309,7 @@ const loadHome = async (req, res) => {
       },
     ]);
  const numberOfOrders=await Order.countDocuments()
- console.log(numberOfOrders)
+//  console.log(numberOfOrders)
     
   //   if(salesPerMonthx){
   //    var salesPerMonth = salesPerMonthx[0].months;
@@ -317,13 +317,13 @@ const loadHome = async (req, res) => {
   //  }
 // console.log(salesPerMonthx[0].months)
     var month = encodeURIComponent(
-      JSON.stringify(salesPerMonthx[0].months.map((item) => item.month))
+      JSON.stringify(salesPerMonthx[0]?.months?.map((item) => item.month))
     );
     var monthlySales = encodeURIComponent(
-      JSON.stringify(salesPerMonthx[0].months.map((item) => item.totalGrandTotal))
+      JSON.stringify(salesPerMonthx[0]?.months?.map((item) => item.totalGrandTotal))
     );
    
-    console.log(typeof month)
+    
     res.render("a-dashboard", {
       currentPage: "dashboard",
       paymentData: "",
