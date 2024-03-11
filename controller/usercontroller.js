@@ -35,7 +35,7 @@ const sendOTPtoMail = (name, email, otp) => {
     });
     const mailOptions = {
       from: config.SMTPOWNER,
-      to: "shahabasg1@gmail.com",
+      to: email,
       subject: "OTP for verifying your email",
       html: `<p> Hi ${name},Use this otp ${otp} to reset your password</p>`,
       text: `Hi ${name},Use this otp ${otp} to reset your password`,
@@ -137,7 +137,7 @@ const loadOtpVerification = async (req, res) => {
     const email = req.body.email;
     let otp = Math.floor(100000 + Math.random() * 900000);
     otp = otp.toString();
-    console.log(otp);
+   
     const userData = await User.findOne({ email: email });
     const otpExpiration = new Date(Date.now() + 1 * 30 * 1000);
     if (userData) {
@@ -148,7 +148,7 @@ const loadOtpVerification = async (req, res) => {
         { $set: { OTP: otp } }
       );
 
-      sendOTPtoMail(userData.firstName, userData.email, userData.OTP);
+      sendOTPtoMail(userData.firstName, userData.email, otp);
 
       res.render("verifyotp",{userData});
     } else {
@@ -187,7 +187,8 @@ const verifyPassword = async (req, res) => {
   try {
     const pass1 = req.body.reset1;
     const pass2 = req.body.reset2;
-    const passwordRegex = /^[a-zA-Z0-9_]{6,}$/;
+    const passwordRegex = /^[a-zA-Z0-9_@]{6,}$/;
+
     const spassword = await securePassword(pass1);
     if (!passwordRegex.test(pass1)) {
       res.render("passwordreset", {
@@ -267,11 +268,12 @@ const sendOtpForOtpLogin = async (req, res) => {
       await userData.save()
       let otp = Math.floor(100000 + Math.random() * 900000);
       otp = otp.toString();
-      console.log(otp);
+      console.log('first',otp);
       const updateOtp = await User.updateOne(
         { email: email },
         { $set: { OTP: otp } }
       );
+      console.log(otp);
       sendOTPtoMail(userData.firstName, email, otp);
       res.render("otplogin",{userData});
     } else {

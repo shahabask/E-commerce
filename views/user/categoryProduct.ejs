@@ -296,7 +296,7 @@
   <div><img src="/public/userImage/extreme-hillside-mountain-biking-r1krl4pwqdgya6wz.jpg" alt="Full Width Image" class="full-width-image"></div>
   <div class="container-fluid">
     <%if(categoryOffer){%>
-      <div class="badge">Category Offer:<%=categoryOffer%>%</div>
+      <div class="badge">Category Offer:<%=categoryOffer??0 %>%</div>
 
     <%}%>
     <div class="row mt-4">
@@ -307,7 +307,7 @@
             <form action="/searchProducts" method="post">
             <div class="input-group">
               <input type="text" id="search-input" class="form-control" placeholder="Search">
-              <input type="text" name="categoryName" value="<%=categoryName%>" hidden>
+              <input type="text" name="categoryName" value="<%=categoryName??0%>" hidden>
               <button type="submit" class="btn btn-primary" id="search-btn">
                 <i class="bi bi-search"></i>
               </button>
@@ -318,10 +318,10 @@
             <div class="sidebar-option">
               <label class="sidebar-label" for="category-filter">Category:</label>
               <select class="sidebar-select" id="category-filter" name="selectedCategory">
-                <option value=""><%=categoryName%></option>
-                <% for(let j = 0; j < category.length; j++) { %>
+                <option value=""><%=categoryName??0%></option>
+                <% for(let j = 0; j < category?.length; j++) { %>
 
-                <option value="<%= category[j].category_name %>"><%= category[j].category_name%></option>
+                <option value="<%= category[j]?.category_name %>"><%= category[j]?.category_name%></option>
                 <% } %>
                 <!-- <option value="">Remove Category</option> -->
               </select>
@@ -362,20 +362,20 @@
     
       <div class="col-lg-9 col-md-8 col-sm-12">
         <div id="product-cards" class="row">
-          <% for (let i = 0; i < products.length; i++) { %>
+          <% for (let i = 0; i < products?.length; i++) { %>
           <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="product-card">
-              <a href="/productdetails?id=<%=products[i]._id%>&category=<%=products[i].category%>">
+              <a href="/productdetails?id=<%=products[i]?._id%>&category=<%=products[i]?.category%>">
                 <div style="border-color: #060606;border-bottom: 5px;" class="col-md-8">
-                  <img src="/public/adminimage/<%= products[i].image[0] %>" class="product-card-img" alt="Product Image">
+                  <img src="/public/adminimage/<%= products[i]?.image[0] %>" class="product-card-img" alt="Product Image">
                 </div>
               </a>
               <div class="product-card-body">
-                <h5 class="product-card-title"><%= products[i].name %></h5>
-                <p class="product-card-price">Price: <%= products[i].price %></p>
-                <span id="stock-message-<%= products[i]._id %>" class="stock-message"></span>
+                <h5 class="product-card-title"><%= products[i]?.name %></h5>
+                <p class="product-card-price">Price: <%= products[i]?.price %></p>
+                <span id="stock-message-<%= products[i]?._id %>" class="stock-message"></span>
 
-              <a onclick="addToCart('<%=products[i]._id%>','<%=products[i].quantity%>')" class="btn btn-primary">Add to Cart</a>
+              <a onclick="addToCart('<%=products[i]?._id%>','<%=products[i]?.quantity%>')" class="btn btn-primary">Add to Cart</a>
               </div>
             </div>
           </div>
