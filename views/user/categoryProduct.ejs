@@ -296,7 +296,7 @@
   <div><img src="/public/userImage/extreme-hillside-mountain-biking-r1krl4pwqdgya6wz.jpg" alt="Full Width Image" class="full-width-image"></div>
   <div class="container-fluid">
     <%if(categoryOffer){%>
-      <div class="badge">Category Offer:<%=categoryOffer??0 %>%</div>
+      <div class="badge">Category Offer:<%=categoryOffer || 0 %>%</div>
 
     <%}%>
     <div class="row mt-4">
@@ -307,7 +307,7 @@
             <form action="/searchProducts" method="post">
             <div class="input-group">
               <input type="text" id="search-input" class="form-control" placeholder="Search">
-              <input type="text" name="categoryName" value="<%=categoryName??0%>" hidden>
+              <input type="text" name="categoryName" value="<%=categoryName || 0%>" hidden>
               <button type="submit" class="btn btn-primary" id="search-btn">
                 <i class="bi bi-search"></i>
               </button>
@@ -318,7 +318,7 @@
             <div class="sidebar-option">
               <label class="sidebar-label" for="category-filter">Category:</label>
               <select class="sidebar-select" id="category-filter" name="selectedCategory">
-                <option value=""><%=categoryName??0%></option>
+                <option value=""><%=categoryName || 0%></option>
                 <% for(let j = 0; j < category?.length; j++) { %>
 
                 <option value="<%= category[j]?.category_name %>"><%= category[j]?.category_name%></option>
