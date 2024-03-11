@@ -373,7 +373,7 @@
                 </div>
               </a>
               <div class="product-card-body">
-                <h5 class="product-card-title"><%= products[i].name %></h5>
+                <h5 class="product-card-title"><%= products[i]?.name %><%='productname'%></h5>
                 <%if(typeof logout=='undefined'){%>
                 <p class="product-card-price">₹<%= products[i].price %></p>
                 <span id="stock-message-<%= products[i]._id %>" class="stock-message"></span>
